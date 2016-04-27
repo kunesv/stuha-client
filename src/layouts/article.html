@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>{{title}} &ndash; A Blog</title>
+
+    <link href="//fonts.googleapis.com/css?family=Quattrocento+Sans:400,400italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/css/common.css"/>
+</head>
+<body id="article">
+<header>
+    <h1 class="logo"><a href="/"><img src="/images/a-blog.svg"/></a></h1>
+</header>
+
+<article>
+    <header>
+        <h1>{{title}}</h1>
+        <small>{{date}}</small>
+    </header>
+    {{{contents}}}
+</article>
+
+<script type="text/javascript">
+    var _paq = _paq || [];
+    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+    _paq.push(["setCookieDomain", "*.snappy.pro"]);
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+    (function () {
+        _paq.push(["setTrackerUrl", "//analytics.snappy.pro/piwik.php"]);
+        _paq.push(["setSiteId", "3"]);
+        var e = document, c = e.createElement("script"), b = e.getElementsByTagName("script")[0];
+        c.type = "text/javascript";
+        c.defer = true;
+        c.async = true;
+        c.src = "//analytics.snappy.pro/piwik.js";
+        b.parentNode.insertBefore(c, b)
+    })();
+</script>
+</body>
+</html>

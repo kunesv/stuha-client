@@ -1,3 +1,3 @@
 # blog
 
-Static
+Static pages generation experiment.

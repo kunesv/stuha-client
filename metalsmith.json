@@ -27,7 +27,6 @@
     },
     "metalsmith-serve": {
       "port": 80
-    },
-    "metalsmith-watch": {}
+    }
   }
 }

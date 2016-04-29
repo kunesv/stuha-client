@@ -9,7 +9,3 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-deploy:
-  provider: heroku
-  api_key: $API_KEY
-  app: vast-savannah-63381

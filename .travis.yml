@@ -11,5 +11,4 @@ addons:
       - g++-4.8
 deploy:
   provider: heroku
-  api_key:
-    secure: $API_KEY
+  api_key: $API_KEY

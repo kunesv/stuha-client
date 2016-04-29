@@ -3,7 +3,7 @@
   "private": true,
   "devDependencies": {},
   "scripts": {
-    "start": "./node_modules/metalsmith/bin/metalsmith"
+    "start": "node metalsmith.js"
   },
 
   "dependencies": {

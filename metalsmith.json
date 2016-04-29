@@ -25,7 +25,9 @@
       "engine": "handlebars",
       "directory": "src/layouts"
     },
-    "metalsmith-serve": {},
+    "metalsmith-serve": {
+      "port": 80
+    },
     "metalsmith-watch": {}
   }
 }

@@ -2,6 +2,10 @@
   "name": "not-that-blog-again",
   "private": true,
   "devDependencies": {},
+  "scripts": {
+    "start": "./node_modules/metalsmith/bin/metalsmith"
+  },
+
   "dependencies": {
     "handlebars": "^4.0.5",
     "metalsmith": "^2.1.0",

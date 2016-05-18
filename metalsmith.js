@@ -31,7 +31,7 @@ Metalsmith(__dirname)
         }]
     }))
     .use(layouts({
-        engine: 'handlebars',
+        engine: 'mustache',
         directory: 'src/layouts'
     }))
     .use(sass({

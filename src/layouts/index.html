@@ -17,8 +17,8 @@
 <main>
 
     {{#articles}}
-    <a href="{{path}}">
-        <header>
+    <article>
+        <header onclick="location.href='{{path}}'">
             <h2>{{title}}</h2>
 
             {{#image}}
@@ -31,14 +31,14 @@
             {{/image}}
 
         </header>
-        <p>{{summary}}</p>
-    </a>
+        <p onclick="location.href='{{path}}'">{{summary}}</p>
+    </article>
     {{/articles}}
 
 </main>
 
 <footer>
-    <small>Eventually getting back with some more notes ...</small>
+    <small>{{{contents}}}</small>
 </footer>
 
 <script type="text/javascript">

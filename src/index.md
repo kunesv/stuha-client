@@ -2,4 +2,4 @@
 layout: index.html
 ---
 
-Hi this is my start page.
+Eventually getting back with some more notes ...

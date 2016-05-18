@@ -87,7 +87,7 @@ body > header > * {
   //max-width: 54rem;
   //margin: 0 auto;
 
-  & > a {
+  & > article {
     color: inherit;
     display: flex;
     flex-direction: column;
@@ -99,7 +99,15 @@ body > header > * {
 
     & > * {
       background-color: white;
-      box-shadow: 6px 6px 0 rgba(0, 0, 0, .2);
+      box-shadow: .25 * $module .25 * $module 0 rgba(0, 0, 0, .2);
+      cursor: pointer;
+
+      transition: box-shadow 400ms ease-out;
+
+    }
+
+    &:hover > * {
+      box-shadow: 2 * $module 2 * $module 0 rgba(0, 0, 0, .2);
     }
 
     & > header {
@@ -118,14 +126,14 @@ body > header > * {
       }
 
       > .image {
-        flex-basis: 6 * $module;
+        flex: 0 0 6 * $module;
         display: flex;
         flex-direction: column;
 
         background-position: center;
 
         small {
-          background-color: rgba(100,150,200,.2);
+          background-color: rgba(100, 150, 200, .2);
           font-weight: 600;
           mix-blend-mode: color-dodge;
         }
@@ -140,13 +148,13 @@ body > header > * {
         padding: .5 * $module 0;
       }
     }
+
+    p {
+
+      margin: 0;
+      padding: $module;
+    }
   }
-}
-
-#home main > a > p {
-
-  margin: 0;
-  padding: $module;
 }
 
 #article > article {

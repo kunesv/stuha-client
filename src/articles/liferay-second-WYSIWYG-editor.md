@@ -3,6 +3,7 @@ title: Bringing Second WYSIWYG Editor to Liferay Blogs Entry Form
 date: 2012-05-16
 layout: article.html
 summary: If you are proper bloger, like me, than you surely love WYSIWYG. And if you publish that blog of yours through Liferay Blog portlet, you may be missing the WYSIWYG editor for the blog's abstract. Let's have a look how you can bring second WYSIWYG editor to blog entry form.
+image: /images/wysiwyg.jpg
 ---
 
 If you are proper bloger, like me, than you surely love WYSIWYG. And if you publish that blog of yours through Liferay Blog portlet, you may be missing the WYSIWYG editor for the blog's abstract. Let's have a look how you can bring second WYSIWYG editor to blog entry form.

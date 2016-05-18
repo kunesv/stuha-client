@@ -3,6 +3,7 @@ title: Add Portlet to Journal Article Template
 date: 2012-07-20
 layout: article.html
 summary: From time to time I want to include portlet in velocity template of Liferay Web Content (Journal) Article.
+image: /images/portlet.jpg
 ---
 
 From time to time I want to include portlet in velocity template of Liferay Web Content (Journal) Article.

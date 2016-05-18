@@ -3,6 +3,7 @@ title: HTML Android Application, Project Setup
 date: 2012-06-25
 layout: article.html
 summary: If you don't know much of Android application development, or just want to achieve something fairly simple, one of the options might be to create your app in HTML5 and JavaScript combination and let Android only to supply the browser window.
+image: "/images/android-html.jpg"
 ---
 
 If you don't know much of Android application development, or just want to achieve something fairly simple, one of the options might be to create your app in HTML and JavaScript combination and let Android only to supply the browser window.

@@ -3,6 +3,7 @@ title: Typekit fonts with Liferay
 date: 2012-05-01
 summary: To add real fonts to your web site, you can use font repository like Typekit. Adding this functionality to your Liferay Portal theme will require three easy steps.
 layout: article.html
+image: /images/go_real_type.jpg
 ---
 
 To add real fonts to your web site, you can use font repository like [Typekit](https://typekit.com/). Adding this functionality to your Liferay Portal theme will require three easy steps.

@@ -3,6 +3,7 @@ title: "Ubuntu apt-get error \"E: Sub-process /usr/bin/dpkg returned an error co
 date: 2012-06-28
 layout: article.html
 summary:  I've just tried to upgrade my Ubuntu with stated error. The solution was nowhere to found. But valuable hint was to actually read the error ...
+image: /images/ubuntu.jpg
 ---
 I've just tried to upgrade my Ubuntu with stated error. The solution was nowhere to found. But valuable hint was to read whole output :).
 

@@ -82,50 +82,64 @@ body > header > * {
 #home main {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 
   //max-width: 54rem;
   //margin: 0 auto;
 
   & > a {
-    background-color: white;
-    box-shadow: 6px 6px 0 rgba(0,0,0,.2);
-
     color: inherit;
     display: flex;
     flex-direction: column;
+    align-content: flex-end;
 
-    flex: 0 1 12 * $module;
-
+    flex: 1 1 12 * $module;
 
     margin: .809rem;
-  }
-}
 
-#home main > a > header {
-  display: flex;
-  flex-direction: column-reverse;
-}
+    & > * {
+      background-color: white;
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, .2);
+    }
 
-#home main > a > header > h2 {
-  flex-grow: 1;
+    & > header {
+      display: flex;
+      flex-direction: column-reverse;
 
-  color: $color-link;
-  font-size: 1.25em;
-  text-align: center;
+      & > h2 {
+        flex-grow: 1;
 
-  margin: 0;
-  padding: .5 * $module;
-}
+        color: $color-link;
+        font-size: 1.25em;
+        text-align: center;
 
-#home main > a > header > small {
-  flex: 0 0 2 * $module;
+        margin: 0;
+        padding: .5 * $module;
+      }
 
-  color: #6C6A68;
-  padding: .5 * $module 0;
-  text-align: center;
+      > .image {
+        flex-basis: 6 * $module;
+        display: flex;
+        flex-direction: column;
 
-  &.with-image {
-    flex-basis: 6 * $module;
+        background-position: center;
+
+        small {
+          background-color: rgba(100,150,200,.2);
+          font-weight: 600;
+          mix-blend-mode: color-dodge;
+        }
+      }
+
+      small {
+        flex: 0 0 2 * $module;
+
+        color: #6C6A68;
+        text-align: center;
+
+        padding: .5 * $module 0;
+      }
+    }
   }
 }
 

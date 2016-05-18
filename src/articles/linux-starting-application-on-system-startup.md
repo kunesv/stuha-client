@@ -2,7 +2,7 @@
 title: Starting Application on System Startup
 date: 2012-06-29
 layout: article.html
-summary: If you want to start your application (for example JBoss) in boot time, one way is to create the script in init.d directory and register it to load on some run-level. Let's see how it can be achieved both in Ubuntu and Centos.
+summary: If you want to start your application (for example JBoss) in boot time, one way is to create the script in init.d directory. Let's see how it can be achieved both in Ubuntu and Centos.
 ---
 
 If you want to start your application (for example JBoss) in boot time, one way is to create the script in init.d directory and register it to load on some run-level. Let's see how it can be achieved both in Ubuntu and Centos.

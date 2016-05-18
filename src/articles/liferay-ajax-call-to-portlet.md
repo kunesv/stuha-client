@@ -3,6 +3,7 @@ title: Ajax Call To Portlet With AUI
 date: 2012-05-11
 summary: Imagine you want to bring some more content to your portlet in response to user action, without the urge to reload whole browser window. You will use good ol' Ajax Call, of course.
 layout: article.html
+image: /images/aui_call.jpg
 ---
 
 Imagine you want to bring some more content to your web page in response to user action without the urge to reload whole browser window. You will use Ajax Call, of course.

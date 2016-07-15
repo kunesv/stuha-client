@@ -5,58 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <title>A Blog</title>
+    <title>Stuha</title>
 
-    <link href="//fonts.googleapis.com/css?family=Quattrocento+Sans:400,400italic" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="/css/common.css"/>
 </head>
 <body id="home">
-<header>
-    <h1 class="logo"><a href="/"><img src="/images/a-blog.svg"/></a></h1>
-</header>
+
 <main>
-
-    {{#articles}}
-    <article>
-        <header onclick="location.href='{{path}}'">
-            <h2>{{title}}</h2>
-
-            {{#image}}
-                <div class="image" style="background-image: url('{{{image}}}')">
-                    <small>{{date}}</small>
-                </div>
-            {{/image}}
-            {{^image}}
-                <small>{{date}}</small>
-            {{/image}}
-
-        </header>
-        <p onclick="location.href='{{path}}'">{{summary}}</p>
-    </article>
-    {{/articles}}
-
+    {{{contents}}}
 </main>
 
-<footer>
-    <small>{{{contents}}}</small>
-</footer>
-
-<script type="text/javascript">
-    var _paq = _paq || [];
-    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-    _paq.push(["setCookieDomain", "*.snappy.pro"]);
-    _paq.push(["trackPageView"]);
-    _paq.push(["enableLinkTracking"]);
-    (function () {
-        _paq.push(["setTrackerUrl", "//analytics.snappy.pro/piwik.php"]);
-        _paq.push(["setSiteId", "3"]);
-        var e = document, c = e.createElement("script"), b = e.getElementsByTagName("script")[0];
-        c.type = "text/javascript";
-        c.defer = true;
-        c.async = true;
-        c.src = "//analytics.snappy.pro/piwik.js";
-        b.parentNode.insertBefore(c, b)
-    })();
-</script>
 </body>
 </html>

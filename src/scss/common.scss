@@ -1,14 +1,14 @@
-$base-font-size: calc(13px + .25vw + .05vh);
-$module: 1.618rem;
+$base-font-size: 14px; //calc(13px + .25vw + .05vh);
+$module: 1.4rem;
 
-$color-background: #4C4F4D;
+$color-background: #F6F6F6;
 
-$color-text: #404040;
+$color-text: #222;
 $color-link: #215B80;
 
 body {
   font-size: $base-font-size;
-  font-family: 'Quattrocento Sans', sans-serif;
+  font-family: Arial, sans-serif;
   line-height: $module;
 
   background: $color-background;
@@ -18,167 +18,66 @@ body {
   padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #eee;
-  font-weight: normal;
+body > main {
+
+  max-width: 960px;
+  margin: 0 auto;
+
+  padding-top: $module;
+}
+
+h1 {
   margin: 0;
 }
 
-a {
-  color: #ccc;
-  padding-bottom: 3px;
-  text-decoration: none;
-}
-
-p {
-  margin: .809rem 0;
-}
-
-pre {
-  background-color: #414343;
-  padding: calc(1.618rem * 0.5);
-  margin: calc(1.618rem * 0.5) 0;
-
-  max-width: 100%;
-  overflow: auto;
-}
-
-code {
-  background-color: #414343;
-  padding: 3px;
-}
-
-pre code {
-  padding: 0;
-}
-
-img {
-  max-width: 100%;
-}
-
-small {
-  font-size: 14px;
-}
-
-.logo img {
-  height: calc(1.5 * 1.618rem);
-}
-
-footer {
-  padding: 3.3rem .809rem;
-  text-align: center;
-}
-
-body > header {
+article {
   display: flex;
-  justify-content: space-between;
-}
 
-body > header > * {
-  flex: 0 1 30rem;
-  margin: .809rem;
-}
+  margin: 0 $module / 2 $module * 1.5;
 
-#home main {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  //max-width: 54rem;
-  //margin: 0 auto;
-
-  & > article {
-    color: inherit;
+  header {
     display: flex;
-    flex-direction: column;
-    align-content: flex-end;
 
-    flex: 1 1 12 * $module;
-
-    margin: .809rem;
-
-    & > * {
+    h1 {
       background-color: white;
-      box-shadow: .25 * $module .25 * $module 0 rgba(0, 0, 0, .2);
-      cursor: pointer;
+      border-radius: 1.25 * $module;
+      height: 2.5 * $module;
+      margin-right: $module;
+      width: 2.5 * $module;
 
-      transition: box-shadow 400ms ease-out;
+      text-align: center;
 
-    }
-
-    &:hover > * {
-      box-shadow: 2 * $module 2 * $module 0 rgba(0, 0, 0, .2);
-    }
-
-    & > header {
-      display: flex;
-      flex-direction: column-reverse;
-
-      & > h2 {
-        flex-grow: 1;
-
-        color: $color-link;
-        font-size: 1.25em;
-        text-align: center;
-
-        margin: 0;
-        padding: .5 * $module;
-      }
-
-      > .image {
-        flex: 0 0 6 * $module;
-        display: flex;
-        flex-direction: column;
-
-        background-position: center;
-
-        small {
-          background-color: rgba(100, 150, 200, .2);
-          font-weight: 600;
-          mix-blend-mode: color-dodge;
-        }
-      }
-
-      small {
-        flex: 0 0 2 * $module;
-
-        color: #6C6A68;
-        text-align: center;
-
-        padding: .5 * $module 0;
+      img {
+        margin-top: 12px;
       }
     }
 
-    p {
-
-      margin: 0;
-      padding: $module;
+    b {
+      color: #999;
+      font-weight: normal;
+      margin-top: $module / 2;
+      margin-left: $module / 2;
     }
   }
-}
 
-#article > article {
-  max-width: 50rem;
-  margin: 0 auto;
+  main {
+    display: inline-block;
 
-  padding: 0 .809rem 1.618rem;
-}
+    background: #E8E8E8;
+    border-radius: $module / 4;
+    padding: $module / 2 $module * 0.75;
+  }
 
-#article > article > header {
-  display: flex;
-}
+  &.my {
+    flex-direction: row-reverse;
 
-#article > article > header > h1 {
-  flex: 1 0 1.618rem;
-}
+    h1 {
+      margin: 0 0 0 $module;
+    }
 
-#article > article > header > small {
-  flex: 0 0 2 * $module;
-
-  color: #6C6A68;
-}
-
-#article > article a {
-  border-bottom: 1px solid;
-  padding-bottom: 2px;
+    main {
+      background-color: #CDEAFC;
+      color: #22659D;
+    }
+  }
 }

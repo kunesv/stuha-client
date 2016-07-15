@@ -10,17 +10,9 @@ var watch = require('metalsmith-watch');
 
 
 Metalsmith(__dirname)
-    .use(collections({
-        articles: {
-            pattern: 'articles/**/*.*',
-            sortBy: 'date',
-            reverse: true
-        }
-    }))
-    .use(markdown())
     .use(permalinks(
         {
-            pattern: ':title',
+            pattern: ':path',
             relative: false
         }
     ))
@@ -41,7 +33,12 @@ Metalsmith(__dirname)
         host: '0.0.0.0',
         port: process.env.PORT || 5000
     }))
-    .use(watch())
+    .use(watch({
+        paths: {
+            "${source}/**/*": true, // every changed files will trigger a rebuild of themselves
+            "${source}/layouts/**/*": "**/*" // every templates changed will trigger a rebuild of all files
+        }
+    }))
     .build(function (err) {
         if (err) throw err;
     });

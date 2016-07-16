@@ -36,7 +36,7 @@ article {
   margin: 0 $module / 2 $module * 1.5;
 
   header {
-    display: flex;
+    flex: 0 0 3.5 * $module;
 
     h1 {
       background-color: white;

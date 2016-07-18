@@ -33,14 +33,19 @@ body > main > aside {
   background-color: white;
   border-right: 1px solid #e5e5e5;
 
-
+  @media (max-width: 960px) {
+    display: none;
+  }
 }
 
 body > main > section {
   flex: 1 1 75%;
 
   padding: 0 2 * $module;
-  //padding: 0 .5 * $module;
+
+  @media (max-width: 960px) {
+    padding: 0 .5 * $module;
+  }
 
   & > * {
     margin-left: auto;

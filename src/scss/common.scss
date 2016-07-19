@@ -2,9 +2,15 @@ $base-font-size: 14px; //calc(13px + .25vw + .05vh);
 $module: 1.4rem;
 
 $color-background: #F6F6F6;
+$color-background-message: #E8E8E8;
+$color-background-my-message: #CDEAFC;
+
+$color-line: #E5E5E5;
 
 $color-text: #222;
 $color-link: #215B80;
+$color-text-my-message: #22659D;
+$color-text-secondary: #bbb;
 
 html, body {
   height: 100%;
@@ -31,7 +37,8 @@ body > main > aside {
   flex: 1 1 25%;
 
   background-color: white;
-  border-right: 1px solid #e5e5e5;
+  border-right: 1px solid $color-line;
+  //box-shadow: 1px 1px 2px #e0e0e0;
 
   @media (max-width: 960px) {
     display: none;
@@ -86,7 +93,7 @@ article {
   }
 
   main {
-    background: #E8E8E8;
+    background: $color-background-message;
     border-radius: $module / 4;
     display: inline-block;
     padding: $module / 2 $module * 0.75;
@@ -97,7 +104,7 @@ article {
     }
 
     footer {
-      color: #bbb;
+      color: $color-text-secondary;
       font-size: 11px;
       position: absolute;
       right: $module / 4;
@@ -113,8 +120,8 @@ article {
     }
 
     main {
-      background-color: #CDEAFC;
-      color: #22659D;
+      background-color: $color-background-my-message;
+      color: $color-text-my-message;
     }
   }
 }
@@ -126,7 +133,7 @@ article {
 
   span {
     background-color: $color-background;
-    color: #bbb;
+    color: $color-text-secondary;
 
     font-size: 13px;
     padding: 0 $module;
@@ -134,7 +141,7 @@ article {
   }
 
   &:before {
-    border-bottom: 1px solid #E5E5E5;
+    border-bottom: 1px solid $color-line;
     content: "";
     left: 0;
     position: absolute;

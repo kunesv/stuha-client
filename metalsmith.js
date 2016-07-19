@@ -7,6 +7,7 @@ var layouts = require('metalsmith-layouts');
 var sass = require('metalsmith-sass');
 var serve = require('metalsmith-serve');
 var watch = require('metalsmith-watch');
+var babel = require('metalsmith-babel');
 
 
 Metalsmith(__dirname)
@@ -16,11 +17,8 @@ Metalsmith(__dirname)
             relative: false
         }
     ))
-    .use(dateFormatter({
-        dates: [{
-            key: 'date',
-            format: 'MMM Do YYYY'
-        }]
+    .use(babel({
+        presets: ['es2015']
     }))
     .use(layouts({
         engine: 'mustache',

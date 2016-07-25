@@ -10,7 +10,7 @@ $color-line: #E5E5E5;
 $color-text: #222;
 $color-link: #215B80;
 $color-text-my-message: #106097;
-$color-text-secondary: #bbb;
+$color-text-secondary: #999;
 
 html, body {
   height: 100%;
@@ -94,9 +94,9 @@ article {
 
   main {
     background: $color-background-message;
-    border-radius: $module / 4;
+    border-radius: 0.25 * $module;
     display: inline-block;
-    padding: $module / 2 $module * 0.75;
+    padding: 0.5 * $module 0.75 * $module;
     position: relative;
 
     p {
@@ -135,7 +135,7 @@ article {
     background-color: $color-background;
     color: $color-text-secondary;
 
-    font-size: 13px;
+    font-size: 12px;
     padding: 0 $module;
 
   }

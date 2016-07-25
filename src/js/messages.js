@@ -58,7 +58,7 @@ for (let i in messages) {
             </header>
             <main>
                 <p><b>${message.userName}:</b> ${message.formatted}</p>
-                <footer>${formatDate(new Date()) != formatDate(message.createdOn) ? formatDate(message.createdOn) : ''}, <b>${formatTime(message.createdOn)}</b></footer>
+                <footer>${formatDate(new Date()) != formatDate(message.createdOn) ? formatDate(message.createdOn) + ',' : ''} <b>${formatTime(message.createdOn)}</b></footer>
             </main>
         </article>`;
 

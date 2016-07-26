@@ -31,6 +31,14 @@ let sampleUsers = [
         userName: 'Houba'
     }
 ];
+let sampleImages = [
+    [],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],
+    [{url: 'img1.jpg'}],
+    [{url: 'img2.jpg'}],
+    [{url: 'img1.jpg'}, {url: 'img2.jpg'}],
+    [{url: 'img2.jpg'}, {url: 'img1.jpg'}],
+    [{url: 'img1.jpg'}, {url: 'img2.jpg'}, {url: 'img1.jpg'}]
+];
 
 
 let messages = [];
@@ -39,13 +47,15 @@ for (let i = 0; i < 10; i++) {
     let date = new Date();
     date.setMilliseconds(date.getMilliseconds() - i * 10000000);
 
+    let imagesId = Math.floor(Math.random() * 31);
+
     messages.push({
         id: i,
         iconPath: user.iconPath,
         userId: user.userId,
         userName: user.userName,
-        formatted: sampleMessages[Math.floor(Math.random() * 5)],
-        image: Math.random() > .8 ? 'img' + Math.ceil(Math.random() * 2) + '.jpg' : false,
+        formatted: imagesId != 30 ? sampleMessages[Math.floor(Math.random() * 5)] : '',
+        images:  sampleImages[imagesId],
         createdOn: date
     });
 }
@@ -61,12 +71,11 @@ for (let i in messages) {
                 <h1><img src="/images/${message.iconPath}.png" /></h1>
             </header>
             <main>          
-                ${image(message.image)}
+                ${images(message.images)}
                 
-                <section>
-                    <p><b>${message.userName}:</b> ${message.formatted}</p>
-                    <footer>${formatDate(new Date()) != formatDate(message.createdOn) ? formatDate(message.createdOn) + ',' : ''} <b>${formatTime(message.createdOn)}</b></footer>
-                </section>
+                ${formattedMessage(message)}
+                    
+                <footer>${formatDate(new Date()) != formatDate(message.createdOn) ? formatDate(message.createdOn) + ',' : ''} <b>${formatTime(message.createdOn)}</b></footer>
             </main>
         </article>`;
 
@@ -82,10 +91,25 @@ for (let i in messages) {
 }
 
 
-function image(image) {
-    let imageTemplate = `<section class="image" style="background-image: url('/images/${image}')"></section>`;
+function images(images) {
+    if (!images.length) {
+        return '';
+    }
 
-    return image ? imageTemplate : '';
+    return `<section class="image">${images.map(image).join('')}</section>`;
+}
+
+function formattedMessage(message) {
+    if(!message.formatted) {
+        return '';
+    }
+
+    return `<section><p><b>${message.userName}:</b> ${message.formatted}</p></section>`;
+}
+
+function image(image) {
+    console.log(image)
+    return `<span style="background-image: url('/images/${image.url}')"></span>`;
 }
 
 function separator(createdOn) {

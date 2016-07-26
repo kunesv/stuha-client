@@ -93,24 +93,33 @@ article {
   }
 
   main {
-
-    display: flex;
-    flex-direction: column;
     position: relative;
 
     section {
-      background: $color-background-message;
-      border-radius: 0.25 * $module;
-      display: inline-block;
-      padding: 0.5 * $module 0.75 * $module;
+
+      p {
+        background: $color-background-message;
+        border-radius: 0.25 * $module;
+        padding: 0.5 * $module 0.75 * $module;
+      }
 
       &.image {
-        background: transparent none center;
-        padding: 0;
-        margin-bottom: 0.25 * $module;
+        span {
+          background: transparent none center;
+          border-radius: 0.25 * $module;
+          cursor: pointer;
+          display: inline-block;
+          margin: 0 0.25 * $module 0.25 * $module 0;
+          vertical-align: bottom;
 
-        width: 10 * $module;
-        height: 7.5 * $module;
+          width: 10 * $module;
+          height: 7.5 * $module;
+
+          @media (max-width: 640px) {
+            width: 6 * $module;
+            height: 4.5 * $module;
+          }
+        }
       }
     }
 
@@ -130,13 +139,20 @@ article {
       margin: 0 0 0 $module;
     }
 
-    main {
-      align-items: flex-end;
-    }
-
     section {
-      background-color: $color-background-my-message;
-      color: $color-text-my-message;
+      p {
+        background-color: $color-background-my-message;
+        color: $color-text-my-message;
+        align-items: flex-end;
+      }
+
+      &.image {
+        text-align: right;
+
+        span {
+          margin: 0 0 0.25 * $module 0.25 * $module;
+        }
+      }
     }
   }
 }

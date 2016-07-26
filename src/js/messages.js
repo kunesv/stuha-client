@@ -1,3 +1,5 @@
+// TEST DATA preparation
+
 let currentUser = {userId: 2, userName: 'Houba'};
 
 let sampleMessages = [
@@ -30,6 +32,7 @@ let sampleUsers = [
     }
 ];
 
+
 let messages = [];
 for (let i = 0; i < 10; i++) {
     let user = sampleUsers[Math.floor(Math.random() * 4)];
@@ -42,6 +45,7 @@ for (let i = 0; i < 10; i++) {
         userId: user.userId,
         userName: user.userName,
         formatted: sampleMessages[Math.floor(Math.random() * 5)],
+        image: Math.random() > .8 ? 'img' + Math.ceil(Math.random() * 2) + '.jpg' : false,
         createdOn: date
     });
 }
@@ -51,14 +55,18 @@ messages.reverse();
 for (let i in messages) {
     let message = messages[i];
 
-    let content =
+    let messageTemplate =
         `<article class="${currentUser.userId == message.userId ? 'my' : ''}" data-id="${message.id}" data-date="${formatDate(message.createdOn)}">
             <header>
                 <h1><img src="/images/${message.iconPath}.png" /></h1>
             </header>
-            <main>
-                <p><b>${message.userName}:</b> ${message.formatted}</p>
-                <footer>${formatDate(new Date()) != formatDate(message.createdOn) ? formatDate(message.createdOn) + ',' : ''} <b>${formatTime(message.createdOn)}</b></footer>
+            <main>          
+                ${image(message.image)}
+                
+                <section>
+                    <p><b>${message.userName}:</b> ${message.formatted}</p>
+                    <footer>${formatDate(new Date()) != formatDate(message.createdOn) ? formatDate(message.createdOn) + ',' : ''} <b>${formatTime(message.createdOn)}</b></footer>
+                </section>
             </main>
         </article>`;
 
@@ -70,7 +78,14 @@ for (let i in messages) {
     }
 
 
-    document.getElementsByClassName('messages')[0].insertAdjacentHTML('afterbegin', content);
+    document.getElementsByClassName('messages')[0].insertAdjacentHTML('afterbegin', messageTemplate);
+}
+
+
+function image(image) {
+    let imageTemplate = `<section class="image" style="background-image: url('/images/${image}')"></section>`;
+
+    return image ? imageTemplate : '';
 }
 
 function separator(createdOn) {

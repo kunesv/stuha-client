@@ -10,7 +10,7 @@ $color-line: #E5E5E5;
 $color-text: #222;
 $color-link: #215B80;
 $color-text-my-message: #106097;
-$color-text-secondary: #999;
+$color-text-secondary: #bbb;
 
 html, body {
   height: 100%;
@@ -61,7 +61,7 @@ body > main > section {
   }
 }
 
-h1 {
+h1, p {
   margin: 0;
 }
 
@@ -93,14 +93,25 @@ article {
   }
 
   main {
-    background: $color-background-message;
-    border-radius: 0.25 * $module;
-    display: inline-block;
-    padding: 0.5 * $module 0.75 * $module;
+
+    display: flex;
+    flex-direction: column;
     position: relative;
 
-    p {
-      margin: 0;
+    section {
+      background: $color-background-message;
+      border-radius: 0.25 * $module;
+      display: inline-block;
+      padding: 0.5 * $module 0.75 * $module;
+
+      &.image {
+        background: transparent none center;
+        padding: 0;
+        margin-bottom: 0.25 * $module;
+
+        width: 10 * $module;
+        height: 7.5 * $module;
+      }
     }
 
     footer {
@@ -120,6 +131,10 @@ article {
     }
 
     main {
+      align-items: flex-end;
+    }
+
+    section {
       background-color: $color-background-my-message;
       color: $color-text-my-message;
     }
@@ -135,7 +150,7 @@ article {
     background-color: $color-background;
     color: $color-text-secondary;
 
-    font-size: 12px;
+    font-size: 13px;
     padding: 0 $module;
 
   }

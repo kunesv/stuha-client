@@ -155,6 +155,41 @@ article {
       }
     }
   }
+
+  &.placeholder {
+    p {
+      width: 100%;
+    }
+  }
+}
+
+.overlay {
+  background-color: rgba(#ccc, .5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  span {
+    background-color: white;
+    border-radius: 0.25 * $module;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    padding: $module;
+
+    height: 6.5 * $module;
+    width: 6.5 * $module;
+  }
 }
 
 .seperator {

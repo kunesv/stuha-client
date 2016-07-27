@@ -1,3 +1,5 @@
+[1, 2, 3, 4].map(messagePlaceholder);
+
 // TEST DATA preparation
 
 let currentUser = {userId: 2, userName: 'Houba'};
@@ -32,7 +34,7 @@ let sampleUsers = [
     }
 ];
 let sampleImages = [
-    [],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],
+    [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
     [{url: 'img1.jpg'}],
     [{url: 'img2.jpg'}],
     [{url: 'img1.jpg'}, {url: 'img2.jpg'}],
@@ -42,7 +44,9 @@ let sampleImages = [
 
 
 let messages = [];
-for (let i = 0; i < 10; i++) {
+let noOfMessages = Math.floor(Math.random() * 10);
+noOfMessages = noOfMessages < 2 ? 0 : noOfMessages;
+for (let i = 0; i < noOfMessages; i++) {
     let user = sampleUsers[Math.floor(Math.random() * 4)];
     let date = new Date();
     date.setMilliseconds(date.getMilliseconds() - i * 10000000);
@@ -55,17 +59,78 @@ for (let i = 0; i < 10; i++) {
         userId: user.userId,
         userName: user.userName,
         formatted: imagesId != 30 ? sampleMessages[Math.floor(Math.random() * 5)] : '',
-        images:  sampleImages[imagesId],
+        images: sampleImages[imagesId],
         createdOn: date
     });
 }
 messages.reverse();
 
 
-for (let i in messages) {
-    let message = messages[i];
+setTimeout(messagesLoadResult, 200);
 
-    let messageTemplate =
+function messagesLoadResult() {
+    if (Math.random() > .2) {
+        messagePlaceholdersRemove();
+
+        for (let message of messages) {
+            messageAdd(message);
+        }
+
+        if(!messages.length) {
+            // Show 'Empty discussion notice'
+        }
+
+    } else {
+        messageLoadFailedOverlayAdd();
+    }
+}
+
+
+function reload() {
+    messageLoadFailedOverlayRemove();
+
+    setTimeout(messagesLoadResult, 500);
+}
+
+function messageLoadFailedOverlayAdd() {
+    let template =
+        `<div class="overlay">
+            <span onclick="reload()">Load failed. <br/> Please reload.</span>
+        </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', template);
+}
+
+function messageLoadFailedOverlayRemove() {
+    let overlays = document.getElementsByClassName('overlay');
+    for (let i = overlays.length; i--;) {
+        let overlay = overlays[i];
+        document.body.removeChild(overlay);
+    }
+}
+
+function messagePlaceholder() {
+    let template =
+        `<article class="placeholder">
+            <header><h1></h1></header>
+            <main>          
+                <section><p><b>&middot;&nbsp;&middot;&nbsp;&middot;</b></p></section>
+            </main>
+        </article>`;
+
+    document.getElementsByClassName('messages')[0].insertAdjacentHTML('beforeend', template);
+}
+
+function messagePlaceholdersRemove() {
+    let placeholders = document.getElementsByClassName('messages')[0].getElementsByClassName('placeholder')
+    for (let i = placeholders.length; i--;) {
+        let placeholder = placeholders[i];
+        document.getElementsByClassName('messages')[0].removeChild(placeholder);
+    }
+}
+
+function messageAdd(message) {
+    let template =
         `<article class="${currentUser.userId == message.userId ? 'my' : ''}" data-id="${message.id}" data-date="${formatDate(message.createdOn)}">
             <header>
                 <h1><img src="/images/${message.iconPath}.png" /></h1>
@@ -87,9 +152,8 @@ for (let i in messages) {
     }
 
 
-    document.getElementsByClassName('messages')[0].insertAdjacentHTML('afterbegin', messageTemplate);
+    document.getElementsByClassName('messages')[0].insertAdjacentHTML('afterbegin', template);
 }
-
 
 function images(images) {
     if (!images.length) {
@@ -100,7 +164,7 @@ function images(images) {
 }
 
 function formattedMessage(message) {
-    if(!message.formatted) {
+    if (!message.formatted) {
         return '';
     }
 
@@ -108,7 +172,6 @@ function formattedMessage(message) {
 }
 
 function image(image) {
-    console.log(image)
     return `<span style="background-image: url('/images/${image.url}')"></span>`;
 }
 

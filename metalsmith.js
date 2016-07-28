@@ -2,7 +2,6 @@ var Metalsmith = require('metalsmith');
 var collections = require('metalsmith-collections');
 var markdown = require('metalsmith-markdown');
 var permalinks = require('metalsmith-permalinks');
-var dateFormatter = require('metalsmith-date-formatter');
 var layouts = require('metalsmith-layouts');
 var sass = require('metalsmith-sass');
 var serve = require('metalsmith-serve');

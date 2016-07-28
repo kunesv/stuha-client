@@ -1,4 +1,4 @@
-[1, 2, 3, 4].map(messagePlaceholder);
+[1, 2, 3, 4].map(messagePlaceholderAdd);
 
 // TEST DATA preparation
 
@@ -71,12 +71,12 @@ function messagesLoadResult() {
     if (Math.random() > .2) {
         messagePlaceholdersRemove();
 
-        for (let message of messages) {
-            messageAdd(message);
+        for (let i in messages) {
+            messageAdd(messages[i]);
         }
 
         if (!messages.length) {
-            // Show Empty Discussion notice & Message Add form
+            emptyDiscussionNoticeAdd();
         }
 
     } else {
@@ -89,6 +89,13 @@ function reload() {
     messageLoadFailedOverlayRemove();
 
     setTimeout(messagesLoadResult, 500);
+}
+
+function emptyDiscussionNoticeAdd() {
+    let template =
+        `No messages found.`;
+
+    document.getElementsByClassName('messages')[0].insertAdjacentHTML('beforeend', template);
 }
 
 function messageLoadFailedOverlayAdd() {
@@ -108,7 +115,7 @@ function messageLoadFailedOverlayRemove() {
     }
 }
 
-function messagePlaceholder() {
+function messagePlaceholderAdd() {
     let template =
         `<article class="placeholder">
             <header><h1></h1></header>

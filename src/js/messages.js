@@ -44,8 +44,7 @@ let sampleImages = [
 
 
 let messages = [];
-let noOfMessages = Math.floor(Math.random() * 10);
-noOfMessages = noOfMessages < 2 ? 0 : noOfMessages;
+let noOfMessages = Math.random() < .2 ? 0 : 10;
 for (let i = 0; i < noOfMessages; i++) {
     let user = sampleUsers[Math.floor(Math.random() * 4)];
     let date = new Date();
@@ -76,8 +75,8 @@ function messagesLoadResult() {
             messageAdd(message);
         }
 
-        if(!messages.length) {
-            // Show 'Empty discussion notice'
+        if (!messages.length) {
+            // Show Empty Discussion notice & Message Add form
         }
 
     } else {

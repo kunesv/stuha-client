@@ -26,39 +26,64 @@ body {
 
   margin: 0;
   padding: 0;
-}
-
-body > main {
-  display: flex;
-  min-height: 100%;
-}
-
-body > main > aside {
-  flex: 1 1 25%;
-
-  background-color: white;
-  border-right: 1px solid $color-line;
-  //box-shadow: 1px 1px 2px #e0e0e0;
 
   @media (max-width: 960px) {
-    display: none;
+    & > header {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      background-color: white;
+
+
+      height: 2 * $module;
+      position: fixed;
+      width: 100%;
+      z-index: 2;
+
+      & > span {
+        color: #999;
+        font-size: 13px;
+        line-height: $module;
+        text-align: center;
+      }
+    }
+
+    & > main > section {
+      padding: 2 * $module 0.5 * $module;
+    }
   }
-}
 
-body > main > section {
-  flex: 1 1 75%;
+  & > main {
+    display: flex;
+    min-height: 100%;
 
-  padding: 0 2 * $module;
+    & > aside {
+      flex: 1 1 25%;
 
-  @media (max-width: 960px) {
-    padding: 0 .5 * $module;
+      background-color: white;
+      border-right: 1px solid $color-line;
+      //box-shadow: 1px 1px 2px #e0e0e0;
+
+      @media (max-width: 960px) {
+        display: none;
+      }
+    }
+
+    & > section {
+      flex: 1 1 75%;
+
+      padding-left: 2 * $module;
+      padding-right: 2 * $module;
+
+      & > * {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 960px;
+      }
+    }
   }
 
-  & > * {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 960px;
-  }
 }
 
 h1, p {
@@ -164,7 +189,7 @@ article {
 }
 
 .overlay {
-  background-color: rgba(#ccc, .5);
+  background-color: rgba(black, .5);
 
   display: flex;
   justify-content: center;
@@ -177,7 +202,7 @@ article {
   width: 100%;
 
   span {
-    background-color: white;
+    background-color: $color-background;
     border-radius: 0.25 * $module;
     cursor: pointer;
     display: flex;
@@ -187,8 +212,8 @@ article {
 
     padding: $module;
 
-    height: 6.5 * $module;
-    width: 6.5 * $module;
+    height: 5 * $module;
+    width: 5 * $module;
   }
 }
 

@@ -34,9 +34,9 @@ body {
       justify-content: space-around;
 
       background-color: white;
+      box-shadow: 1px 1px 0.5 * $module rgba(black, 0.2);
 
-
-      height: 2 * $module;
+      height: 2.5 * $module;
       position: fixed;
       width: 100%;
       z-index: 2;
@@ -45,6 +45,7 @@ body {
         color: #999;
         font-size: 13px;
         line-height: $module;
+        padding: 0 0.5 * $module;
         text-align: center;
       }
     }

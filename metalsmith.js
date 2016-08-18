@@ -8,7 +8,6 @@ var serve = require('metalsmith-serve');
 var watch = require('metalsmith-watch');
 var babel = require('metalsmith-babel');
 
-
 Metalsmith(__dirname)
     .use(permalinks(
         {
@@ -41,3 +40,4 @@ Metalsmith(__dirname)
     });
 
 
+// '${source}/../node_modules/babel-polyfill/dist/polyfill.js'

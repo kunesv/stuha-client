@@ -27,6 +27,10 @@ body {
   margin: 0;
   padding: 0;
 
+  & > header {
+    display: none;
+  }
+
   @media (max-width: 960px) {
     & > header {
       display: flex;

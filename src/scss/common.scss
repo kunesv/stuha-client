@@ -46,11 +46,26 @@ body {
       z-index: 2;
 
       & > span {
+        flex-grow: 1;
+
         color: #999;
-        font-size: 13px;
+        font-size: 14px;
         line-height: $module;
         padding: 0 0.5 * $module;
         text-align: center;
+
+        &.button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 2.5 * $module;
+
+          background-color: rebeccapurple;
+          color: white;
+          cursor: pointer;
+          font-size: 32px;
+          height: 2.5 * $module;
+        }
       }
     }
   }
@@ -204,6 +219,7 @@ article {
   position: absolute;
   top: 0;
   width: 100%;
+  z-index: 2;
 
   span {
     background-color: $color-background;

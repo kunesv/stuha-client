@@ -53,10 +53,6 @@ body {
         text-align: center;
       }
     }
-
-    & > main > section {
-      padding: 2 * $module 0.5 * $module;
-    }
   }
 
   & > main {
@@ -68,7 +64,6 @@ body {
 
       background-color: white;
       border-right: 1px solid $color-line;
-      //box-shadow: 1px 1px 2px #e0e0e0;
 
       @media (max-width: 960px) {
         display: none;
@@ -80,6 +75,10 @@ body {
 
       padding-left: 2 * $module;
       padding-right: 2 * $module;
+
+      @media (max-width: 960px) {
+        padding: 2 * $module 0.5 * $module;
+      }
 
       & > * {
         margin-left: auto;

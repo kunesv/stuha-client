@@ -36,7 +36,7 @@ a.button {
   }
 
   &.clicked {
-    box-shadow: 0 0 0 0.1 * $module $color-background inset;
+    box-shadow: 0 0 0 0.5 * $module rgba(black, 0.2) inset;
     //font-size: 24px;
   }
 

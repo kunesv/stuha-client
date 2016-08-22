@@ -12,7 +12,9 @@ for (var i = 0; i < buttons.length; i++) {
             button.classList.remove('clicked');
 
             if (button.hasAttribute('data-action')) {
-                window[button.getAttribute('data-action')](button);
+                setTimeout(() => {
+                    window[button.getAttribute('data-action')](button)
+                }, 200);
             }
         }, 300)
 

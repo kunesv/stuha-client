@@ -22,21 +22,20 @@ a.button {
   justify-content: center;
 
   background-color: #639;
-  color: white;
+  color: #A079C8;
   cursor: pointer;
   font-size: 32px;
   font-weight: 100;
   height: 2.5 * $module;
-  text-shadow: 1px 1px 1px rgba(black, .5);
 
-  transition: background-color 400ms, box-shadow 100ms;
+  transition: background-color 400ms, box-shadow 200ms;
 
   &:hover {
     background-color: #4F1B85;
   }
 
   &.clicked {
-    box-shadow: 0 0 0 0.25 * $module $color-background inset;
+    box-shadow: 0 0 0 0.25 * $module #639 inset;
   }
 }
 

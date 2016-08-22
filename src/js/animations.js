@@ -8,21 +8,22 @@ for (var i = 0; i < buttons.length; i++) {
     });
 
     button.addEventListener('mouseup', () => {
+        button.classList.add('clicked');
         setTimeout(() => {
             button.classList.remove('clicked');
 
             if (button.hasAttribute('data-action')) {
                 setTimeout(() => {
                     window[button.getAttribute('data-action')](button)
-                }, 200);
+                }, 300);
             }
         }, 300)
 
     });
 
-    button.addEventListener('mouseleave', () => {
-        button.classList.remove('clicked');
-    });
+    // button.addEventListener('mouseleave', () => {
+    //     button.classList.remove('clicked');
+    // });
 }
 
 

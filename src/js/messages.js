@@ -135,3 +135,19 @@ function formatTime(date) {
     return ('0' + date.getHours()).slice(-2) + '.' + ('0' + date.getMinutes()).slice(-2);
 }
 
+
+function messageDialog (button) {
+    // let template =
+    //     `<section class="overlay"></section>`;
+    //
+    // document.body.insertAdjacentHTML('beforeend', template);
+
+    let template =
+        `<section class="message-dialog"></section>`;
+
+    button.insertAdjacentHTML('afterend', template);
+
+    setTimeout(() => {
+        document.getElementsByClassName('message-dialog')[0].classList.add('active')
+    },100);
+}

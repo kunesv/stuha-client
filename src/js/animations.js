@@ -10,8 +10,16 @@ for (var i = 0; i < buttons.length; i++) {
     button.addEventListener('mouseup', () => {
         setTimeout(() => {
             button.classList.remove('clicked');
+
+            if (button.hasAttribute('data-action')) {
+                window[button.getAttribute('data-action')](button);
+            }
         }, 300)
 
+    });
+
+    button.addEventListener('mouseleave', () => {
+        button.classList.remove('clicked');
     });
 }
 

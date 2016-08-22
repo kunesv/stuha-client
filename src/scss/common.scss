@@ -4,6 +4,7 @@ $module: 1.4rem;
 $color-background: #F6F6F6;
 $color-background-message: #E8E8E8;
 $color-background-my-message: #BAEAFD;
+$color-background-button: #639;
 
 $color-line: #E5E5E5;
 
@@ -21,22 +22,31 @@ a.button {
   align-items: center;
   justify-content: center;
 
-  background-color: #639;
+  background-color: $color-background-button;
   color: #A079C8;
   cursor: pointer;
   font-size: 32px;
   font-weight: 100;
   height: 2.5 * $module;
 
-  transition: background-color 400ms, box-shadow 200ms, font-size 200ms;
+  transition: background-color 400ms, box-shadow 200ms;
 
   &:hover {
     background-color: #4F1B85;
   }
 
   &.clicked {
-    box-shadow: 0 0 0 0.5 * $module rgba(white, .1) inset;
+    box-shadow: 0 0 0 0.1 * $module $color-background inset;
     //font-size: 24px;
+  }
+
+  span {
+    display: flex;
+    height: 18px;
+    line-height: 12px;
+    width: 18px;
+
+    //transform: rotate(25deg);
   }
 }
 
@@ -89,7 +99,7 @@ body {
 
   & > main {
     display: flex;
-    min-height: 100%;
+    height: 100%;
 
     & > aside {
       flex: 1 1 25%;
@@ -105,11 +115,15 @@ body {
     & > section {
       flex: 1 1 75%;
 
+      height: 100%;
+      overflow: auto;
+
       padding-left: 2 * $module;
       padding-right: 2 * $module;
 
       @media (max-width: 960px) {
-        padding: 2 * $module 0.5 * $module;
+        padding-left: 0.5 * $module;
+        padding-right: 0.5 * $module;
       }
 
       & > * {
@@ -134,6 +148,10 @@ article {
 
   &:first-child {
     margin-top: 1.75 * $module;
+
+    @media (max-width: 960px) {
+      margin-top: 3.75 * $module;
+    }
   }
 
   header {
@@ -276,5 +294,24 @@ article {
     top: 50%;
     width: 100%;
     z-index: -1;
+  }
+}
+
+.message-dialog {
+  background-color: #f0f0f0;
+  height: 2.5 * $module;
+  right: 0px;
+  overflow: auto;
+  position: fixed;
+  top: 0px;
+  width: 3.5 * $module;
+
+  transition: all 300ms;
+
+  &.active {
+    height: 100%;
+    right: 0;
+    top: 0;
+    width: 100%;
   }
 }

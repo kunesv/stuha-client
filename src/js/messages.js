@@ -143,11 +143,27 @@ function messageDialog (button) {
     // document.body.insertAdjacentHTML('beforeend', template);
 
     let template =
-        `<section class="message-dialog"></section>`;
+        `<section class="message-dialog">
+            <header>
+                <span></span>
+                <span class="close_button"><a class="button" onmousedown="hideMessageDialog()"><span>&#43;</span></a></span>
+            </header>
+        </section>`;
 
     button.insertAdjacentHTML('afterend', template);
+
+
 
     setTimeout(() => {
         document.getElementsByClassName('message-dialog')[0].classList.add('active')
     },100);
+}
+
+function hideMessageDialog() {
+    let dialog = document.getElementsByClassName('message-dialog')[0];
+    dialog.classList.remove('active');
+
+    setTimeout(() => {
+        dialog.parentNode.removeChild(dialog);
+    }, 300);
 }

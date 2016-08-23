@@ -23,7 +23,7 @@ html, body {
   justify-content: center;
 
   background-color: $color-background-button;
-  color: #A079C8;
+  color: rgba(white, 0.4);
   cursor: pointer;
   font-size: 32px;
   font-weight: 100;
@@ -315,5 +315,23 @@ article {
     right: 0;
     top: 0;
     width: 100%;
+  }
+
+  > header {
+    display: flex;
+
+    & > span {
+      flex-grow: 1;
+
+      &.close_button {
+        flex: 0 0 3.5 * $module;
+
+        padding: 0;
+
+        & > .button {
+          background-color: #ccc;
+        }
+      }
+    }
   }
 }

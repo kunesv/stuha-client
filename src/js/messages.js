@@ -75,7 +75,7 @@ function messageAdd(message) {
     let template =
         `<article class="${currentUser.userId == message.userId ? 'my' : ''}" data-id="${message.id}" data-date="${formatDate(message.createdOn)}">
             <header>
-                <h1><img src="/images/${message.iconPath}.png" /></h1>
+                <h1 style="background-image: url('/images/${message.iconPath}.png')"></h1>
             </header>
             <main>          
                 ${images(message.images)}
@@ -150,8 +150,8 @@ function messageDialog(button) {
             </header>
             <form>
                 <ul class="icons">
-                    <li class="button"><img src="/images/3_1.png" alt=":)"/></li>
-                    <li class="button"><img src="/images/3_4.png" alt=":)"/></li>
+                    <li class="button" style="background-image: url('/images/3_1.png')"></li>
+                    <li class="button" style="background-image: url('/images/3_4.png')"></li>
                 </ul>
                 <p>
                     <textarea ></textarea>

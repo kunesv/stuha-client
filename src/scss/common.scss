@@ -128,11 +128,9 @@ article {
     flex: 0 0 3.5 * $module;
 
     h1 {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
       background-color: white;
+      background-position: center;
+      background-repeat: no-repeat;
       border-radius: 1.25 * $module;
       height: 2.5 * $module;
       margin-right: $module;

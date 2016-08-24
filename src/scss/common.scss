@@ -13,47 +13,17 @@ $color-link: #215B80;
 $color-text-my-message: #106097;
 $color-text-secondary: #bbb;
 
+$base-font-family: Ubuntu, sans-serif;
+
 html, body {
   height: 100%;
 }
 
-.button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  background-color: $color-background-button;
-  color: rgba(white, 0.4);
-  cursor: pointer;
-  font-size: 32px;
-  font-weight: 100;
-  height: 2.5 * $module;
-  outline: 0 none;
-
-  transition: background-color 400ms, box-shadow 100ms;
-
-  &:hover {
-    background-color: #4F1B85;
-  }
-
-  &.clicked {
-    box-shadow: 0 0 0 0.5 * $module rgba(black, 0.4) inset;
-    //font-size: 24px;
-  }
-
-  span {
-    display: flex;
-    height: 18px;
-    line-height: 12px;
-    width: 18px;
-
-    //transform: rotate(25deg);
-  }
-}
 
 body {
   font-size: $base-font-size;
-  font-family: Ubuntu, sans-serif;
+  font-family: $base-font-family;
   line-height: $module;
 
   background: $color-background;
@@ -62,12 +32,12 @@ body {
   margin: 0;
   padding: 0;
 
-  & > header {
+  > header {
     display: none;
   }
 
   @media (max-width: 960px) {
-    & > header {
+    > header {
       display: flex;
       align-items: center;
       justify-content: space-around;
@@ -80,11 +50,10 @@ body {
       width: 100%;
       z-index: 2;
 
-      & > span {
+      > span {
         flex-grow: 1;
 
         color: #999;
-        font-size: 14px;
         line-height: $module;
         padding: 0 0.5 * $module;
         text-align: center;
@@ -98,11 +67,11 @@ body {
     }
   }
 
-  & > main {
+  > main {
     display: flex;
     height: 100%;
 
-    & > aside {
+    > aside {
       flex: 1 1 25%;
 
       background-color: white;
@@ -113,7 +82,7 @@ body {
       }
     }
 
-    & > section {
+    > section {
       flex: 1 1 75%;
 
       height: 100%;
@@ -127,7 +96,7 @@ body {
         padding-right: 0.5 * $module;
       }
 
-      & > * {
+      > * {
         margin-left: auto;
         margin-right: auto;
         max-width: 960px;
@@ -159,16 +128,16 @@ article {
     flex: 0 0 3.5 * $module;
 
     h1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
       background-color: white;
       border-radius: 1.25 * $module;
       height: 2.5 * $module;
       margin-right: $module;
       text-align: center;
       width: 2.5 * $module;
-
-      img {
-        margin-top: 12px;
-      }
     }
   }
 
@@ -298,40 +267,5 @@ article {
   }
 }
 
-.message-dialog {
-  background-color: $color-background-button;
-  height: 2.5 * $module;
-  right: 0px;
-  overflow: auto;
-  position: fixed;
-  top: 0px;
-  width: 3.5 * $module;
-
-  transition: all 300ms;
-
-  &.active {
-    background-color: $color-background;
-    height: 100%;
-    right: 0;
-    top: 0;
-    width: 100%;
-  }
-
-  > header {
-    display: flex;
-
-    & > span {
-      flex-grow: 1;
-
-      &.close_button {
-        flex: 0 0 3.5 * $module;
-
-        padding: 0;
-
-        & > .button {
-          background-color: #ccc;
-        }
-      }
-    }
-  }
-}
+@import "button";
+@import "message-dialog";

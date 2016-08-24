@@ -64,7 +64,7 @@ function messagePlaceholderAdd() {
 }
 
 function messagePlaceholdersRemove() {
-    let placeholders = document.getElementsByClassName('messages')[0].getElementsByClassName('placeholder')
+    let placeholders = document.getElementsByClassName('messages')[0].getElementsByClassName('placeholder');
     for (let i = placeholders.length; i--;) {
         let placeholder = placeholders[i];
         document.getElementsByClassName('messages')[0].removeChild(placeholder);
@@ -136,7 +136,7 @@ function formatTime(date) {
 }
 
 
-function messageDialog (button) {
+function messageDialog(button) {
     // let template =
     //     `<section class="overlay"></section>`;
     //
@@ -146,17 +146,26 @@ function messageDialog (button) {
         `<section class="message-dialog">
             <header>
                 <span></span>
-                <span class="close_button"><a class="button" onmousedown="hideMessageDialog()"><span>&#43;</span></a></span>
+                <span class="close_button"><a class="button" data-action="hideMessageDialog"><span>&#43;</span></a></span>
             </header>
+            <form>
+                <ul class="icons">
+                    <li class="button"><img src="/images/3_1.png" alt=":)"/></li>
+                    <li class="button"><img src="/images/3_4.png" alt=":)"/></li>
+                </ul>
+                <p>
+                    <textarea ></textarea>
+                </p>
+            </form>
         </section>`;
 
-    button.insertAdjacentHTML('afterend', template);
-
-
+    document.body.insertAdjacentHTML('beforeend', template);
 
     setTimeout(() => {
-        document.getElementsByClassName('message-dialog')[0].classList.add('active')
-    },100);
+        document.getElementsByClassName('message-dialog')[0].classList.add('active');
+
+        initButtons(document.getElementsByClassName('message-dialog')[0].getElementsByClassName('button'));
+    }, 100);
 }
 
 function hideMessageDialog() {

@@ -32,7 +32,8 @@ Metalsmith(__dirname)
     .use(watch({
         paths: {
             "${source}/**/*": true, // every changed files will trigger a rebuild of themselves
-            "${source}/layouts/**/*": "**/*" // every templates changed will trigger a rebuild of all files
+            "${source}/layouts/**/*": "**/*", // every templates changed will trigger a rebuild of all files
+            "${source}/scss/**/*": "**/*", // every sass changed will trigger a rebuild of all sass files
         }
     }))
     .build(function (err) {

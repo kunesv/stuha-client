@@ -1,0 +1,30 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: $color-background-button;
+  color: rgba(white, 0.4);
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: 100;
+  height: 2.5 * $module;
+  outline: 0 none;
+
+  transition: background-color 400ms, box-shadow 100ms;
+
+  &:hover {
+    background-color: #4F1B85;
+  }
+
+  &.clicked {
+    box-shadow: 0 0 0 0.5 * $module rgba(black, 0.5) inset;
+  }
+
+  span {
+    display: flex;
+    height: 18px;
+    line-height: 12px;
+    width: 18px;
+  }
+}

@@ -12,15 +12,14 @@ function initButtons(buttons) {
 
         button.addEventListener('mouseup', () => {
             button.classList.add('clicked');
+
             setTimeout(() => {
                 button.classList.remove('clicked');
 
-                if (button.hasAttribute('data-action')) {
-
-                    window[button.getAttribute('data-action')](button)
-
+                if (button.hasAttribute('data-click')) {
+                    window[button.getAttribute('data-click')](button);
                 }
-            }, 300)
+            }, 300);
 
         });
 
@@ -28,6 +27,4 @@ function initButtons(buttons) {
         //     button.classList.remove('clicked');
         // });
     }
-
-
 }

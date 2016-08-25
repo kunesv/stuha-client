@@ -8,8 +8,8 @@ function messagesLoadResult() {
     if (Math.random() > .2) {
         messagePlaceholdersRemove();
 
-        for (let i in messages) {
-            messageAdd(messages[i]);
+        for (let message of messages) {
+            messageAdd(message);
         }
 
         if (!messages.length) {
@@ -31,7 +31,7 @@ function emptyDiscussionNoticeAdd() {
     let template =
         `<article>Tak tady se asi ještě diskuse moc nerozjela.</article>`;
 
-    document.getElementsByClassName('messages')[0].insertAdjacentHTML('beforeend', template);
+    document.querySelector('.messages').insertAdjacentHTML('beforeend', template);
 }
 
 function messageLoadFailedOverlayAdd() {
@@ -60,14 +60,14 @@ function messagePlaceholderAdd() {
             </main>
         </article>`;
 
-    document.getElementsByClassName('messages')[0].insertAdjacentHTML('beforeend', template);
+    document.querySelector('.messages').insertAdjacentHTML('beforeend', template);
 }
 
 function messagePlaceholdersRemove() {
     let placeholders = document.getElementsByClassName('messages')[0].getElementsByClassName('placeholder');
     for (let i = placeholders.length; i--;) {
         let placeholder = placeholders[i];
-        document.getElementsByClassName('messages')[0].removeChild(placeholder);
+        document.querySelector('.messages').removeChild(placeholder);
     }
 }
 
@@ -86,15 +86,13 @@ function messageAdd(message) {
             </main>
         </article>`;
 
-
-    if (document.getElementsByClassName('messages')[0].firstChild
-        && document.getElementsByClassName('messages')[0].firstChild.hasAttribute('data-date')
-        && document.getElementsByClassName('messages')[0].firstChild.getAttribute('data-date') != formatDate(message.createdOn)) {
-        document.getElementsByClassName('messages')[0].insertAdjacentHTML('afterbegin', separator(document.getElementsByClassName('messages')[0].firstChild.getAttribute('data-date')));
+    if (document.querySelector('.messages').firstChild
+        && document.querySelector('.messages').firstChild.hasAttribute('data-date')
+        && document.querySelector('.messages').firstChild.getAttribute('data-date') != formatDate(message.createdOn)) {
+        document.querySelector('.messages').insertAdjacentHTML('afterbegin', separator(document.querySelector('.messages').firstChild.getAttribute('data-date')));
     }
 
-
-    document.getElementsByClassName('messages')[0].insertAdjacentHTML('afterbegin', template);
+    document.querySelector('.messages').insertAdjacentHTML('afterbegin', template);
 }
 
 function images(images) {
@@ -125,13 +123,10 @@ function separator(createdOn) {
 function formatDate(date) {
     let dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
 
-
     return dayNames[date.getDay()] + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '. ' + date.getFullYear();
 }
 
 function formatTime(date) {
-
-
     return ('0' + date.getHours()).slice(-2) + '.' + ('0' + date.getMinutes()).slice(-2);
 }
 
@@ -146,12 +141,14 @@ function messageDialog(button) {
         `<section class="message-dialog">
             <header>
                 <span></span>
-                <span class="close_button"><a class="button" data-action="hideMessageDialog"><span>&#43;</span></a></span>
+                <span class="close_button"><a class="button" data-click="hideMessageDialog"><span>&#43;</span></a></span>
             </header>
             <form>
                 <ul class="icons">
                     <li class="button" style="background-image: url('/images/3_1.png')"></li>
                     <li class="button" style="background-image: url('/images/3_4.png')"></li>
+                    <li class="button" style="background-image: url('/images/3_1.png')"></li>
+                    <li class="button" style="background-image: url('/images/3_4.png')"></li>                                                     
                 </ul>
                 <p>
                     <textarea ></textarea>
@@ -162,14 +159,15 @@ function messageDialog(button) {
     document.body.insertAdjacentHTML('beforeend', template);
 
     setTimeout(() => {
-        document.getElementsByClassName('message-dialog')[0].classList.add('active');
+        document.querySelector('.message-dialog').classList.add('active');
 
-        initButtons(document.getElementsByClassName('message-dialog')[0].getElementsByClassName('button'));
+        initButtons(document.querySelectorAll('.message-dialog .button'));
     }, 100);
 }
 
 function hideMessageDialog() {
-    let dialog = document.getElementsByClassName('message-dialog')[0];
+    let dialog = document.querySelector('.message-dialog');
+
     dialog.classList.remove('active');
 
     setTimeout(() => {

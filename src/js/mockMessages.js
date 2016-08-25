@@ -61,3 +61,7 @@ for (let i = 0; i < noOfMessages; i++) {
 messages.reverse();
 
 setTimeout(messagesLoadResult, Math.round(Math.random() * 1500));
+
+function userIcons() {
+    return [{url: '3_1'}, {url: '3_4'}, {url: '3_1'}, {url: '3_4'}];
+}

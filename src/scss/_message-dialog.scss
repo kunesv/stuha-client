@@ -11,7 +11,7 @@
   transition: height 300ms ease-out, width 300ms ease-out, background-color 300ms;
 
   &.active {
-    background-color: $color-background;
+    background-color: #f0f0f0;
     height: 100%;
     overflow: auto;
     width: 100%;
@@ -44,12 +44,23 @@
   }
 
   > form {
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    transition: opacity 300ms;
+
+    width: 100vw;
+
+    > p {
+      margin: 0 .5 * $module .75 * $module;
+    }
 
     ul {
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
 
-      margin: 0;
+      margin: 0.5 * $module 0.5 * $module 0.25 * $module;
       padding: 0;
       list-style: none;
 
@@ -66,21 +77,21 @@
         &:hover {
           background-color: white;
         }
+
+        &.active {
+          box-shadow: 0 0 0 0.5 * $module rgba(black, 0.2) inset;
+        }
       }
     }
 
-    opacity: 0;
-    padding: 0.5 * $module;
-
-    transition: opacity 300ms;
-
-    textarea {
-      border: 0 none;
-      font-family: $base-font-family;
-      font-size: $base-font-size;
-      margin: 0;
+    .textarea {
+      background-color: white;
+      border-radius: 0.15 * $module;
+      min-height: 1.5 * $module;
+      margin: 0 0.5 * $module 0.75 * $module;
+      outline: 0 none;
+      overflow-x: auto;
       padding: 0.5 * $module;
-      width: calc(100% - #{$module});
     }
   }
 }

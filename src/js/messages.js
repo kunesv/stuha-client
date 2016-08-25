@@ -8,8 +8,8 @@ function messagesLoadResult() {
     if (Math.random() > .2) {
         messagePlaceholdersRemove();
 
-        for (let message of messages) {
-            messageAdd(message);
+        for (let i = 0; i < messages.length; i++) {
+            messageAdd(messages[i]);
         }
 
         if (!messages.length) {
@@ -37,10 +37,11 @@ function emptyDiscussionNoticeAdd() {
 function messageLoadFailedOverlayAdd() {
     let template =
         `<div class="overlay">
-            <span onclick="reload()">Zatím se nepodařilo nic nahrát. <br/> Zkuste to prosím ještě jednou.</span>
+            <span class="button" data-click="reload">Zatím se nepodařilo nic nahrát. <br/> Zkuste to prosím ještě jednou.</span>
         </div>`;
 
     document.body.insertAdjacentHTML('beforeend', template);
+    initButtons(document.querySelectorAll('.overlay .button'));
 }
 
 function messageLoadFailedOverlayRemove() {
@@ -145,14 +146,10 @@ function messageDialog(button) {
             </header>
             <form>
                 <ul class="icons">
-                    <li class="button" style="background-image: url('/images/3_1.png')"></li>
-                    <li class="button" style="background-image: url('/images/3_4.png')"></li>
-                    <li class="button" style="background-image: url('/images/3_1.png')"></li>
-                    <li class="button" style="background-image: url('/images/3_4.png')"></li>                                                     
+                    ${icons()}                                                                        
                 </ul>
-                <p>
-                    <textarea ></textarea>
-                </p>
+                
+                <div class="textarea" contenteditable="true"></div>               
             </form>
         </section>`;
 
@@ -162,7 +159,22 @@ function messageDialog(button) {
         document.querySelector('.message-dialog').classList.add('active');
 
         initButtons(document.querySelectorAll('.message-dialog .button'));
+
+        let textarea = document.querySelector('.message-dialog .textarea');
+        textarea.addEventListener('paste', () => {
+            setTimeout(() => {
+                textarea.innerHTML = textarea.textContent;
+            }, 1);
+        });
     }, 100);
+}
+
+function icons() {
+    return userIcons().map(icon).join('');
+}
+
+function icon(icon) {
+    return `<li class="button" data-click="selectIcon" style="background-image: url('/images/${icon.url}.png')"></li>`;
 }
 
 function hideMessageDialog() {
@@ -173,4 +185,15 @@ function hideMessageDialog() {
     setTimeout(() => {
         dialog.parentNode.removeChild(dialog);
     }, 300);
+}
+
+function selectIcon(li) {
+    let icons = li.parentNode.querySelectorAll('li');
+    for (let i = 0; i < icons.length; i++) {
+        let icon = icons[i];
+
+        icon.classList.remove('active');
+    }
+
+    li.classList.add('active');
 }

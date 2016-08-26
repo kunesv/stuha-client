@@ -1,0 +1,13 @@
+.image-dialog {
+  @extend .overlay;
+
+  img {
+    //border-radius: 0.25 * $module;
+    //
+    //max-width: calc(100% - #{$module});
+    //max-height: calc(100% - #{$module});
+
+    max-width: 100%;
+    max-height: 100%;
+  }
+}

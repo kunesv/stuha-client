@@ -1,30 +1,33 @@
-let buttons = document.getElementsByClassName('button');
+let buttons = {
+    CLICK: 'data-click',
+    CLICKED_CLASSNAME: 'clicked',
+    CLICKED_ANIMATION_DURATION: 300,
 
-initButtons(buttons);
+    init: (btns) => {
+        for (let i = 0; i < btns.length; i++) {
+            let button = btns[i];
 
-function initButtons(buttons) {
-    for (var i = 0; i < buttons.length; i++) {
-        let button = buttons[i];
+            button.addEventListener('mousedown', () => {
+                button.classList.add(buttons.CLICKED_CLASSNAME);
+            });
 
-        button.addEventListener('mousedown', () => {
-            button.classList.add('clicked');
-        });
+            button.addEventListener('mouseup', () => buttons.click(button));
 
-        button.addEventListener('mouseup', () => {
-            button.classList.add('clicked');
 
-            setTimeout(() => {
-                button.classList.remove('clicked');
+            // button.addEventListener('mouseleave', () => {
+            //     button.classList.remove('clicked');
+            // });
+        }
+    },
 
-                if (button.hasAttribute('data-click')) {
-                    window[button.getAttribute('data-click')](button);
-                }
-            }, 300);
+    click: (button) => {
+        setTimeout(() => {
+            button.classList.remove(buttons.CLICKED_CLASSNAME);
 
-        });
-
-        // button.addEventListener('mouseleave', () => {
-        //     button.classList.remove('clicked');
-        // });
+            if (button.hasAttribute(buttons.CLICK)) {
+                window[button.getAttribute(buttons.CLICK)](button);
+            }
+        }, buttons.CLICKED_ANIMATION_DURATION);
     }
-}
+
+};

@@ -1,3 +1,7 @@
+let headerButtons = document.querySelectorAll('body > header .button');
+buttons.init(headerButtons);
+
+
 initMessagePlaceholers();
 
 function initMessagePlaceholers() {
@@ -41,7 +45,7 @@ function messageLoadFailedOverlayAdd() {
         </div>`;
 
     document.body.insertAdjacentHTML('beforeend', template);
-    initButtons(document.querySelectorAll('.overlay .button'));
+    buttons.init(document.querySelectorAll('.overlay .button'));
 }
 
 function messageLoadFailedOverlayRemove() {
@@ -87,13 +91,16 @@ function messageAdd(message) {
             </main>
         </article>`;
 
-    if (document.querySelector('.messages').firstChild
-        && document.querySelector('.messages').firstChild.hasAttribute('data-date')
-        && document.querySelector('.messages').firstChild.getAttribute('data-date') != formatDate(message.createdOn)) {
-        document.querySelector('.messages').insertAdjacentHTML('afterbegin', separator(document.querySelector('.messages').firstChild.getAttribute('data-date')));
+    let messages = document.querySelector('.messages');
+    if (messages.querySelector('article:first-child')
+        && messages.querySelector('article:first-child').hasAttribute('data-date')
+        && messages.querySelector('article:first-child').getAttribute('data-date') != formatDate(message.createdOn)) {
+        messages.insertAdjacentHTML('afterbegin', separator(messages.querySelector('article:first-child').getAttribute('data-date')));
     }
 
-    document.querySelector('.messages').insertAdjacentHTML('afterbegin', template);
+    messages.insertAdjacentHTML('afterbegin', template);
+    buttons.init(messages.querySelectorAll('article:first-child .button'));
+
 }
 
 function images(images) {
@@ -113,7 +120,7 @@ function formattedMessage(message) {
 }
 
 function image(image) {
-    return `<span style="background-image: url('/images/${image.url}')"></span>`;
+    return `<span class="button" data-click="openImage" data-url="${image.url}" style="background-image: url('/images/${image.url}')"></span>`;
 }
 
 function separator(createdOn) {
@@ -158,7 +165,7 @@ function messageDialog(button) {
     setTimeout(() => {
         document.querySelector('.message-dialog').classList.add('active');
 
-        initButtons(document.querySelectorAll('.message-dialog .button'));
+        buttons.init(document.querySelectorAll('.message-dialog .button'));
 
         let textarea = document.querySelector('.message-dialog .textarea');
         textarea.addEventListener('paste', () => {
@@ -196,4 +203,14 @@ function selectIcon(li) {
     }
 
     li.classList.add('active');
+}
+
+function openImage(image) {
+    console.log(image)
+    let template =
+        `<section class="image-dialog">
+            <img src="/images/${image.getAttribute('data-url')}" />
+        </section>`;
+
+    document.body.insertAdjacentHTML('beforeend', template);
 }

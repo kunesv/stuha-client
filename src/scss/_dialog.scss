@@ -1,0 +1,43 @@
+.overlay {
+  background-color: rgba(black, .5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+
+  span.button {
+    background-color: $color-background;
+    border-radius: 0.25 * $module;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    padding: $module;
+
+    height: 5 * $module;
+    width: 5 * $module;
+
+    color: $color-text;
+    font-size: $base-font-size;
+
+    transition: padding 100ms;
+
+    &:hover {
+      background-color: $color-background;
+    }
+
+    &.clicked {
+      box-shadow: 0 0 rgba(black, 0);
+      padding: 1.25 * $module;
+    }
+  }
+}

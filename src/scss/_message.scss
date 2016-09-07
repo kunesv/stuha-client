@@ -1,0 +1,124 @@
+article {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 1.75 * $module;
+
+  &:first-child {
+    margin-top: 1.75 * $module;
+
+    @media (max-width: 960px) {
+      margin-top: 3.75 * $module;
+    }
+  }
+
+  header {
+    flex: 0 0 3.5 * $module;
+
+    h1 {
+      background-color: white;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-radius: 1.25 * $module;
+      height: 2.5 * $module;
+      margin-right: $module;
+      text-align: center;
+      width: 2.5 * $module;
+    }
+  }
+
+  main {
+    position: relative;
+
+    section {
+
+      p {
+        background: $color-background-message;
+        border-radius: 0.25 * $module;
+        padding: 0.5 * $module 0.75 * $module;
+      }
+
+      &.image {
+        span {
+          background: transparent none center;
+          border-radius: 0.25 * $module;
+          cursor: pointer;
+          display: inline-block;
+          margin: 0 0.25 * $module 0.25 * $module 0;
+          vertical-align: bottom;
+
+          width: 10 * $module;
+          height: 7.5 * $module;
+
+          @media (max-width: 640px) {
+            width: 6 * $module;
+            height: 4.5 * $module;
+          }
+        }
+      }
+    }
+
+    footer {
+      color: $color-text-secondary;
+      font-size: 11px;
+      position: absolute;
+      right: $module / 4;
+      bottom: -$module * 1.1;
+    }
+  }
+
+  &.my {
+    flex-direction: row-reverse;
+
+    h1 {
+      margin: 0 0 0 $module;
+    }
+
+    section {
+      p {
+        background-color: $color-background-my-message;
+        color: $color-text-my-message;
+        align-items: flex-end;
+      }
+
+      &.image {
+        text-align: right;
+
+        span {
+          margin: 0 0 0.25 * $module 0.25 * $module;
+        }
+      }
+    }
+  }
+
+  &.placeholder {
+    p {
+      width: 100%;
+    }
+  }
+}
+
+.seperator {
+  margin-bottom: 1.75 * $module;
+  position: relative;
+  text-align: center;
+
+  span {
+    background-color: $color-background;
+    color: $color-text-secondary;
+
+    font-size: 13px;
+    padding: 0 $module;
+
+  }
+
+  &:before {
+    border-bottom: 1px solid $color-line;
+    content: "";
+    left: 0;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    z-index: -1;
+  }
+}

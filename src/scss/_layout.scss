@@ -1,0 +1,91 @@
+html, body {
+  height: 100%;
+}
+
+h1, p {
+  margin: 0;
+}
+
+body {
+  font-size: $base-font-size;
+  font-family: $base-font-family;
+  line-height: $module;
+
+  background: $color-background;
+  color: $color-text;
+
+  margin: 0;
+  padding: 0;
+
+  > header {
+    display: none;
+  }
+
+  @media (max-width: 960px) {
+    > header {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      background-color: white;
+      box-shadow: 1px 1px 0.5 * $module rgba(black, 0.2);
+
+      height: 2.5 * $module;
+      position: fixed;
+      width: 100%;
+      z-index: 2;
+
+      > span {
+        flex-grow: 1;
+
+        color: #999;
+        line-height: $module;
+        padding: 0 0.5 * $module;
+        text-align: center;
+
+        &.add_button {
+          flex: 0 0 3.5 * $module;
+          padding: 0;
+        }
+      }
+    }
+  }
+
+  > main {
+    display: flex;
+    height: 100%;
+
+    > aside {
+      flex: 1 1 25%;
+
+      background-color: white;
+      border-right: 1px solid $color-line;
+
+      @media (max-width: 960px) {
+        display: none;
+      }
+    }
+
+    > section {
+      flex: 1 1 75%;
+
+      height: 100%;
+      overflow: auto;
+
+      padding-left: 2 * $module;
+      padding-right: 2 * $module;
+
+      @media (max-width: 960px) {
+        padding-left: 0.5 * $module;
+        padding-right: 0.5 * $module;
+      }
+
+      > * {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 960px;
+      }
+    }
+  }
+
+}

@@ -28,7 +28,7 @@ body {
       justify-content: space-around;
 
       background-color: white;
-      box-shadow: 1px 1px 0.5 * $module rgba(black, 0.2);
+      box-shadow: 0 0 0.5 * $module rgba(black, 0.2);
 
       height: 2.5 * $module;
       position: fixed;
@@ -55,16 +55,6 @@ body {
     display: flex;
     height: 100%;
 
-    > aside {
-      flex: 1 1 25%;
-
-      background-color: white;
-      border-right: 1px solid $color-line;
-
-      @media (max-width: 960px) {
-        display: none;
-      }
-    }
 
     > section {
       @extend .overflow-auto;

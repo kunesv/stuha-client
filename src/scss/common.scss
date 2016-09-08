@@ -15,7 +15,14 @@ $color-text-secondary: #bbb;
 
 $base-font-family: Ubuntu, sans-serif;
 
+.overflow-auto {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
+  @media (max-width: 960px) {
+    overflow: scroll;
+  }
+}
 
 @import "layout";
 @import "button";
@@ -25,3 +32,4 @@ $base-font-family: Ubuntu, sans-serif;
 @import "image-dialog";
 
 @import "message";
+

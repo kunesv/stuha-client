@@ -29,7 +29,7 @@
     color: $color-text;
     font-size: $base-font-size;
 
-    transition: padding 100ms;
+    transition: transform 100ms ease-out;
 
     &:hover {
       background-color: $color-background;
@@ -37,7 +37,7 @@
 
     &.clicked {
       box-shadow: 0 0 rgba(black, 0);
-      padding: 1.25 * $module;
+      transform: scale(.85);
     }
   }
 }

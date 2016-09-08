@@ -10,14 +10,22 @@
 
   transition: height 300ms ease-out, width 300ms ease-out, background-color 300ms;
 
+  > form {
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 300ms ease-in-out, opacity 300ms;
+  }
+
   &.active {
+    @extend .overflow-auto;
+
     background-color: #f0f0f0;
     height: 100%;
-    overflow: auto;
     width: 100%;
 
     > form {
       opacity: 1;
+      transform: scale(1);
     }
   }
 
@@ -46,10 +54,6 @@
   > form {
     margin: 0;
     padding: 0;
-    opacity: 0;
-    transition: opacity 300ms;
-
-    width: 100vw;
 
     > p {
       margin: 0 .5 * $module .75 * $module;

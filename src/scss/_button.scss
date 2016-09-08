@@ -29,3 +29,16 @@
     width: 18px;
   }
 }
+
+.scale-button {
+  transition: transform 100ms ease-in-out;
+
+  &:hover {
+    background-color: $color-background;
+  }
+
+  &.clicked {
+    box-shadow: 0 0 rgba(black, 0);
+    transform: scale(.9);
+  }
+}

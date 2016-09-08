@@ -120,7 +120,7 @@ function formattedMessage(message) {
 }
 
 function image(image) {
-    return `<span class="button" data-click="openImage" data-url="${image.url}" style="background-image: url('/images/${image.url}')"></span>`;
+    return `<span class="button thumbnail" data-click="openImage" data-url="${image.url}" style="background-image: url('/images/${image.url}')"></span>`;
 }
 
 function separator(createdOn) {
@@ -206,7 +206,6 @@ function selectIcon(li) {
 }
 
 function openImage(image) {
-    console.log(image)
     let template =
         `<section class="image-dialog">
             <img src="/images/${image.getAttribute('data-url')}" />

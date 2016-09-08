@@ -11,3 +11,7 @@
     max-height: 100%;
   }
 }
+
+.thumbnail.button {
+  @extend .scale-button;
+}

@@ -46,6 +46,10 @@
           &:hover {
             background-color: #6C6C6C;
           }
+
+          > span {
+            transform: rotate(45deg);
+          }
         }
       }
     }
@@ -56,7 +60,7 @@
     padding: 0;
 
     > p {
-      margin: 0 .5 * $module .75 * $module;
+      margin: 0 .5 * $module 0.75 * $module;
     }
 
     ul {
@@ -92,7 +96,6 @@
       background-color: white;
       border-radius: 0.15 * $module;
       min-height: 1.5 * $module;
-      margin: 0 0.5 * $module 0.75 * $module;
       outline: 0 none;
       overflow-x: auto;
       padding: 0.5 * $module;

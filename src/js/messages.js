@@ -156,7 +156,9 @@ function messageDialog(button) {
                     ${icons()}                                                                        
                 </ul>
                 
-                <div class="textarea" contenteditable="true"></div>               
+                <p class="textarea" contenteditable="true"></p>
+                               
+                <p><a class="button" data-click="submit"><span>&gt;</span><span class="progress">..</span></a></p>
             </form>
         </section>`;
 
@@ -212,4 +214,21 @@ function openImage(image) {
         </section>`;
 
     document.body.insertAdjacentHTML('beforeend', template);
+}
+
+function submit(button) {
+    if(!button.classList.contains('progress')) {
+        button.classList.add('progress');
+        setTimeout(() => {
+            // on success:
+            hideMessageDialog();
+            button.classList.remove('progress');
+        }, 1500);
+    }
+
+
+
+
+
+
 }

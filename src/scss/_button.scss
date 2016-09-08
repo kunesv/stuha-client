@@ -22,6 +22,22 @@
     box-shadow: 0 0 0 0.5 * $module rgba(black, 0.5) inset;
   }
 
+  span.progress {
+    display: none;
+  }
+
+  &.progress {
+    background-color: #ccc;
+    transition: background-color 100ms;
+
+    span {
+      display: none;
+    }
+    span.progress {
+      display: flex;
+    }
+  }
+
   span {
     display: flex;
     height: 18px;

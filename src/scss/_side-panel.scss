@@ -17,8 +17,6 @@ body > main > aside {
     display: flex;
 
     border-bottom: 1px solid $color-line;
-    box-shadow: 0 0 0.25 * $module rgba(black, 0.1);
-
   }
 
   > section {

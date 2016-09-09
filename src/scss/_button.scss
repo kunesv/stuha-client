@@ -46,6 +46,10 @@
   }
 }
 
+form .button {
+  border-radius: 0.25 * $module;
+}
+
 .scale-button {
   transition: transform 100ms ease-in-out;
 

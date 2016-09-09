@@ -159,7 +159,7 @@ function messageDialog(button) {
                 
                 <p class="textarea" contenteditable="true"></p>
                                
-                <p><a class="button" data-click="submit"><span>&gt;</span><span class="progress">..</span></a></p>
+                <p><a class="button" data-click="submitMessage"><span>&gt;</span><span class="progress">..</span></a></p>
             </form>
         </section>`;
 
@@ -184,7 +184,7 @@ function icons() {
 }
 
 function icon(icon) {
-    return `<li class="button" data-click="selectIcon" style="background-image: url('/images/${icon.url}.png')"></li>`;
+    return `<li class="button" data-click="selectIcon" data-path="${icon.url}" style="background-image: url('/images/${icon.url}.png')"></li>`;
 }
 
 function hideMessageDialog() {
@@ -222,10 +222,26 @@ function hideImageDialog(image) {
     image.parentNode.removeChild(image);
 }
 
-function submit(button) {
+function submitMessage(button) {
     if (!button.classList.contains('progress')) {
         button.classList.add('progress');
         setTimeout(() => {
+            let messageForm = document.querySelector('.message-dialog form');
+
+            let message = {
+                createdOn: new Date(),
+                userName: 'Houba',
+                formatted: messageForm.querySelector('.textarea').textContent,
+                iconPath: messageForm.querySelector('.icons .active').getAttribute('data-path'),
+                images: []
+            };
+
+            messageAdd(message);
+
+            // icon
+            // message || image
+            // image, gps, date?
+
             // on success:
             hideMessageDialog();
             button.classList.remove('progress');

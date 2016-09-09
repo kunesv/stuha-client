@@ -62,6 +62,7 @@ function messagePlaceholderAdd() {
             <header><h1></h1></header>
             <main>          
                 <section><p><b>&middot;&nbsp;&middot;&nbsp;&middot;</b></p></section>
+                <footer></footer>
             </main>
         </article>`;
 
@@ -120,7 +121,7 @@ function formattedMessage(message) {
 }
 
 function image(image) {
-    return `<span class="button thumbnail" data-click="openImage" data-url="${image.url}" style="background-image: url('/images/${image.url}')"></span>`;
+    return `<span class="button thumbnail" data-click="imageDialog" data-url="${image.url}" style="background-image: url('/images/${image.url}')"></span>`;
 }
 
 function separator(createdOn) {
@@ -207,17 +208,22 @@ function selectIcon(li) {
     li.classList.add('active');
 }
 
-function openImage(image) {
+function imageDialog(image) {
     let template =
-        `<section class="image-dialog">
+        `<section class="image-dialog" data-click="hideImageDialog">
             <img src="/images/${image.getAttribute('data-url')}" />
         </section>`;
 
     document.body.insertAdjacentHTML('beforeend', template);
+    buttons.init(document.querySelectorAll('.image-dialog'));
+}
+
+function hideImageDialog(image) {
+    image.parentNode.removeChild(image);
 }
 
 function submit(button) {
-    if(!button.classList.contains('progress')) {
+    if (!button.classList.contains('progress')) {
         button.classList.add('progress');
         setTimeout(() => {
             // on success:
@@ -225,10 +231,6 @@ function submit(button) {
             button.classList.remove('progress');
         }, 1500);
     }
-
-
-
-
 
 
 }

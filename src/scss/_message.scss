@@ -2,7 +2,7 @@ article {
   display: flex;
   align-items: center;
 
-  margin-bottom: 1.75 * $module;
+  margin-bottom: 0.75 * $module;
 
   &:first-child {
     margin-top: 1.75 * $module;
@@ -14,6 +14,7 @@ article {
 
   header {
     flex: 0 0 3.5 * $module;
+    padding-bottom: $module;
 
     h1 {
       background-color: white;
@@ -28,7 +29,11 @@ article {
   }
 
   main {
-    position: relative;
+    margin-right: 5 * $module;
+
+    @media (max-width: 960px) {
+      margin-right: 0;
+    }
 
     section {
 
@@ -61,14 +66,22 @@ article {
     footer {
       color: $color-text-secondary;
       font-size: 11px;
-      position: absolute;
-      right: $module / 4;
-      bottom: -$module * 1.1;
+      height: $module;
+      text-align: right;
     }
   }
 
   &.my {
     flex-direction: row-reverse;
+
+    main {
+      margin-left: 5 * $module;
+      margin-right: 0;
+
+      @media (max-width: 960px) {
+        margin-left: 0;
+      }
+    }
 
     h1 {
       margin: 0 0 0 $module;

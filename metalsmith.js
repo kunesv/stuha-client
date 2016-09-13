@@ -27,7 +27,10 @@ Metalsmith(__dirname)
     }))
     .use(serve({
         host: '0.0.0.0',
-        port: process.env.PORT || 5000
+        port: process.env.PORT || 5000,
+        headers: {
+            'Content-Security-Policy': "default-src 'self'; style-src 'self' 'unsafe-inline';"
+        }
     }))
     .use(watch({
         paths: {

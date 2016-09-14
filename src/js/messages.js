@@ -180,7 +180,7 @@ function messageDialog(button) {
 }
 
 function icons() {
-    return userIcons().map(icon).join('');
+    return currentUser.icons.map(icon).join('');
 }
 
 function icon(icon) {

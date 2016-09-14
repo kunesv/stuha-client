@@ -1,4 +1,8 @@
-let currentUser = {userId: 2, userName: 'Houba'};
+let currentUser = {
+    userId: 2,
+    userName: 'Houba',
+    icons: [{url: '3_1'}, {url: '3_4'}, {url: '3_1'}, {url: '3_4'}]
+};
 
 let sampleMessages = [
     'Tady scanuju celej byt.',
@@ -61,7 +65,3 @@ for (let i = 0; i < noOfMessages; i++) {
 messages.reverse();
 
 setTimeout(messagesLoadResult, Math.round(Math.random() * 1500));
-
-function userIcons() {
-    return [{url: '3_1'}, {url: '3_4'}, {url: '3_1'}, {url: '3_4'}];
-}

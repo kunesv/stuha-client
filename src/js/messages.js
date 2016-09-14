@@ -230,7 +230,8 @@ function submitMessage(button) {
 
             let message = {
                 createdOn: new Date(),
-                userName: 'Houba',
+                userName: currentUser.userName,
+                userId: currentUser.userId,    
                 formatted: messageForm.querySelector('.textarea').textContent,
                 iconPath: messageForm.querySelector('.icons .active').getAttribute('data-path'),
                 images: []

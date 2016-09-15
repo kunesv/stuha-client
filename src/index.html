@@ -1,7 +1,34 @@
----
-layout: index.html
----
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+    <title>Stuha</title>
 
+    <meta name="msapplication-tap-highlight" content="no"/>
 
-<p>Some contents</p>
+    <link rel="stylesheet" href="/css/common.css"/>
+</head>
+<body>
+
+    <header>
+        <span>Originals</span>
+        <span class="add_button"><a class="button" data-click="messageDialog"><span>&#43;</span></a></span>
+    </header>
+
+    <main>
+        <aside>
+            <header></header>
+            <section></section>
+        </aside>
+        <section class="messages"></section>
+    </main>
+
+    <script src="/js/buttons.js"></script>
+    <script src="/js/messages.js"></script>
+    <script src="/js/mockMessages.js"></script>
+
+</body>
+</html>

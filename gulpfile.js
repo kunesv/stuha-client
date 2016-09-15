@@ -70,7 +70,9 @@ gulp.task('uglify:assets', function () {
 
 gulp.task('uglify:app', function () {
     return gulp.src(paths.app)
-        .pipe(babel())
+        .pipe(babel({
+            presets: ['es2015']
+        }))
         .pipe(gulp.dest('./build/js/'));
 });
 

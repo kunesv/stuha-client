@@ -95,11 +95,7 @@ gulp.task('server', ['build'], function () {
             port: process.env.PORT || 5000,
             host: '0.0.0.0',
             fallback: 'index.html',
-            livereload: true,
-            open: true,
-            headers: {
-                'Content-Security-Policy': "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
-            }
+            open: true
         }))
     ;
 });

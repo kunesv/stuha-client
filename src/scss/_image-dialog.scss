@@ -1,5 +1,10 @@
 .image-dialog {
   @extend .overlay;
+  cursor: zoom-out;
+  width: 0;
+  height: 0;
+
+  transition: width 100ms, height 100ms;
 
   img {
     //border-radius: 0.25 * $module;
@@ -12,6 +17,17 @@
   }
 }
 
+.active.thumbnail + .image-dialog {
+  width: 100%;
+  height: 100%;
+}
+
 .thumbnail.button {
   @extend .scale-button;
+
+  cursor: zoom-in;
+
+  &.active {
+    background: none transparent;
+  }
 }

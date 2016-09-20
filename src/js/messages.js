@@ -121,8 +121,7 @@ function formattedMessage(message) {
 }
 
 function image(image) {
-    return `<span class="button thumbnail" data-click="imageDialog" data-url="url('${image.url}')" style="background-image: url('/images/${image.url}')"></span>
-        <div class="image-dialog"></div>`;
+    return `<span class="button thumbnail" data-click="imageDialog" data-url="url('/images/${image.url}')" style="background-image: url('/images/${image.url}')"></span><div class="image-dialog button" data-click="hideImageDialog"></div>`;
 }
 
 function separator(createdOn) {
@@ -205,13 +204,17 @@ function selectIcon(li) {
 }
 
 function imageDialog(image) {
-    if(image.classList.contains('active')){
-        image.classList.remove('active');
-        image.style.backgroundImage = image.getAttribute('data-url');
-    } else {
-        image.classList.add('active');
-        image.style.backgroundImage = 'none';
-    }
+    image.classList.add('active');
+    image.style.backgroundImage = 'none';
+
+    let dialog = image.nextSibling;
+    dialog.style.backgroundImage = image.getAttribute('data-url');
+}
+
+function hideImageDialog(dialog) {
+    let image = dialog.previousSibling;
+    image.classList.remove('active');
+    image.style.backgroundImage = image.getAttribute('data-url');
 }
 
 function submitMessage(button) {

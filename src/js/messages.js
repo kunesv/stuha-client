@@ -121,7 +121,7 @@ function formattedMessage(message) {
 }
 
 function image(image) {
-    return `<span class="button thumbnail" data-click="imageDialog" data-url="url('/images/${image.url}')" style="background-image: url('/images/${image.url}')"></span><div class="image-dialog button" data-click="hideImageDialog"></div>`;
+    return `<span class="button thumbnail" data-click="imageDialog" data-url="${image.url}" style="background-image: url('/images/${image.thumbUrl}')"></span>`;
 }
 
 function separator(createdOn) {
@@ -203,18 +203,36 @@ function selectIcon(li) {
     li.classList.add('active');
 }
 
-function imageDialog(image) {
-    image.classList.add('active');
-    image.style.backgroundImage = 'none';
+function imageDialog(thumbnail) {
+    let template = `<div class="image-dialog" data-click="hideImageDialog"></div>`;
 
-    let dialog = image.nextSibling;
-    dialog.style.backgroundImage = image.getAttribute('data-url');
+    thumbnail.insertAdjacentHTML('afterend', template);
+    let imageDialog = document.querySelector('.image-dialog');
+    buttons.init([imageDialog]);
+
+    let image = new Image();
+    image.src = '/images/' + thumbnail.getAttribute('data-url');
+    image.addEventListener('load', () => {
+        imageDialog.appendChild(image);
+
+        setTimeout(() => {
+            imageDialog.classList.add('active');
+        }, 100);
+    });
+
+    setTimeout(() => {
+        thumbnail.classList.add('active');
+    }, 100);
 }
 
 function hideImageDialog(dialog) {
     let image = dialog.previousSibling;
+    console.log(image)
     image.classList.remove('active');
-    image.style.backgroundImage = image.getAttribute('data-url');
+
+    setTimeout(() => {
+        dialog.parentNode.removeChild(dialog);
+    }, 300);
 }
 
 function submitMessage(button) {
@@ -226,7 +244,7 @@ function submitMessage(button) {
             let message = {
                 createdOn: new Date(),
                 userName: currentUser.userName,
-                userId: currentUser.userId,    
+                userId: currentUser.userId,
                 formatted: messageForm.querySelector('.textarea').textContent,
                 iconPath: messageForm.querySelector('.icons .active').getAttribute('data-path'),
                 images: []

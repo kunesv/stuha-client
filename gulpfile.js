@@ -94,8 +94,7 @@ gulp.task('server', ['build'], function () {
         .pipe(webserver({
             port: process.env.PORT || 5000,
             host: '0.0.0.0',
-            fallback: 'index.html',
-            open: true
+            fallback: 'index.html'
         }))
     ;
 });

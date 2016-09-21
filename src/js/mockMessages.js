@@ -35,11 +35,11 @@ let sampleUsers = [
 ];
 let sampleImages = [
     [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
-    [{url: 'img1.jpg'}],
-    [{url: 'img2.jpg'}],
-    [{url: 'img1.jpg'}, {url: 'img2.jpg'}],
-    [{url: 'img2.jpg'}, {url: 'img1.jpg'}],
-    [{url: 'img1.jpg'}, {url: 'img2.jpg'}, {url: 'img1.jpg'}]
+    [{url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}],
+    [{url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}],
+    [{url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}, {url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}],
+    [{url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}, {url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}],
+    [{url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}, {url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}, {url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}]
 ];
 
 

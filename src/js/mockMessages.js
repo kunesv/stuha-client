@@ -1,7 +1,7 @@
 let currentUser = {
     userId: 2,
     userName: 'Houba',
-    icons: [{url: '3_1'}, {url: '3_4'}, {url: '3_1'}, {url: '3_4'}]
+    icons: [{url: '2_1'}, {url: '2_2'}, {url: '2_3'}, {url: '2_4'}]
 };
 
 let sampleMessages = [

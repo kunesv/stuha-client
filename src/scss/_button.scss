@@ -62,3 +62,21 @@ form .button {
     transform: scale(.9);
   }
 }
+
+
+.close_button {
+  padding: 0;
+
+  > .button {
+    background-color: #999;
+    width: 3.5 * $module;
+
+    &:hover {
+      background-color: #6C6C6C;
+    }
+
+    > span {
+      transform: rotate(45deg);
+    }
+  }
+}

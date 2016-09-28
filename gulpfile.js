@@ -2,6 +2,7 @@ var gulp = require('gulp');
 
 var autoprefixer = require('gulp-autoprefixer');
 var babel = require('gulp-babel');
+var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var sequence = require('run-sequence');
 var rimraf = require('rimraf');
@@ -70,6 +71,7 @@ gulp.task('uglify:assets', function () {
 
 gulp.task('uglify:app', function () {
     return gulp.src(paths.app)
+        // .pipe(concat('app.js'))
         .pipe(babel({
             presets: ['es2015']
         }))

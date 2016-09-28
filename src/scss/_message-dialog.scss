@@ -1,58 +1,18 @@
 .message-dialog {
+  @extend .overlay;
   background-color: $color-background-button;
-  right: 0;
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  z-index: 3;
 
-  height: 100%;
-  width: 100%;
-  transform: scale(0);
+  transition: transform 300ms ease-in-out, opacity 300ms, background-color 300ms ease-out;
+  transform: scale3d(0, 0, 1);
   transform-origin: top right;
 
-  transition: height 300ms ease-out, width 300ms ease-out, background-color 300ms ease-in, transform 300ms ease-in-out;
-
-  > form, > header {
-    opacity: 0;
-    transition: opacity 300ms;
-  }
+  opacity: 0;
 
   &.active {
-    @extend .overflow-auto;
-
     background-color: #f0f0f0;
-    transform: scale(1);
 
-    > form, > header {
-      opacity: 1;
-    }
-  }
-
-  > header {
-    display: flex;
-
-    > span {
-      flex-grow: 1;
-
-      &.close_button {
-        flex: 0 0 3.5 * $module;
-
-        padding: 0;
-
-        > .button {
-          background-color: #999;
-
-          &:hover {
-            background-color: #6C6C6C;
-          }
-
-          > span {
-            transform: rotate(45deg);
-          }
-        }
-      }
-    }
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
   }
 
   > form {

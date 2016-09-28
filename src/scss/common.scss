@@ -18,10 +18,6 @@ $base-font-family: Arial, sans-serif;
 .overflow-auto {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-
-  @media (max-width: 960px) {
-    overflow: scroll;
-  }
 }
 
 @import "layout";

@@ -43,7 +43,7 @@ let sampleImages = [
 ];
 
 
-let messages = [];
+let messagesSample = [];
 let noOfMessages = Math.random() < .2 ? 0 : 10;
 for (let i = 0; i < noOfMessages; i++) {
     let user = sampleUsers[Math.floor(Math.random() * 4)];
@@ -52,7 +52,7 @@ for (let i = 0; i < noOfMessages; i++) {
 
     let imagesId = Math.floor(Math.random() * 31);
 
-    messages.push({
+    messagesSample.push({
         id: i,
         iconPath: user.iconPath,
         userId: user.userId,
@@ -62,6 +62,8 @@ for (let i = 0; i < noOfMessages; i++) {
         createdOn: date
     });
 }
-messages.reverse();
 
-setTimeout(messagesLoadResult, Math.round(Math.random() * 1500));
+messagesSample.reverse();
+
+Messages.init();
+setTimeout(Messages.load, Math.round(Math.random() * 1500));

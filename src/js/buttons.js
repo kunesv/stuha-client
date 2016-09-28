@@ -26,7 +26,14 @@ let buttons = {
             button.classList.remove(buttons.CLICKED_CLASSNAME);
 
             if (button.hasAttribute(buttons.CLICK)) {
-                window[button.getAttribute(buttons.CLICK)](button);
+                let functionName = button.getAttribute(buttons.CLICK).split('.');
+                if (functionName.length) {
+                    let fn = window;
+                    for (let i = 0; i < functionName.length; i++) {
+                        fn = fn[functionName[i]];
+                    }
+                    fn(button);
+                }
             }
         }, buttons.CLICKED_ANIMATION_DURATION);
     }

@@ -1,27 +1,24 @@
 .image-dialog {
   @extend .overlay;
-  cursor: zoom-out;
-  width: 100%;
-  height: 100%;
 
-  transition: transform 300ms, opacity 300ms;
-  transform: scale(0);
+  transition: transform 300ms, opacity 300ms, background-color 400ms;
+  transform: scale3d(0, 0, 1);
+
   opacity: 0;
 
+  > main {
+    text-align: center;
+  }
+
   img {
-    //border-radius: 0.25 * $module;
-    //
-    //max-width: calc(100% - #{$module});
-    //max-height: calc(100% - #{$module});
-
     max-width: 100%;
-    max-height: 100%;
-
     opacity: 0;
     transition: opacity 200ms;
   }
 
   &.active {
+    background-color: #333;
+
     img {
       opacity: 1;
     }
@@ -30,7 +27,7 @@
 
 .active.thumbnail + .image-dialog {
   opacity: 1;
-  transform: scale(1);
+  transform: scale3d(1, 1, 1);
 }
 
 .thumbnail.button {

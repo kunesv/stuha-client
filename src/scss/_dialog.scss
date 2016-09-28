@@ -1,19 +1,26 @@
 .overlay {
-  background-color: rgba(black, .5);
+  @extend .overflow-auto;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: rgba(black, .5);
 
   height: 100%;
   left: 0;
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 2;
 
   &:hover {
     background-color: rgba(black, .5);
+  }
+
+  > header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  > main {
+    padding: $module 0;
   }
 
   span.button {
@@ -34,5 +41,12 @@
     font-size: $base-font-size;
 
     @extend .scale-button;
+  }
+
+  &.alert {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }

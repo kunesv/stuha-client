@@ -12,7 +12,7 @@ article {
     }
   }
 
-  header {
+  > header {
     flex: 0 0 3.5 * $module;
     padding-bottom: $module;
 
@@ -28,7 +28,7 @@ article {
     }
   }
 
-  main {
+  > main {
     margin-right: 5 * $module;
 
     @media (max-width: 960px) {
@@ -44,7 +44,7 @@ article {
       }
 
       &.image {
-        > span {
+        & > span {
           background: transparent none center;
           border-radius: 0.25 * $module;
           cursor: pointer;
@@ -74,7 +74,7 @@ article {
   &.my {
     flex-direction: row-reverse;
 
-    main {
+    > main {
       margin-left: 5 * $module;
       margin-right: 0;
 
@@ -101,7 +101,7 @@ article {
       &.image {
         text-align: right;
 
-        span {
+        > span {
           margin: 0 0 0.25 * $module 0.25 * $module;
         }
       }

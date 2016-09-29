@@ -119,6 +119,7 @@ article {
   margin-bottom: 1.75 * $module;
   position: relative;
   text-align: center;
+  z-index: 2;
 
   span {
     background-color: $color-background;

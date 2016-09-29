@@ -107,9 +107,7 @@ body {
     > section {
       @extend .overflow-auto;
 
-      flex-grow: 1;
-
-
+      flex: 1 1 75%;
 
       padding-left: 2 * $module;
       padding-right: 2 * $module;

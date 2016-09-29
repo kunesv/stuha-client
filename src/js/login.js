@@ -33,7 +33,7 @@ let Login = {
     </section>
 </main>`;
 
-        document.body.insertAdjacentHTML('afterBegin', template);
+        document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
 
         Buttons.init(document.querySelectorAll('.button'));
     },
@@ -41,8 +41,7 @@ let Login = {
         if (!button.classList.contains('progress')) {
             button.classList.add('progress');
             setTimeout(() => {
-                document.body.removeChild(document.body.querySelector('header'));
-                document.body.removeChild(document.body.querySelector('main'));
+                Content.clean();
 
                 Messages.init();
             }, 500);
@@ -52,19 +51,26 @@ let Login = {
         if (!button.classList.contains('progress')) {
             button.classList.add('progress');
             setTimeout(() => {
-                document.body.removeChild(document.body.querySelector('header'));
-                document.body.removeChild(document.body.querySelector('main'));
-
-                let nav = document.body.querySelector('nav');
-                if (nav) {
-                    document.body.removeChild(nav);
-                }
+                Content.clean();
+                Messages.menu.remove();
 
                 Login.init();
             }, 300);
         }
     }
 };
+
+let Content = {
+    clean: () => {
+        let content = document.querySelector('.content');
+
+        while (content.hasChildNodes()) {
+            content.removeChild(content.lastChild);
+        }
+
+
+    }
+}
 
 Users.init();
 

@@ -14,9 +14,9 @@ let Messages = {
     <section class="messages"></section>
 </main>`;
 
-        document.body.insertAdjacentHTML('afterBegin', template);
+        document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
 
-        let headerButtons = document.querySelectorAll('body > header .button');
+        let headerButtons = document.querySelectorAll('.content > header .button');
         Buttons.init(headerButtons);
 
         Messages.placeholders.init();
@@ -49,20 +49,26 @@ let Messages = {
     },
 
     menu: {
-        toggle: (button) => {
+        add: (button) => {
             let template = `<nav><ul>
     <li><a class="button" data-click="Login.logout"><span>Logout</span><span class="progress">...</span></a></li>
 </ul></nav>`;
 
-            button.classList.toggle('active');
-            document.body.querySelector('header').classList.toggle('moved');
-            document.body.querySelector('main').classList.toggle('moved');
+            document.body.insertAdjacentHTML('afterBegin', template);
+            Buttons.init(document.body.querySelectorAll('nav .button'));
 
+            document.querySelector('.content').classList.add('moved');
+        },
+        remove: () => {
+            document.body.removeChild(document.body.querySelector('nav'));
+            document.querySelector('.content').classList.remove('moved');
+        },
+        toggle: (button) => {
+            button.classList.toggle('active');
             if (button.classList.contains('active')) {
-                document.body.insertAdjacentHTML('afterBegin', template);
-                Buttons.init(document.body.querySelectorAll('nav .button'));
+                Messages.menu.add();
             } else {
-                document.body.removeChild(document.body.querySelector('nav'));
+                Messages.menu.remove();
             }
         }
     },

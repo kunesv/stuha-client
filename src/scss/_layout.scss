@@ -1,5 +1,6 @@
 html, body {
   height: 100%;
+  width: 100%;
 }
 
 h1, p {
@@ -11,7 +12,7 @@ body {
   font-family: $base-font-family;
   line-height: $module;
 
-  background: $color-background;
+  background: $color-background-message;
   color: $color-text;
 
   margin: 0;
@@ -30,10 +31,13 @@ body {
       background-color: white;
       box-shadow: 0 0 0.5 * $module rgba(black, 0.2);
 
+      left:0;
       height: 2.5 * $module;
       position: fixed;
       width: 100%;
       z-index: 2;
+
+      transition: left 300ms ease-in-out;
 
       > span {
         flex-grow: 1;
@@ -43,18 +47,50 @@ body {
         padding: 0 0.5 * $module;
         text-align: center;
 
-        &.add_button {
-          flex: 0 0 3.5 * $module;
+        &.menu-button {
+          flex: 0 0 2.5 * $module;
+          padding: 0;
+
+          .button {
+            background-color: transparent;
+            color: #ccc;
+          }
+        }
+
+        &.add-button {
+          flex: 0 0 3 * $module;
           padding: 0;
         }
       }
+
+    }
+
+    > header.moved, > main.moved {
+      left: 60%;
+    }
+
+    > nav {
+      position: fixed;
+    }
+  }
+
+  @media (max-width: 360px) {
+    > header.moved, > main.moved {
+      left: 9 * $module;
     }
   }
 
   > main {
+    background-color: $color-background;
     display: flex;
     height: 100%;
+    left: 0;
+    position: fixed;
+    width: 100%;
 
+    box-shadow: 0 0 0.25 * $module #ccc;
+
+    transition: left 300ms ease-in-out;
 
     > section {
       @extend .overflow-auto;

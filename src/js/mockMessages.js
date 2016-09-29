@@ -1,9 +1,3 @@
-let currentUser = {
-    userId: 2,
-    userName: 'Houba',
-    icons: [{url: '2_1'}, {url: '2_2'}, {url: '2_3'}, {url: '2_4'}]
-};
-
 let sampleMessages = [
     'Tady scanuju celej byt.',
     'Houba si balí na čundr: dva obří spacáky po prababičce a další pravou zálesáckou výbavu. Počítám, že asi tak po půl kilometru omdlí pod tou vahou únavou a povezete ho k tábořišti na kárce.',
@@ -39,31 +33,33 @@ let sampleImages = [
     [{url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}],
     [{url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}, {url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}],
     [{url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}, {url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}],
-    [{url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}, {url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}, {url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}]
+    [{url: 'img1.jpg', thumbUrl: 'img1_thumb.jpg'}, {url: 'img2.jpg', thumbUrl: 'img2_thumb.jpg'}, {
+        url: 'img1.jpg',
+        thumbUrl: 'img1_thumb.jpg'
+    }]
 ];
 
 
-let messagesSample = [];
-let noOfMessages = Math.random() < .2 ? 0 : 10;
-for (let i = 0; i < noOfMessages; i++) {
-    let user = sampleUsers[Math.floor(Math.random() * 4)];
-    let date = new Date();
-    date.setMilliseconds(date.getMilliseconds() - i * 10000000);
+let messagesSample = () => {
+    let messagesSample = [];
+    let noOfMessages = Math.random() < .2 ? 0 : 10;
+    for (let i = 0; i < noOfMessages; i++) {
+        let user = sampleUsers[Math.floor(Math.random() * 4)];
+        let date = new Date();
+        date.setMilliseconds(date.getMilliseconds() - i * 10000000);
 
-    let imagesId = Math.floor(Math.random() * 31);
+        let imagesId = Math.floor(Math.random() * 31);
 
-    messagesSample.push({
-        id: i,
-        iconPath: user.iconPath,
-        userId: user.userId,
-        userName: user.userName,
-        formatted: imagesId != 30 ? sampleMessages[Math.floor(Math.random() * 5)] : '',
-        images: sampleImages[imagesId],
-        createdOn: date
-    });
-}
+        messagesSample.push({
+            id: i,
+            iconPath: user.iconPath,
+            userId: user.userId,
+            userName: user.userName,
+            formatted: imagesId != 30 ? sampleMessages[Math.floor(Math.random() * 5)] : '',
+            images: sampleImages[imagesId],
+            createdOn: date
+        });
+    }
 
-messagesSample.reverse();
-
-Messages.init();
-setTimeout(Messages.load, Math.round(Math.random() * 1500));
+    return messagesSample.reverse();
+};

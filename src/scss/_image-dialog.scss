@@ -16,11 +16,19 @@
     transition: opacity 200ms;
   }
 
+  .close-button {
+    visibility: hidden;
+  }
+
   &.active {
     background-color: #ccc;
 
     img {
       opacity: 1;
+    }
+
+    .close-button {
+      visibility: visible;
     }
   }
 }

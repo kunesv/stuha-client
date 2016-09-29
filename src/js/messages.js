@@ -1,20 +1,40 @@
 let Messages = {
     init: () => {
+        let template = `<header>
+    <span class="menu-button"><a class="button" data-click="Messages.menu.toggle"><span>☰</span></a></span>
+    <span>Originals</span>
+    <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"><span>&#43;</span></a></span>
+</header>
+
+<main>
+    <aside>
+        <header></header>
+        <section></section>
+    </aside>
+    <section class="messages"></section>
+</main>`;
+
+        document.body.insertAdjacentHTML('afterBegin', template);
+
         let headerButtons = document.querySelectorAll('body > header .button');
-        buttons.init(headerButtons);
+        Buttons.init(headerButtons);
 
         Messages.placeholders.init();
+
+        setTimeout(Messages.load, Math.round(Math.random() * 1500));
     },
 
     load: () => {
         if (Math.random() > .2) {
             Messages.placeholders.removeAll();
 
-            for (let i = 0; i < messagesSample.length; i++) {
-                Messages.message.add(messagesSample[i]);
+            let messages = messagesSample();
+
+            for (let i = 0; i < messages.length; i++) {
+                Messages.message.add(messages[i]);
             }
 
-            if (!messagesSample.length) {
+            if (!messages.length) {
                 Messages.empty.add();
             }
 
@@ -28,6 +48,25 @@ let Messages = {
         setTimeout(Messages.load, Math.round(Math.random() * 1500));
     },
 
+    menu: {
+        toggle: (button) => {
+            let template = `<nav><ul>
+    <li><a class="button" data-click="Login.logout"><span>Logout</span><span class="progress">...</span></a></li>
+</ul></nav>`;
+
+            button.classList.toggle('active');
+            document.body.querySelector('header').classList.toggle('moved');
+            document.body.querySelector('main').classList.toggle('moved');
+
+            if (button.classList.contains('active')) {
+                document.body.insertAdjacentHTML('afterBegin', template);
+                Buttons.init(document.body.querySelectorAll('nav .button'));
+            } else {
+                document.body.removeChild(document.body.querySelector('nav'));
+            }
+        }
+    },
+
     message: {
         submit: (button)=> {
             if (!button.classList.contains('progress')) {
@@ -37,8 +76,8 @@ let Messages = {
 
                     let message = {
                         createdOn: new Date(),
-                        userName: currentUser.userName,
-                        userId: currentUser.userId,
+                        userName: Users.currentUser.userName,
+                        userId: Users.currentUser.userId,
                         formatted: messageForm.querySelector('.textarea').textContent,
                         iconPath: messageForm.querySelector('.icons .active').getAttribute('data-path'),
                         images: []
@@ -59,7 +98,7 @@ let Messages = {
 
         add: (message) => {
             let template =
-                `<article class="${currentUser.userId == message.userId ? 'my' : ''}" data-id="${message.id}" data-date="${dateTime.formatDate(message.createdOn)}">
+                `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''}" data-id="${message.id}" data-date="${dateTime.formatDate(message.createdOn)}">
     <header>
         <h1 style="background-image: url('/images/${message.iconPath}.png')"></h1>
     </header>
@@ -80,7 +119,7 @@ let Messages = {
             }
 
             messages.insertAdjacentHTML('afterbegin', template);
-            buttons.init(messages.querySelectorAll('article:first-child .button'));
+            Buttons.init(messages.querySelectorAll('article:first-child .button'));
         },
 
         images: (images) => {
@@ -111,7 +150,7 @@ let Messages = {
                 let template =
                     `<section class="message-dialog">
     <header>
-        <span class="close_button"><a class="button" data-click="Messages.message.dialog.remove"><span>&#43;</span></a></span>
+        <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"><span>&#43;</span></a></span>
     </header>
     <form>
         <ul class="icons">
@@ -129,7 +168,7 @@ let Messages = {
                 setTimeout(() => {
                     document.querySelector('.message-dialog').classList.add('active');
 
-                    buttons.init(document.querySelectorAll('.message-dialog .button'));
+                    Buttons.init(document.querySelectorAll('.message-dialog .button'));
 
                     let textarea = document.querySelector('.message-dialog .textarea');
                     textarea.addEventListener('paste', () => {
@@ -150,7 +189,7 @@ let Messages = {
             },
 
             icons: () => {
-                return currentUser.icons.map(Messages.message.dialog.icon).join('');
+                return Users.currentUser.icons.map(Messages.message.dialog.icon).join('');
             },
             icon: (icon)=> {
                 return `<li class="button" data-click="Messages.message.dialog.selectIcon" data-path="${icon.url}" style="background-image: url('/images/${icon.url}.png')"></li>`;
@@ -173,14 +212,14 @@ let Messages = {
             add: (thumbnail) => {
                 let template = `<div class="image-dialog">
     <header>
-        <span class="close_button"><a class="button" data-click="Messages.image.dialog.remove"><span>&#43;</span></a></span>
+        <span class="close-button"><a class="button" data-click="Messages.image.dialog.remove"><span>&#43;</span></a></span>
     </header>
     <main></main>
 </div>`;
 
                 thumbnail.insertAdjacentHTML('afterend', template);
                 let imageDialog = document.querySelector('.image-dialog');
-                buttons.init([imageDialog]);
+                Buttons.init([imageDialog]);
 
                 let image = new Image();
                 image.src = '/images/' + thumbnail.getAttribute('data-url');
@@ -194,7 +233,7 @@ let Messages = {
 
                 setTimeout(() => {
                     thumbnail.classList.add('active');
-                    buttons.init(document.querySelectorAll('.image-dialog .button'));
+                    Buttons.init(document.querySelectorAll('.image-dialog .button'));
                 }, 100);
             },
             remove: (button) => {
@@ -250,7 +289,7 @@ let Messages = {
 </div>`;
 
             document.body.insertAdjacentHTML('beforeend', template);
-            buttons.init(document.querySelectorAll('.overlay .button'));
+            Buttons.init(document.querySelectorAll('.overlay .button'));
         },
         remove: () => {
             let overlays = document.getElementsByClassName('overlay');

@@ -1,4 +1,4 @@
-let buttons = {
+let Buttons = {
     CLICK: 'data-click',
     CLICKED_CLASSNAME: 'clicked',
     CLICKED_ANIMATION_DURATION: 100,
@@ -8,10 +8,10 @@ let buttons = {
             let button = btns[i];
 
             button.addEventListener('mousedown', () => {
-                button.classList.add(buttons.CLICKED_CLASSNAME);
+                button.classList.add(Buttons.CLICKED_CLASSNAME);
             });
 
-            button.addEventListener('mouseup', (event) => buttons.click(button, event));
+            button.addEventListener('mouseup', (event) => Buttons.click(button, event));
 
 
             button.addEventListener('mouseleave', () => {
@@ -23,10 +23,10 @@ let buttons = {
     click: (button, event) => {
         event.stopPropagation();
         setTimeout(() => {
-            button.classList.remove(buttons.CLICKED_CLASSNAME);
+            button.classList.remove(Buttons.CLICKED_CLASSNAME);
 
-            if (button.hasAttribute(buttons.CLICK)) {
-                let functionName = button.getAttribute(buttons.CLICK).split('.');
+            if (button.hasAttribute(Buttons.CLICK)) {
+                let functionName = button.getAttribute(Buttons.CLICK).split('.');
                 if (functionName.length) {
                     let fn = window;
                     for (let i = 0; i < functionName.length; i++) {
@@ -35,7 +35,7 @@ let buttons = {
                     fn(button);
                 }
             }
-        }, buttons.CLICKED_ANIMATION_DURATION);
+        }, Buttons.CLICKED_ANIMATION_DURATION);
     }
 
 };

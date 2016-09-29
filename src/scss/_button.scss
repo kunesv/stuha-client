@@ -37,13 +37,6 @@
       display: flex;
     }
   }
-
-  span {
-    display: flex;
-    height: 18px;
-    line-height: 12px;
-    width: 18px;
-  }
 }
 
 form .button {
@@ -64,12 +57,12 @@ form .button {
 }
 
 
-.close_button {
+.close-button {
   padding: 0;
 
   > .button {
     background-color: #999;
-    width: 3.5 * $module;
+    width: 3 * $module;
 
     &:hover {
       background-color: #6C6C6C;

@@ -60,8 +60,12 @@ let Messages = {
             document.querySelector('.content').classList.add('moved');
         },
         remove: () => {
-            document.body.removeChild(document.body.querySelector('nav'));
+
             document.querySelector('.content').classList.remove('moved');
+
+            setTimeout(() => {
+                document.body.removeChild(document.body.querySelector('nav'));
+            }, 300);
         },
         toggle: (button) => {
             button.classList.toggle('active');

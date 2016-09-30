@@ -20,7 +20,7 @@
   }
 
   > main {
-    padding: $module 0;
+    padding: $module 0 2.5 * $module;
   }
 
   span.button {

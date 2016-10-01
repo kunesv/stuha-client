@@ -102,6 +102,8 @@ let Messages = {
                     // on success:
                     Messages.message.dialog.remove();
                     button.classList.remove('progress');
+
+                    document.querySelector('.messages').scrollTop = 0;
                 }, 1500);
             }
         },

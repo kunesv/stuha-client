@@ -16,9 +16,6 @@
   }
 
   > form {
-    margin: 0;
-    padding: 0;
-
     > p {
       margin: 0 .5 * $module 0.75 * $module;
     }
@@ -53,12 +50,7 @@
     }
 
     .textarea {
-      background-color: white;
-      border-radius: 0.125 * $module;
-      min-height: 1.5 * $module;
-      outline: 0 none;
-      overflow-x: auto;
-      padding: 0.5 * $module;
+      @extend textarea;
     }
   }
 }

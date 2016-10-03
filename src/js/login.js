@@ -28,19 +28,27 @@ let Login = {
         <header></header>
         <section></section>
     </aside>
-    <section class="login">
-        <a class="button" data-click="Login.submit"><span>&gt;</span><span class="progress">...</span></a>
+    <section class="login">   
+         <form data-click="Login.submit">
+            <p><input name="username" type="text"/></p>
+            <p><input type="password"/></p>
+            <p><button type="submit" data-click="Login.submit"><span>&gt;</span><span class="progress">...</span></button></p>           
+         </form>
     </section>
 </main>`;
 
         document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
 
-        Buttons.init(document.querySelectorAll('.button'));
+        Buttons.initForms(document.querySelectorAll('form'));
     },
-    submit: (button) => {
+    submit: (form) => {
+        let button = form.querySelector('button');
+
         if (!button.classList.contains('progress')) {
             button.classList.add('progress');
             setTimeout(() => {
+                Users.currentUser.userName = form.querySelector('input[name=username]').value;
+
                 Content.clean();
 
                 Messages.init();

@@ -43,6 +43,13 @@ form .button {
   border-radius: 0.125 * $module;
 }
 
+button {
+  @extend .button;
+
+  border: 0 none;
+  width: 100%;
+}
+
 .scale-button {
   transition: transform 100ms ease-in-out, opacity 100ms ease-in;
 

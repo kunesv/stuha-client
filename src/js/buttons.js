@@ -20,8 +20,17 @@ let Buttons = {
         }
     },
 
+    initForms: (forms) => {
+        for (let i = 0; i < forms.length; i++) {
+            let form = forms[i];
+
+            form.addEventListener('submit', (event) => Buttons.click(form, event));
+        }
+    },
+
     click: (button, event) => {
         event.stopPropagation();
+        event.preventDefault();
         setTimeout(() => {
             button.classList.remove(Buttons.CLICKED_CLASSNAME);
 

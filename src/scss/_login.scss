@@ -4,21 +4,33 @@
 
   justify-content: center;
 
-  min-height: 10 * $module;
+  min-height: 14 * $module;
 
-  form {
+  > form {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 14 * $module;
     width: 100%;
   }
 
   p {
     display: flex;
+    flex-direction: column;
     box-sizing: border-box;
 
     margin: 0 0 .75 * $module;
 
+    label {
+      color: #666;
+      font-size: 12px;
+    }
 
     input,button {
       width: 100%;
+    }
+
+    > span {
+      display: flex;
     }
 
   }

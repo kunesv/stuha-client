@@ -30,8 +30,8 @@ let Login = {
     </aside>
     <section class="login">   
          <form data-click="Login.submit">
-            <p><input name="username" type="text"/></p>
-            <p><input type="password"/></p>
+            <p><label>Přihlašovací jméno</label><span><input name="username" type="text"/></span><span class="error"></span></p>
+            <p><label>Heslo</label><span><input type="password"/></span><span class="error"></span></p>
             <p><button type="submit" data-click="Login.submit"><span>&gt;</span><span class="progress">...</span></button></p>           
          </form>
     </section>
@@ -78,7 +78,7 @@ let Content = {
 
 
     }
-}
+};
 
 Users.init();
 

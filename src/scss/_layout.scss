@@ -82,9 +82,6 @@ body {
       left: 60%;
     }
 
-    > nav {
-      position: fixed;
-    }
   }
 
   @media (max-width: 360px) {
@@ -102,7 +99,7 @@ body {
     overflow: hidden;
     width: 100%;
 
-    box-shadow: 0 0 0.25 * $module #ccc;
+    box-shadow: 0 0 0.25 * $module rgba(black, 0.1);
 
     > section {
       @extend .overflow-auto;

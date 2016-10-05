@@ -1,6 +1,36 @@
 form {
   margin: 0;
   padding: 0;
+
+  > section {
+    border-radius: .17rem;
+
+    margin: 0.25 * $module;
+    padding: 0.25 * $module;
+
+    transition: box-shadow 300ms;
+
+    &.error {
+      box-shadow: 0 0 4rem #f99 inset;
+
+      > .error {
+        max-height: 5rem;
+      }
+    }
+
+    > .error {
+      color: #c00;
+      max-height: 0;
+      font-size: 12px;
+      padding: 0.25 * $module;
+
+      transition: max-height 300ms;
+    }
+  }
+
+  > p {
+    margin: 0.5 * $module;
+  }
 }
 
 input {

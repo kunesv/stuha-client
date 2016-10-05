@@ -16,16 +16,12 @@
   }
 
   > form {
-    > p {
-      margin: 0 .5 * $module 0.75 * $module;
-    }
-
     ul {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
 
-      margin: 0.5 * $module 0.5 * $module 0.25 * $module;
+      margin: 0.25 * $module 0;
       padding: 0;
       list-style: none;
 

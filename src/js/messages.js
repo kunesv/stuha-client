@@ -78,18 +78,21 @@ let Messages = {
     },
 
     message: {
-        submit: (button)=> {
+        submit: (form)=> {
+            let button = form.querySelector('button[type=submit]');
             if (!button.classList.contains('progress')) {
+                if (!Messages.message.dialog.validations.all()) {
+                    return;
+                }
+
                 button.classList.add('progress');
                 setTimeout(() => {
-                    let messageForm = document.querySelector('.message-dialog form');
-
                     let message = {
                         createdOn: new Date(),
                         userName: Users.currentUser.userName,
                         userId: Users.currentUser.userId,
-                        formatted: messageForm.querySelector('.textarea').textContent,
-                        iconPath: messageForm.querySelector('.icons .active').getAttribute('data-path'),
+                        formatted: Messages.message.dialog.text(),
+                        iconPath: Messages.message.dialog.selectedIcon(),
                         images: []
                     };
 
@@ -164,14 +167,16 @@ let Messages = {
     <header>
         <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"><span>&#43;</span></a></span>
     </header>
-    <form>
-        <ul class="icons">
-            ${Messages.message.dialog.icons()}                                                                        
-        </ul>
-        
-        <p class="textarea" contenteditable="true"></p>
-                       
-        <p><a class="button" data-click="Messages.message.submit"><span>&gt;</span><span class="progress">...</span></a></p>
+    <form data-click="Messages.message.submit">
+        <section>
+            <ul class="icons">
+                ${Messages.message.dialog.icons()}                                                                        
+            </ul>           
+        </section>
+        <section>
+            <p class="textarea" contenteditable="true"></p>
+        </section>              
+        <p><button type="submit"><span>&gt;</span><span class="progress">...</span></button></p>
     </form>
 </section>`;
 
@@ -181,12 +186,19 @@ let Messages = {
                     document.querySelector('.message-dialog').classList.add('active');
 
                     Buttons.init(document.querySelectorAll('.message-dialog .button'));
+                    Buttons.initForms(document.querySelectorAll('.message-dialog form'));
 
                     let textarea = document.querySelector('.message-dialog .textarea');
                     textarea.addEventListener('paste', () => {
                         setTimeout(() => {
                             textarea.innerHTML = textarea.textContent;
                         }, 1);
+                    });
+                    textarea.addEventListener('focus', () => {
+                        Messages.message.dialog.validations.icons();
+                    });
+                    textarea.addEventListener('blur', () => {
+                        Messages.message.dialog.validations.text();
                     });
                 }, 100);
             },
@@ -204,7 +216,7 @@ let Messages = {
                 return Users.currentUser.icons.map(Messages.message.dialog.icon).join('');
             },
             icon: (icon)=> {
-                return `<li class="button" data-click="Messages.message.dialog.selectIcon" data-path="${icon.url}" style="background-image: url('/images/${icon.url}.png')"></li>`;
+                return `<li class="button" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.url}" style="background-image: url('/images/${icon.url}.png')"></li>`;
             },
             selectIcon: (li)=> {
                 let icons = li.parentNode.querySelectorAll('li');
@@ -215,6 +227,68 @@ let Messages = {
                 }
 
                 li.classList.add('active');
+
+                Messages.message.dialog.validations.icons();
+            },
+            selectedIcon: () => {
+                let activeIcon = document.querySelector('.message-dialog .icons .active');
+                return activeIcon ? activeIcon.getAttribute('data-path') : null;
+            },
+            text: () => {
+                return document.querySelector('.message-dialog .textarea').textContent;
+            },
+
+            validations: {
+                all: () => {
+                    let valid = Messages.message.dialog.validations.icons();
+                    valid = Messages.message.dialog.validations.text() && valid;
+
+                    return valid;
+                },
+                icons: () => {
+                    let template = `<p class="error">Vyberte prosím ikonku.</p>`;
+
+                    let valid = Messages.message.dialog.selectedIcon();
+                    let section = document.querySelector('.message-dialog .icons').parentNode;
+                    let error = section.classList.contains('error');
+
+                    if (!valid && !error) {
+                        section.insertAdjacentHTML('beforeend', template);
+                        section.classList.add('error');
+                    }
+
+                    if (valid && error) {
+                        section.classList.remove('error');
+                        setTimeout(() => {
+                            section.removeChild(section.querySelector('.error'));
+                        }, 300);
+                    }
+
+                    return valid;
+                },
+                text: () => {
+                    let template = `<p class="error">Přidejte prosím nějaký obsah.</p>`;
+
+                    let valid = Messages.message.dialog.text();
+                    let section = document.querySelector('.message-dialog .textarea').parentNode;
+                    let error = section.classList.contains('error');
+
+                    if (!valid && !error) {
+                        section.insertAdjacentHTML('beforeend', template);
+                        section.classList.add('error');
+                    }
+
+                    if (valid && error) {
+                        section.classList.remove('error');
+                        setTimeout(() => {
+                            section.removeChild(section.querySelector('.error'));
+                        }, 300);
+                    }
+
+                    return valid;
+
+                    return true;
+                }
             }
         }
     },

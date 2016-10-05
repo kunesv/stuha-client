@@ -1,6 +1,5 @@
 let Users = {
     currentUser: {
-
         userId: 2,
         userName: 'Houba',
         icons: [{url: '2_1'}, {url: '2_2'}, {url: '2_3'}, {url: '2_4'}]
@@ -30,7 +29,7 @@ let Login = {
     </aside>
     <section class="login">   
          <form data-click="Login.submit">
-            <p><label>Přihlašovací jméno</label><span><input name="username" type="text"/></span><span class="error"></span></p>
+            <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span><span class="error"></span></p>
             <p><label>Heslo</label><span><input type="password"/></span><span class="error"></span></p>
             <p><button type="submit" data-click="Login.submit"><span>&gt;</span><span class="progress">...</span></button></p>           
          </form>

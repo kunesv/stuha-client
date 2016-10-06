@@ -15,6 +15,10 @@ $color-text-secondary: #bbb;
 
 $base-font-family: Arial, sans-serif;
 
+html {
+  touch-action: manipulation;
+}
+
 .overflow-auto {
   overflow: auto;
   -webkit-overflow-scrolling: touch;

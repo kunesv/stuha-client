@@ -74,6 +74,9 @@ let Messages = {
             } else {
                 Messages.menu.remove();
             }
+        },
+        addSwipeActivation: () => {
+
         }
     },
 
@@ -253,40 +256,41 @@ let Messages = {
                     return valid;
                 },
                 icons: () => {
-                    let template = `<p class="error">Vyberte prosím ikonku.</p>`;
+                    let template = `<p class="error">Vyberte ikonku.</p>`;
 
                     let valid = Messages.message.dialog.values.icon();
                     let section = document.querySelector('.message-dialog .icons').parentNode;
-                    let error = section.classList.contains('error');
 
-                    if (!valid && !error) {
-                        section.insertAdjacentHTML('beforeend', template);
-                        section.classList.add('error');
-                    }
+                    Validations.refresh(section, valid, template);
 
-                    if (valid && error) {
-                        section.classList.remove('error');
-                        section.removeChild(section.querySelector('.error'));
-                    }
+                    Messages.message.dialog.validations.iconsTooManyAttempts.anotherTry(section, valid);
 
                     return valid;
                 },
+                iconsTooManyAttempts: {
+                    anotherTry: (section, valid) => {
+                        if (valid) {
+                            section.setAttribute('data-count', 0);
+                        } else {
+                            let count = section.getAttribute('data-count');
+                            if (count == 3) {
+                                console.log('3 times do something very funny!');
+
+                                document.querySelector('.message-dialog .icons').insertAdjacentHTML('beforeend', Messages.message.dialog.icon({path: '0_0'}));
+                                Buttons.init(document.querySelectorAll('.message-dialog .icons .button:last-child'));
+
+                            }
+                            section.setAttribute('data-count', ++count);
+                        }
+                    }
+                },
                 text: () => {
-                    let template = `<p class="error">Ještě prosím připojte nějaký obsah.</p>`;
+                    let template = `<p class="error">A ještě připojte nějaký obsah ...</p>`;
 
                     let valid = Messages.message.dialog.values.text();
                     let section = document.querySelector('.message-dialog .textarea').parentNode;
-                    let error = section.classList.contains('error');
 
-                    if (!valid && !error) {
-                        section.insertAdjacentHTML('beforeend', template);
-                        section.classList.add('error');
-                    }
-
-                    if (valid && error) {
-                        section.classList.remove('error');
-                        section.removeChild(section.querySelector('.error'));
-                    }
+                    Validations.refresh(section, valid, template);
 
                     return valid;
                 }

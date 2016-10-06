@@ -9,12 +9,13 @@ let Buttons = {
 
             button.addEventListener('mousedown', () => button.classList.add(Buttons.CLICKED_CLASSNAME));
 
-            button.addEventListener('mouseup', (event) => Buttons.click(button, event));
-
+            button.addEventListener('click', (event) => Buttons.click(button, event));
 
             button.addEventListener('mouseleave', () => {
                 button.classList.remove('clicked');
             });
+
+            button.setAttribute('href', '#');
         }
     },
 

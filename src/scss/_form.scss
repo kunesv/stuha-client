@@ -11,20 +11,13 @@ form {
     transition: box-shadow 300ms;
 
     &.error {
-      box-shadow: 0 0 4rem #f99 inset;
-
-      > .error {
-        max-height: 5rem;
-      }
+      box-shadow: 0 0 $module rgba(#c33, 0.33) inset;
     }
 
     > .error {
-      color: #c00;
-      max-height: 0;
-      font-size: 12px;
+      color: #c33;
+      font-size: 13px;
       padding: 0.25 * $module;
-
-      transition: max-height 300ms;
     }
   }
 

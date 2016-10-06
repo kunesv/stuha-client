@@ -78,8 +78,11 @@ let Messages = {
     },
 
     message: {
-        submit: (form)=> {
-            let button = form.querySelector('button[type=submit]');
+        submitForm: (form) => {
+            let button = form.querySelector('.submit.button');
+            Messages.message.submit(button);
+        },
+        submit: (button)=> {
             if (!button.classList.contains('progress')) {
                 if (!Messages.message.dialog.validations.all()) {
                     return;
@@ -91,8 +94,8 @@ let Messages = {
                         createdOn: new Date(),
                         userName: Users.currentUser.userName,
                         userId: Users.currentUser.userId,
-                        formatted: Messages.message.dialog.text(),
-                        iconPath: Messages.message.dialog.selectedIcon(),
+                        formatted: Messages.message.dialog.values.text(),
+                        iconPath: Messages.message.dialog.values.icon(),
                         images: []
                     };
 
@@ -167,7 +170,7 @@ let Messages = {
     <header>
         <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"><span>&#43;</span></a></span>
     </header>
-    <form data-click="Messages.message.submit">
+    <form>
         <section>
             <ul class="icons">
                 ${Messages.message.dialog.icons()}                                                                        
@@ -176,7 +179,7 @@ let Messages = {
         <section>
             <p class="textarea" contenteditable="true"></p>
         </section>              
-        <p><button type="submit"><span>&gt;</span><span class="progress">...</span></button></p>
+        <p><a class="submit button" tabindex="0" data-click="Messages.message.submit"><span>&gt;</span><span class="progress">...</span></a></p>
     </form>
 </section>`;
 
@@ -186,7 +189,6 @@ let Messages = {
                     document.querySelector('.message-dialog').classList.add('active');
 
                     Buttons.init(document.querySelectorAll('.message-dialog .button'));
-                    Buttons.initForms(document.querySelectorAll('.message-dialog form'));
 
                     let textarea = document.querySelector('.message-dialog .textarea');
                     textarea.addEventListener('paste', () => {
@@ -194,11 +196,14 @@ let Messages = {
                             textarea.innerHTML = textarea.textContent;
                         }, 1);
                     });
-                    textarea.addEventListener('focus', () => {
-                        Messages.message.dialog.validations.icons();
-                    });
-                    textarea.addEventListener('blur', () => {
-                        Messages.message.dialog.validations.text();
+                    textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
+                    textarea.addEventListener('blur', Messages.message.dialog.validations.text);
+                    let validationTimeout;
+                    textarea.addEventListener('input', () => {
+                        if (validationTimeout) {
+                            clearTimeout(validationTimeout);
+                        }
+                        validationTimeout = setTimeout(Messages.message.dialog.validations.text, 200);
                     });
                 }, 100);
             },
@@ -216,7 +221,7 @@ let Messages = {
                 return Users.currentUser.icons.map(Messages.message.dialog.icon).join('');
             },
             icon: (icon)=> {
-                return `<li class="button" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.url}" style="background-image: url('/images/${icon.url}.png')"></li>`;
+                return `<li class="button" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/${icon.path}.png')"></li>`;
             },
             selectIcon: (li)=> {
                 let icons = li.parentNode.querySelectorAll('li');
@@ -230,12 +235,14 @@ let Messages = {
 
                 Messages.message.dialog.validations.icons();
             },
-            selectedIcon: () => {
-                let activeIcon = document.querySelector('.message-dialog .icons .active');
-                return activeIcon ? activeIcon.getAttribute('data-path') : null;
-            },
-            text: () => {
-                return document.querySelector('.message-dialog .textarea').textContent;
+
+            values: {
+                icon: () => {
+                    let activeIcon = document.querySelector('.message-dialog .icons .active');
+                    return activeIcon ? activeIcon.getAttribute('data-path') : null;
+                }, text: () => {
+                    return document.querySelector('.message-dialog .textarea').textContent;
+                }
             },
 
             validations: {
@@ -248,7 +255,7 @@ let Messages = {
                 icons: () => {
                     let template = `<p class="error">Vyberte prosím ikonku.</p>`;
 
-                    let valid = Messages.message.dialog.selectedIcon();
+                    let valid = Messages.message.dialog.values.icon();
                     let section = document.querySelector('.message-dialog .icons').parentNode;
                     let error = section.classList.contains('error');
 
@@ -259,17 +266,15 @@ let Messages = {
 
                     if (valid && error) {
                         section.classList.remove('error');
-                        setTimeout(() => {
-                            section.removeChild(section.querySelector('.error'));
-                        }, 300);
+                        section.removeChild(section.querySelector('.error'));
                     }
 
                     return valid;
                 },
                 text: () => {
-                    let template = `<p class="error">Přidejte prosím nějaký obsah.</p>`;
+                    let template = `<p class="error">Ještě prosím připojte nějaký obsah.</p>`;
 
-                    let valid = Messages.message.dialog.text();
+                    let valid = Messages.message.dialog.values.text();
                     let section = document.querySelector('.message-dialog .textarea').parentNode;
                     let error = section.classList.contains('error');
 
@@ -280,14 +285,10 @@ let Messages = {
 
                     if (valid && error) {
                         section.classList.remove('error');
-                        setTimeout(() => {
-                            section.removeChild(section.querySelector('.error'));
-                        }, 300);
+                        section.removeChild(section.querySelector('.error'));
                     }
 
                     return valid;
-
-                    return true;
                 }
             }
         }

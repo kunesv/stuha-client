@@ -7,9 +7,7 @@ let Buttons = {
         for (let i = 0; i < btns.length; i++) {
             let button = btns[i];
 
-            button.addEventListener('mousedown', () => {
-                button.classList.add(Buttons.CLICKED_CLASSNAME);
-            });
+            button.addEventListener('mousedown', () => button.classList.add(Buttons.CLICKED_CLASSNAME));
 
             button.addEventListener('mouseup', (event) => Buttons.click(button, event));
 

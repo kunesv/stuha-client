@@ -11,27 +11,28 @@
     margin-right: auto;
     max-width: 14 * $module;
     width: 100%;
-  }
 
-  p {
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-
-    margin: 0 0 .75 * $module;
-
-    label {
-      color: #666;
-    }
-
-    input,button {
-      width: 100%;
-    }
-
-    > span {
+    > section, p {
       display: flex;
-    }
+      flex-direction: column;
+      box-sizing: border-box;
 
+      label {
+        color: #666;
+      }
+
+      input, button {
+        width: 100%;
+      }
+
+      > span {
+        display: flex;
+      }
+
+       p {
+        margin-bottom: 0.5 * $module;
+      }
+    }
   }
 
   .button {

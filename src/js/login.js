@@ -27,7 +27,7 @@ let Login = {
         <header></header>
         <section></section>
     </aside>
-    <section class="login">   
+    <section id="login">   
          <form data-click="Login.submit">
             <section>
                 <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span></p>

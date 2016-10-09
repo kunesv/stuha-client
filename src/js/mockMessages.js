@@ -1,3 +1,6 @@
+Users.init();
+
+
 let sampleMessages = [
     'Tady scanuju celej byt.',
     'Houba si balí na čundr: dva obří spacáky po prababičce a další pravou zálesáckou výbavu. Počítám, že asi tak po půl kilometru omdlí pod tou vahou únavou a povezete ho k tábořišti na kárce.',
@@ -63,3 +66,4 @@ let messagesSample = () => {
 
     return messagesSample.reverse();
 };
+

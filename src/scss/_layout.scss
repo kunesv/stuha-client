@@ -30,10 +30,14 @@ body {
   left: 0;
   top: 0;
 
-  transition: left 300ms ease-in-out;
+  transition: transform 300ms ease-in-out;
 
   > header {
     display: none;
+  }
+
+  &.swiping {
+    transition: initial;
   }
 
   @media (max-width: 960px) {
@@ -49,8 +53,6 @@ body {
 
       width: 100%;
       z-index: 2;
-
-
 
       > span {
         flex-grow: 1;
@@ -79,14 +81,14 @@ body {
     }
 
     &.moved {
-      left: 60%;
+      transform: translate3d(60%, 0, 0);
     }
 
   }
 
   @media (max-width: 360px) {
     &.moved {
-      left: 9 * $module;
+      transform: translate3d(9 * $module, 0, 0);
     }
   }
 

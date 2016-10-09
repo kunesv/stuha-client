@@ -22,6 +22,9 @@ let Messages = {
         Messages.placeholders.init();
 
         setTimeout(Messages.load, Math.round(Math.random() * 1500));
+
+        let content = document.querySelector('.content');
+        Messages.swipe = new Swipe(content);
     },
 
     load: () => {
@@ -74,9 +77,6 @@ let Messages = {
             } else {
                 Messages.menu.remove();
             }
-        },
-        addSwipeActivation: () => {
-
         }
     },
 

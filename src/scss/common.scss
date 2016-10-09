@@ -19,6 +19,13 @@ html {
   touch-action: manipulation;
 }
 
+* {
+  -ms-scroll-chaining: none;
+}
+.content * {
+  -ms-scroll-chaining: chained;
+}
+
 .overflow-auto {
   overflow: auto;
   -webkit-overflow-scrolling: touch;

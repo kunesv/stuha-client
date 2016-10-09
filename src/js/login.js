@@ -5,7 +5,8 @@ let Users = {
         icons: [{path: '2_1'}, {path: '2_2'}, {path: '2_3'}, {path: '2_4'}]
     },
     init: () => {
-        let signedIn = false;
+        let signedIn = localStorage.getItem('signedIn');
+        Users.currentUser.userName = localStorage.getItem('userName');
 
         if (signedIn) {
             Messages.init();
@@ -61,6 +62,9 @@ let Login = {
             setTimeout(() => {
                 Users.currentUser.userName = form.querySelector('input[name=username]').value;
 
+                localStorage.setItem('signedIn', 'true');
+                localStorage.setItem('userName', Users.currentUser.userName);
+
                 Content.clean();
 
                 Messages.init();
@@ -73,6 +77,9 @@ let Login = {
             setTimeout(() => {
                 Content.clean();
                 Messages.menu.remove();
+
+                localStorage.removeItem('signedIn');
+                localStorage.removeItem('userName');
 
                 Login.init();
             }, 300);
@@ -146,5 +153,4 @@ let Content = {
     }
 };
 
-Users.init();
 

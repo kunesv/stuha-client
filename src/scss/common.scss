@@ -19,11 +19,14 @@ html {
   touch-action: manipulation;
 }
 
-* {
+// Windows 8+ IE only
+html {
+  overflow-x: scroll;
+  -ms-touch-action: none;
+  -ms-overflow-style: none;
   -ms-scroll-chaining: none;
-}
-.content * {
-  -ms-scroll-chaining: chained;
+
+  color: red;
 }
 
 .overflow-auto {

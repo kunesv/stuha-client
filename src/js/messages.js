@@ -87,7 +87,7 @@ let Messages = {
     <header>
         <div class="icon button" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
     </header>
-    <main>          ${message.replyTo ? 'Reply to: ' + message.replyTo.id : ''}
+    <main>          
         ${Messages.message.images(message.images)}
         
         ${Messages.message.formatted(message)}
@@ -95,6 +95,8 @@ let Messages = {
         <footer>${dateTime.formatDate(new Date()) != dateTime.formatDate(message.createdOn) ? dateTime.formatDate(message.createdOn) + ',' : ''} <b>${dateTime.formatTime(message.createdOn)}</b></footer>
     </main>
 </article>`;
+
+            console.log('Reply to: ' + (message.replyTo ? message.replyTo.id : ''));
 
             let messages = document.querySelector('.messages');
             if (messages.querySelector('article:first-child')
@@ -228,7 +230,7 @@ let Messages = {
                 return Users.currentUser.icons.map(Messages.message.dialog.icon).join('');
             },
             icon: (icon)=> {
-                return `<li class="button" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/${icon.path}.png')"></li>`;
+                return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/${icon.path}.png')"></li>`;
             },
             selectIcon: (li)=> {
                 let icons = li.parentNode.querySelectorAll('li');
@@ -280,9 +282,17 @@ let Messages = {
                             if (count == 3) {
                                 console.log('3 times do something very funny!');
 
-                                document.querySelector('.message-dialog .icons').insertAdjacentHTML('beforeend', Messages.message.dialog.icon({path: '0_0'}));
-                                Buttons.init(document.querySelectorAll('.message-dialog .icons .button:last-child'));
+                                document.querySelector('.message-dialog .icons').insertAdjacentHTML('beforeend', Messages.message.dialog.icon({
+                                    path: '0_0',
+                                    hiddenOnLoad: true
+                                }));
 
+                                let icon = document.querySelectorAll('.message-dialog .icons .button:last-child');
+                                Buttons.init(icon);
+
+                                setTimeout(() => {
+                                    icon[0].classList.remove('hidden');
+                                }, 10);
                             }
                             section.setAttribute('data-count', ++count);
                         }

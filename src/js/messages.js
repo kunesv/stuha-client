@@ -81,6 +81,33 @@ let Messages = {
     },
 
     message: {
+        add: (message) => {
+            let template =
+                `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''}" data-date="${dateTime.formatDate(message.createdOn)}">
+    <header>
+        <div class="icon button" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
+    </header>
+    <main>          ${message.replyTo ? 'Reply to: ' + message.replyTo.id : ''}
+        ${Messages.message.images(message.images)}
+        
+        ${Messages.message.formatted(message)}
+            
+        <footer>${dateTime.formatDate(new Date()) != dateTime.formatDate(message.createdOn) ? dateTime.formatDate(message.createdOn) + ',' : ''} <b>${dateTime.formatTime(message.createdOn)}</b></footer>
+    </main>
+</article>`;
+
+            let messages = document.querySelector('.messages');
+            if (messages.querySelector('article:first-child')
+                && messages.querySelector('article:first-child').hasAttribute('data-date')
+                && messages.querySelector('article:first-child').getAttribute('data-date') != dateTime.formatDate(message.createdOn)) {
+                messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').getAttribute('data-date')));
+            }
+
+            messages.insertAdjacentHTML('afterbegin', template);
+
+            Buttons.init(messages.querySelectorAll('article:first-child .icon'));
+        },
+
         submitForm: (form) => {
             let button = form.querySelector('.submit.button');
             Messages.message.submit(button);
@@ -95,6 +122,9 @@ let Messages = {
                 setTimeout(() => {
                     let message = {
                         createdOn: new Date(),
+                        replyTo: {
+                            id: document.querySelector('.message-dialog').getAttribute('data-reply-to')
+                        },
                         userName: Users.currentUser.userName,
                         userId: Users.currentUser.userId,
                         formatted: Messages.message.dialog.values.text(),
@@ -115,32 +145,6 @@ let Messages = {
                     document.querySelector('.messages').scrollTop = 0;
                 }, 1500);
             }
-        },
-
-        add: (message) => {
-            let template =
-                `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''}" data-id="${message.id}" data-date="${dateTime.formatDate(message.createdOn)}">
-    <header>
-        <h1 style="background-image: url('/images/${message.iconPath}.png')"></h1>
-    </header>
-    <main>          
-        ${Messages.message.images(message.images)}
-        
-        ${Messages.message.formatted(message)}
-            
-        <footer>${dateTime.formatDate(new Date()) != dateTime.formatDate(message.createdOn) ? dateTime.formatDate(message.createdOn) + ',' : ''} <b>${dateTime.formatTime(message.createdOn)}</b></footer>
-    </main>
-</article>`;
-
-            let messages = document.querySelector('.messages');
-            if (messages.querySelector('article:first-child')
-                && messages.querySelector('article:first-child').hasAttribute('data-date')
-                && messages.querySelector('article:first-child').getAttribute('data-date') != dateTime.formatDate(message.createdOn)) {
-                messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').getAttribute('data-date')));
-            }
-
-            messages.insertAdjacentHTML('afterbegin', template);
-            Buttons.init(messages.querySelectorAll('article:first-child .button'));
         },
 
         images: (images) => {
@@ -169,7 +173,7 @@ let Messages = {
         dialog: {
             add: (button) => {
                 let template =
-                    `<section class="message-dialog">
+                    `<section class="message-dialog" data-reply-to="${button.getAttribute('data-reply-to')}">
     <header>
         <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"><span>&#43;</span></a></span>
     </header>
@@ -346,7 +350,7 @@ let Messages = {
         add: () => {
             let template =
                 `<article class="placeholder">
-                    <header><h1></h1></header>
+                    <header><div class="icon"></div></header>
                     <main>          
                         <section><p><b>&middot;&nbsp;&middot;&nbsp;&middot;</b></p></section>
                         <footer></footer>

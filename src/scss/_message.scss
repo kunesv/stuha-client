@@ -16,7 +16,7 @@ article {
     flex: 0 0 3.5 * $module;
     padding-bottom: $module;
 
-    h1 {
+    .icon {
       background-color: white;
       background-position: center;
       background-repeat: no-repeat;
@@ -25,6 +25,14 @@ article {
       margin-right: $module;
       text-align: center;
       width: 2.5 * $module;
+
+      &:hover {
+        background-color: white;
+      }
+
+      &.active {
+        box-shadow: 0 0 0 0.5 * $module rgba(black, 0.2) inset;
+      }
     }
   }
 
@@ -87,7 +95,7 @@ article {
       }
     }
 
-    h1 {
+    .icon {
       margin: 0 0 0 $module;
     }
 

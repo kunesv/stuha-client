@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp');
 
 var autoprefixer = require('gulp-autoprefixer');
@@ -89,19 +91,25 @@ gulp.task('sass', function () {
         ;
 });
 
+let webserverSettings = {
+    port: process.env.PORT,
+    host: '0.0.0.0',
+    fallback: 'index.html',
+
+};
+
+if (!process.env.PORT) {
+    webserverSettings.port = 5000;
+    webserverSettings.https = true;
+    webserverSettings.proxies = [{
+        source: '/api/',
+        target: 'http://localhost:8080/'
+    }];
+}
 
 // Starts a test server, which you can view at http://localhost:3000
 gulp.task('server', ['build'], function () {
     gulp.src('./build')
-        .pipe(webserver({
-            port: process.env.PORT || 5000,
-            host: '0.0.0.0',
-            fallback: 'index.html',
-            https: true,
-            proxies: [{
-                source: '/api/',
-                target: 'http://localhost:8080/'
-            }]
-        }))
+        .pipe(webserver(webserverSettings))
     ;
 });

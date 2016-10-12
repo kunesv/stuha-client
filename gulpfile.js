@@ -71,7 +71,7 @@ gulp.task('uglify:assets', function () {
 
 gulp.task('uglify:app', function () {
     return gulp.src(paths.app)
-        // .pipe(concat('app.js'))
+    // .pipe(concat('app.js'))
         .pipe(babel({
             presets: ['es2015']
         }))
@@ -96,7 +96,12 @@ gulp.task('server', ['build'], function () {
         .pipe(webserver({
             port: process.env.PORT || 5000,
             host: '0.0.0.0',
-            fallback: 'index.html'
+            fallback: 'index.html',
+            https: true,
+            proxies: [{
+                source: '/api/',
+                target: 'http://localhost:8080/'
+            }]
         }))
     ;
 });

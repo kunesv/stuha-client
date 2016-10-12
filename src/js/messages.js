@@ -280,8 +280,6 @@ let Messages = {
                         } else {
                             let count = section.getAttribute('data-count');
                             if (count == 3) {
-                                console.log('3 times do something very funny!');
-
                                 document.querySelector('.message-dialog .icons').insertAdjacentHTML('beforeend', Messages.message.dialog.icon({
                                     path: '0_0',
                                     hiddenOnLoad: true

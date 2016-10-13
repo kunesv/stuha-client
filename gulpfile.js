@@ -94,8 +94,7 @@ gulp.task('sass', function () {
 let webserverSettings = {
     port: process.env.PORT,
     host: '0.0.0.0',
-    fallback: 'index.html',
-
+    fallback: 'index.html'
 };
 
 if (!process.env.PORT) {

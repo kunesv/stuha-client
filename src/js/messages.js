@@ -107,7 +107,7 @@ let Messages = {
 
             messages.insertAdjacentHTML('afterbegin', template);
 
-            Buttons.init(messages.querySelectorAll('article:first-child .icon'));
+            Buttons.init(messages.querySelectorAll('article:first-child .button'));
         },
 
         submitForm: (form) => {

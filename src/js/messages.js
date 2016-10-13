@@ -290,7 +290,7 @@ let Messages = {
 
                                 setTimeout(() => {
                                     icon[0].classList.remove('hidden');
-                                }, 10);
+                                }, 100);
                             }
                             section.setAttribute('data-count', ++count);
                         }

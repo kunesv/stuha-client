@@ -1,9 +1,9 @@
 let Messages = {
     init: () => {
         let template = `<header>
-    <span class="menu-button"><a class="button" data-click="Messages.menu.toggle"><span>☰</span></a></span>
+    <span class="menu-button"><a class="button" data-click="Messages.menu.toggle"></a></span>
     <span>Originals</span>
-    <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"><span>&#43;</span></a></span>
+    <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
 </header>
 
 <main>
@@ -177,18 +177,22 @@ let Messages = {
                 let template =
                     `<section class="message-dialog" data-reply-to="${button.getAttribute('data-reply-to')}">
     <header>
-        <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"><span>&#43;</span></a></span>
+        <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"></a></span>
     </header>
     <form>
         <section>
             <ul class="icons">
                 ${Messages.message.dialog.icons()}                                                                        
             </ul>           
-        </section>
-        <section>
+        </section>       
+        <section>           
             <p class="textarea" contenteditable="true"></p>
+            <ul class="buttons">
+                <li class="button image"><input name="image" type="file" multiple="multiple"/></li>
+                <li class="button gps"></li>
+            </ul>
         </section>              
-        <p><a class="submit button" tabindex="0" data-click="Messages.message.submit"><span>&gt;</span><span class="progress">...</span></a></p>
+        <p><a class="submit button" tabindex="0" data-click="Messages.message.submit"><span class="progress">...</span></a></p>
     </form>
 </section>`;
 

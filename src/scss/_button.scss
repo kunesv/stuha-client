@@ -4,9 +4,11 @@
   justify-content: center;
 
   background-color: $color-background-button;
+  background-position: center;
+  background-repeat: no-repeat;
+
   color: rgba(white, 0.4);
   cursor: pointer;
-  font-size: 32px;
   height: 2.5 * $module;
 
   transition: background-color 400ms, box-shadow 100ms;
@@ -41,6 +43,9 @@
   }
 }
 
+
+
+
 form .button {
   border-radius: 0.125 * $module;
 }
@@ -65,20 +70,28 @@ button {
   }
 }
 
+.add-button .button {
+  background-image: url("/images/plus.svg");
+}
 
 .close-button {
   padding: 0;
 
   > .button {
     background-color: #999;
+    background-image: url("/images/ex.svg");
     width: 3 * $module;
 
     &:hover {
       background-color: #6C6C6C;
     }
-
-    > span {
-      transform: rotate(45deg);
-    }
   }
+}
+
+.menu-button .button {
+  background-image: url("/images/menu.svg");
+}
+
+.submit.button {
+  background-image: url("/images/submit.svg");
 }

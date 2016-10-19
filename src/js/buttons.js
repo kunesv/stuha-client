@@ -23,7 +23,11 @@ let Buttons = {
         for (let i = 0; i < forms.length; i++) {
             let form = forms[i];
 
-            form.addEventListener('submit', (event) => Buttons.click(form, event));
+            form.addEventListener('submit', (event) => {
+                event.stopPropagation();
+                event.preventDefault();
+                Buttons.click(form, event)
+            });
         }
     },
 

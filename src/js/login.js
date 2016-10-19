@@ -34,7 +34,7 @@ let Login = {
                 <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span></p>
                 <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
             </section>
-            <p><button type="submit" data-click="Login.submit"><span>&gt;</span><span class="progress">...</span></button></p>           
+            <p><button type="submit"><span>&gt;</span><span class="progress">...</span></button></p>           
          </form>
     </section>
 </main>`;

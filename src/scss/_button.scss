@@ -92,6 +92,6 @@ button {
   background-image: url("/images/menu.svg");
 }
 
-.submit.button {
+.submit.button, button[type=submit] {
   background-image: url("/images/submit.svg");
 }

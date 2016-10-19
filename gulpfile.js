@@ -28,7 +28,7 @@ var paths = {
     ],
     // These files are for your app's JavaScript
     app: [
-        './src/js/**/*.js'
+        './src/**/*.js'
     ]
 };
 
@@ -77,7 +77,7 @@ gulp.task('uglify:app', function () {
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(gulp.dest('./build/js/'));
+        .pipe(gulp.dest('./build/'));
 });
 
 // Compiles Sass

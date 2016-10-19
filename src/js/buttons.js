@@ -28,8 +28,6 @@ let Buttons = {
     },
 
     click: (button, event) => {
-        event.stopPropagation();
-        event.preventDefault();
         setTimeout(() => {
             button.classList.remove(Buttons.CLICKED_CLASSNAME);
 
@@ -41,6 +39,8 @@ let Buttons = {
                         fn = fn[functionName[i]];
                     }
                     fn(button);
+                    event.stopPropagation();
+                    event.preventDefault();
                 }
             }
         }, Buttons.CLICKED_ANIMATION_DURATION);

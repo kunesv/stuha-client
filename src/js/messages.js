@@ -88,9 +88,10 @@ let Messages = {
         <div class="icon button" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
     </header>
     <main>          
-        ${Messages.message.images(message.images)}
-        
+              
         ${Messages.message.formatted(message)}
+        
+        ${Messages.message.images(message.images)}
             
         <footer>${dateTime.formatDate(new Date()) != dateTime.formatDate(message.createdOn) ? dateTime.formatDate(message.createdOn) + ',' : ''} <b>${dateTime.formatTime(message.createdOn)}</b></footer>
     </main>

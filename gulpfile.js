@@ -99,7 +99,6 @@ let webserverSettings = {
 
 if (!process.env.PORT) {
     webserverSettings.port = 5000;
-    webserverSettings.https = true;
     webserverSettings.proxies = [{
         source: '/api/',
         target: 'http://localhost:8080/'

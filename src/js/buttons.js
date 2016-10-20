@@ -1,4 +1,4 @@
-let Buttons = {
+var Buttons = {
     CLICK: 'data-click',
     CLICKED_CLASSNAME: 'clicked',
     CLICKED_ANIMATION_DURATION: 100,

@@ -1,4 +1,4 @@
-let Swipe = (element) => {
+function Swipe(element) {
     let start = 0;
 
     element.addEventListener('touchstart', (event) => {
@@ -35,6 +35,4 @@ let Swipe = (element) => {
             event.preventDefault();
         }
     });
-
-    return {};
-};
+}

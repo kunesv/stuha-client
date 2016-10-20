@@ -1,4 +1,4 @@
-let Validations = {
+var Validations = {
     ERROR_CLASS_NAME: 'error',
 
     refresh: (section, valid, template) => {

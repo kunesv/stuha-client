@@ -54,7 +54,7 @@ article {
       &.image {
         & > span {
           background: transparent none center;
-          border-radius: 0.25 * $module;
+          border-radius: 1/8 * $module;
           cursor: pointer;
           display: inline-block;
           margin: 0.25 * $module 0.25 * $module 0 0;

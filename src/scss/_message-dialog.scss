@@ -93,6 +93,32 @@
       }
     }
 
+    .thumbnails {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        background-position: center;
+        background-repeat: no-repeat;
+
+        border-radius: 0.125 * $module;
+        margin: 0.25 * $module 0.25 * $module 0 0;
+
+        width: 8 * $module;
+        height: 6 * $module;
+
+        @media (max-width: 640px) {
+          width: 6 * $module;
+          height: 4.5 * $module;
+        }
+      }
+    }
+
     .error .buttons li {
       background-color: transparent;
     }

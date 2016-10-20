@@ -1,4 +1,4 @@
-let Messages = {
+var Messages = {
     init: () => {
         let template = `<header>
     <span class="menu-button"><a class="button" data-click="Messages.menu.toggle"></a></span>
@@ -97,8 +97,6 @@ let Messages = {
     </main>
 </article>`;
 
-            console.log('Reply to: ' + (message.replyTo ? message.replyTo.id : ''));
-
             let messages = document.querySelector('.messages');
             if (messages.querySelector('article:first-child')
                 && messages.querySelector('article:first-child').hasAttribute('data-date')
@@ -189,8 +187,8 @@ let Messages = {
         <section>           
             <p class="textarea" contenteditable="true"></p>
             <ul class="buttons">
-                <li class="button image"><input name="image" type="file" multiple="multiple"/></li>
-                <li class="button gps"></li>
+                <li class="image button"><input name="image" type="file" multiple="multiple" accept="image/*"/></li>
+                <li class="gps button"></li>
             </ul>
         </section>              
         <p><a class="submit button" tabindex="0" data-click="Messages.message.submit"><span class="progress">...</span></a></p>
@@ -212,6 +210,7 @@ let Messages = {
                     });
                     textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
                     textarea.addEventListener('blur', Messages.message.dialog.validations.text);
+
                     let validationTimeout;
                     textarea.addEventListener('input', () => {
                         if (validationTimeout) {
@@ -219,6 +218,9 @@ let Messages = {
                         }
                         validationTimeout = setTimeout(Messages.message.dialog.validations.text, 200);
                     });
+
+                    let buttons = document.querySelector('.message-dialog .buttons');
+                    buttons.querySelector('.image.button').addEventListener('change', (event) => Images.upload(event, buttons));
                 }, 100);
             },
             remove: () => {

@@ -1,4 +1,4 @@
-let Users = {
+var Users = {
     currentUser: {
         userId: 2,
         userName: 'Houba',
@@ -17,7 +17,7 @@ let Users = {
 };
 
 
-let Login = {
+var Login = {
     init: () => {
         let template = `<header>
     

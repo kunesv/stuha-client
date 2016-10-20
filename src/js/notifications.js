@@ -1,6 +1,7 @@
 var isPushEnabled = false;
 
 window.addEventListener('load', function () {
+    /*
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').then(function (reg) {
             if (reg.installing) {
@@ -16,7 +17,7 @@ window.addEventListener('load', function () {
     } else {
         console.log('Service workers aren\'t supported in this browser.');
     }
-
+    */
     // setTimeout(subscribe, 1000);
 });
 

@@ -128,7 +128,7 @@ var Messages = {
                         },
                         userName: Users.currentUser.userName,
                         userId: Users.currentUser.userId,
-                        formatted: Messages.message.dialog.values.text(),
+                        formatted: Messages.message.dialog.values.content(),
                         iconPath: Messages.message.dialog.values.icon(),
                         images: []
                     };
@@ -209,18 +209,21 @@ var Messages = {
                         }, 1);
                     });
                     textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
-                    textarea.addEventListener('blur', Messages.message.dialog.validations.text);
+                    textarea.addEventListener('blur', Messages.message.dialog.validations.content);
 
                     let validationTimeout;
                     textarea.addEventListener('input', () => {
                         if (validationTimeout) {
                             clearTimeout(validationTimeout);
                         }
-                        validationTimeout = setTimeout(Messages.message.dialog.validations.text, 200);
+                        validationTimeout = setTimeout(Messages.message.dialog.validations.content, 200);
                     });
 
                     let buttons = document.querySelector('.message-dialog .buttons');
-                    buttons.querySelector('.image.button').addEventListener('change', (event) => Images.upload(event, buttons));
+                    buttons.querySelector('.image.button').addEventListener('change', (event) => {
+                        Images.upload(event, buttons);
+                        Messages.message.dialog.validations.all();
+                    });
                 }, 100);
             },
             remove: () => {
@@ -256,15 +259,19 @@ var Messages = {
                 icon: () => {
                     let activeIcon = document.querySelector('.message-dialog .icons .active');
                     return activeIcon ? activeIcon.getAttribute('data-path') : null;
-                }, text: () => {
+                },
+                content: () => {
                     return document.querySelector('.message-dialog .textarea').textContent;
+                },
+                images: () => {
+                    return Images.values();
                 }
             },
 
             validations: {
                 all: () => {
                     let valid = Messages.message.dialog.validations.icons();
-                    valid = Messages.message.dialog.validations.text() && valid;
+                    valid = Messages.message.dialog.validations.content() && valid;
 
                     return valid;
                 },
@@ -303,10 +310,10 @@ var Messages = {
                         }
                     }
                 },
-                text: () => {
+                content: () => {
                     let template = `<p class="error">A ještě připojte nějaký obsah ...</p>`;
 
-                    let valid = Messages.message.dialog.values.text();
+                    let valid = Messages.message.dialog.values.content() || (Messages.message.dialog.values.images() && Messages.message.dialog.values.images().length);
                     let section = document.querySelector('.message-dialog .textarea').parentNode;
 
                     Validations.refresh(section, valid, template);

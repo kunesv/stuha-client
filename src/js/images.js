@@ -1,11 +1,11 @@
 var Images = {
     thumbnail: (src) => {
-        return `<li style="background-image: url('${src}')"></li>`;
+        return `<li data-src="${src}" style="background-image: url('${src}')"></li>`;
     },
 
     upload: (event, buttons) => {
         let fileList = event.target.files;
-        if(!fileList.length){
+        if (!fileList.length) {
             // Notify user!
             return;
         }
@@ -20,5 +20,14 @@ var Images = {
 
             thumbnails.insertAdjacentHTML('beforeend', Images.thumbnail(window.URL.createObjectURL(file)));
         }
+    },
+
+    values: () => {
+        let images = document.querySelectorAll('.message-dialog .thumbnails li');
+        let results = [];
+        for (let i = 0; i < images.length; i++) {
+            results.push(images[i].getAttribute('data-src'))
+        }
+        return results;
     }
 };

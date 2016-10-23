@@ -19,14 +19,6 @@ html {
   touch-action: manipulation;
 }
 
-// Windows 8+ IE only
-//html {
-//  overflow-x: scroll;
-//  -ms-touch-action: none;
-//  -ms-overflow-style: none;
-//  -ms-scroll-chaining: none;
-//}
-
 .overflow-auto {
   overflow: auto;
   -webkit-overflow-scrolling: touch;

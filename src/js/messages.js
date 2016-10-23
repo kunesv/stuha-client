@@ -130,7 +130,7 @@ var Messages = {
                         userId: Users.currentUser.userId,
                         formatted: Messages.message.dialog.values.content(),
                         iconPath: Messages.message.dialog.values.icon(),
-                        images: []
+                        images: Messages.message.dialog.values.images()
                     };
 
                     Messages.message.add(message);
@@ -222,7 +222,7 @@ var Messages = {
                     let buttons = document.querySelector('.message-dialog .buttons');
                     buttons.querySelector('.image.button').addEventListener('change', (event) => {
                         Images.upload(event, buttons);
-                        Messages.message.dialog.validations.all();
+                        Messages.message.dialog.validations.icons();
                     });
                 }, 100);
             },

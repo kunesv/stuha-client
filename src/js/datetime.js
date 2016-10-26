@@ -1,6 +1,6 @@
 var Datetime = {
     arrayToDate: (array) => {
-        return new Date(array[0], array[1], array[2], array[3], array[4], array[5]);
+        return new Date(array[0], array[1] - 1, array[2], array[3], array[4], array[5]);
     },
     formatDate: (date)=> {
         let dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];

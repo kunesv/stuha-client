@@ -24,7 +24,8 @@ var paths = {
     ],
     // JavaScript dependencies
     libs: [
-        './node_modules/babel-polyfill/dist/polyfill.js'
+        './node_modules/babel-polyfill/dist/polyfill.js',
+        './node_modules/whatwg-fetch/fetch.js'
     ],
     // These files are for your app's JavaScript
     app: [

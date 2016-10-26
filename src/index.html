@@ -7,7 +7,7 @@
 
     <title>Stuha</title>
 
-    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';"/>-->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"/>
     <meta name="msapplication-tap-highlight" content="no"/>
 
     <link rel="stylesheet" href="/css/common.css"/>
@@ -15,6 +15,10 @@
 <body>
     <div class="content"></div>
 
+
+    <!-- FIXME: load only for archaic browsers -->
+    <script src="/js/polyfill.js"></script>
+    <script src="/js/fetch.js"></script>
 
     <script src="/js/datetime.js"></script>
     <script src="/js/buttons.js"></script>

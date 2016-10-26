@@ -17,6 +17,7 @@
     "gulp-watch": "^4.3.9",
     "gulp-webserver": "^0.9.1",
     "rimraf": "^2.5.4",
-    "run-sequence": "^1.2.2"
+    "run-sequence": "^1.2.2",
+    "whatwg-fetch": "^1.0.0"
   }
 }

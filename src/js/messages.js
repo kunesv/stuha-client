@@ -19,36 +19,43 @@ var Messages = {
         let headerButtons = document.querySelectorAll('.content > header .button');
         Buttons.init(headerButtons);
 
-        Messages.placeholders.init();
+        Messages.placeholders.add();
 
-        setTimeout(Messages.load, Math.round(Math.random() * 1500));
+        Messages.load();
 
         let content = document.querySelector('.content');
         Messages.swipe = new Swipe(content);
     },
 
     load: () => {
-        if (Math.random() > .2) {
-            Messages.placeholders.removeAll();
-
-            let messages = messagesSample();
-
-            for (let i = 0; i < messages.length; i++) {
-                Messages.message.add(messages[i]);
+        fetch('/api/message', {
+            headers: {
+                'Accept': 'application/json'
             }
+        }).then((response) => {
+            if (response.ok) {
+                return response.json().then((messages) => {
+                    Messages.placeholders.removeAll();
 
-            if (!messages.length) {
-                Messages.empty.add();
+                    for (let i = 0; i < messages.length; i++) {
+                        Messages.message.add(messages[i]);
+                    }
+
+                    if (!messages.length) {
+                        Messages.empty.add();
+                    }
+                });
+            } else {
+                Messages.failed.add();
             }
-
-        } else {
-            Messages.failed.add();
-        }
+        });
     },
+
     reload: () => {
         Messages.failed.remove();
+        Messages.placeholders.add();
 
-        setTimeout(Messages.load, Math.round(Math.random() * 1500));
+        Messages.load();
     },
 
     menu: {
@@ -82,8 +89,10 @@ var Messages = {
 
     message: {
         add: (message) => {
+            message.createdOn = Datetime.arrayToDate(message.createdOn);
+
             let template =
-                `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''}" data-date="${dateTime.formatDate(message.createdOn)}">
+                `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
         <div class="icon button" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
     </header>
@@ -93,14 +102,14 @@ var Messages = {
         
         ${Messages.message.images(message.images)}
             
-        <footer>${dateTime.formatDate(new Date()) != dateTime.formatDate(message.createdOn) ? dateTime.formatDate(message.createdOn) + ',' : ''} <b>${dateTime.formatTime(message.createdOn)}</b></footer>
+        <footer>${Datetime.formatDate(new Date()) != Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
     </main>
 </article>`;
 
             let messages = document.querySelector('.messages');
             if (messages.querySelector('article:first-child')
                 && messages.querySelector('article:first-child').hasAttribute('data-date')
-                && messages.querySelector('article:first-child').getAttribute('data-date') != dateTime.formatDate(message.createdOn)) {
+                && messages.querySelector('article:first-child').getAttribute('data-date') != Datetime.formatDate(message.createdOn)) {
                 messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').getAttribute('data-date')));
             }
 
@@ -120,31 +129,38 @@ var Messages = {
                 }
 
                 button.classList.add('progress');
-                setTimeout(() => {
-                    let message = {
-                        createdOn: new Date(),
-                        replyTo: {
-                            id: document.querySelector('.message-dialog').getAttribute('data-reply-to')
-                        },
-                        userName: Users.currentUser.userName,
-                        userId: Users.currentUser.userId,
-                        formatted: Messages.message.dialog.values.content(),
-                        iconPath: Messages.message.dialog.values.icon(),
-                        images: Messages.message.dialog.values.images()
-                    };
 
-                    Messages.message.add(message);
+                let message = {
+                    replyToId: document.querySelector('.message-dialog').getAttribute('data-reply-to'),
+                    userName: Users.currentUser.userName,
+                    userId: Users.currentUser.userId,
+                    rough: Messages.message.dialog.values.content(),
+                    iconPath: Messages.message.dialog.values.icon(),
+                    images: Messages.message.dialog.values.images()
+                };
 
-                    // icon
-                    // message || image
-                    // image, gps, date?
 
-                    // on success:
-                    Messages.message.dialog.remove();
-                    button.classList.remove('progress');
+                fetch('/api/message', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(message)
+                }).then((response) => {
+                    if (response.ok) {
+                        return response.json().then((message) => {
+                            Messages.message.add(message);
 
-                    document.querySelector('.messages').scrollTop = 0;
-                }, 1500);
+                            Messages.message.dialog.remove();
+                            button.classList.remove('progress');
+
+                            document.querySelector('.messages').scrollTop = 0;
+                        });
+                    } else {
+                        console.log('ERRORRR, (...)')
+                    }
+                });
             }
         },
 
@@ -156,7 +172,7 @@ var Messages = {
             return `<section class="image">${images.map(Messages.message.image).join('')}</section>`;
         },
         image: (image)=> {
-            return `<span class="button thumbnail" data-click="Messages.image.dialog.add" data-url="${image.url}" style="background-image: url('/images/${image.thumbUrl}')"></span>`;
+            return `<span class="button thumbnail" data-click="Messages.image.dialog.add" data-url="${image.image}" style="background-image: url('${image.thumbnail}')"></span>`;
         },
 
         formatted: (message) => {
@@ -339,13 +355,10 @@ var Messages = {
                 Buttons.init([imageDialog]);
 
                 let image = new Image();
-                image.src = '/images/' + thumbnail.getAttribute('data-url');
+                image.src = thumbnail.getAttribute('data-url');
                 image.addEventListener('load', () => {
                     imageDialog.querySelector('main').appendChild(image);
-
-                    setTimeout(() => {
-                        imageDialog.classList.add('active');
-                    }, 1000);
+                    imageDialog.classList.add('active');
                 });
 
                 setTimeout(() => {
@@ -368,8 +381,8 @@ var Messages = {
     },
 
     placeholders: {
-        init: () => [1, 2, 3, 4].map(Messages.placeholders.add),
-        add: () => {
+        add: () => [1, 2, 3, 4].map(Messages.placeholders.addOne),
+        addOne: () => {
             let template =
                 `<article class="placeholder">
                     <header><div class="icon"></div></header>
@@ -417,18 +430,3 @@ var Messages = {
         }
     }
 };
-
-let dateTime = {
-    formatDate: (date)=> {
-        let dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
-
-        return dayNames[date.getDay()] + ' ' + date.getDate() + '.' + (date.getMonth() + 1) + '. ' + date.getFullYear();
-    },
-
-    formatTime: (date) => {
-        return ('0' + date.getHours()).slice(-2) + '.' + ('0' + date.getMinutes()).slice(-2);
-    }
-};
-
-
-

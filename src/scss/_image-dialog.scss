@@ -41,8 +41,25 @@
 .thumbnail.button {
   @extend .scale-button;
 
+  background: $color-background-message none center;
+  border-radius: 1/8 * $module;
   cursor: zoom-in;
+  display: inline-block;
+  margin: 0.25 * $module 0.25 * $module 0 0;
   opacity: 1;
+  vertical-align: bottom;
+
+  width: 8 * $module;
+  height: 6 * $module;
+
+  @media (max-width: 640px) {
+    width: 6 * $module;
+    height: 4.5 * $module;
+  }
+
+  &:hover {
+    background-color: $color-background-message;
+  }
 
   &.active {
     opacity: 0;

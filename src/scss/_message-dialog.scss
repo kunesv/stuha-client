@@ -35,7 +35,7 @@
         text-align: center;
         width: 2.5 * $module;
 
-        transition: transform 1s ease-in-out, opacity 2s ease-in-out;
+        transition:  background-color 400ms, box-shadow 100ms, transform 1s ease-in-out, opacity 2s ease-in-out;
 
         &:hover {
           background-color: white;
@@ -103,6 +103,7 @@
       list-style: none;
 
       li {
+        background-color: $color-background-message;
         background-position: center;
         background-repeat: no-repeat;
 

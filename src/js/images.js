@@ -1,6 +1,6 @@
 var Images = {
     thumbnail: (src, thumbnailSrc) => {
-        return `<li data-src="${src}" style="background-image: url('${thumbnailSrc}')"></li>`;
+        return `<li data-src="${src}" data-src-thumb="${thumbnailSrc}" style="background-image: url('${thumbnailSrc}')"></li>`;
     },
 
     upload: (event, buttons) => {
@@ -67,7 +67,7 @@ var Images = {
         let images = document.querySelectorAll('.message-dialog .thumbnails li');
         let results = [];
         for (let i = 0; i < images.length; i++) {
-            results.push({url: images[i].getAttribute('data-src')});
+            results.push({thumbnail: images[i].getAttribute('data-src-thumb'), image: images[i].getAttribute('data-src')});
         }
         return results;
     }

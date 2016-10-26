@@ -7,6 +7,7 @@ var Users = {
     init: () => {
         let signedIn = localStorage.getItem('signedIn');
         Users.currentUser.userName = localStorage.getItem('userName');
+        Users.currentUser.userId = localStorage.getItem('userId');
 
         if (signedIn) {
             Messages.init();
@@ -61,9 +62,11 @@ var Login = {
             button.classList.add('progress');
             setTimeout(() => {
                 Users.currentUser.userName = form.querySelector('input[name=username]').value;
+                Users.currentUser.userId = new Date().getTime() + '-' + Math.random();
 
                 localStorage.setItem('signedIn', 'true');
                 localStorage.setItem('userName', Users.currentUser.userName);
+                localStorage.setItem('userId', Users.currentUser.userId);
 
                 Content.clean();
 
@@ -80,6 +83,7 @@ var Login = {
 
                 localStorage.removeItem('signedIn');
                 localStorage.removeItem('userName');
+                localStorage.removeItem('userId');
 
                 Login.init();
             }, 300);

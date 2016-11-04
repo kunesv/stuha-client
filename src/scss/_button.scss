@@ -94,4 +94,8 @@ button {
 
 .submit.button, button[type=submit] {
   background-image: url("/images/submit.svg");
+
+  &.progress {
+    background-image: url("/images/progress.svg");
+  }
 }

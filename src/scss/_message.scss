@@ -98,7 +98,11 @@ article {
 
   &.placeholder {
     p {
-      width: 100%;
+      background-image: url("/images/progress.svg");
+      background-repeat: no-repeat;
+      background-position: left center;
+      height: $module;
+      width: 3 * $module;
     }
   }
 }

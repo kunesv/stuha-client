@@ -26,28 +26,28 @@ var Messages = {
         let content = document.querySelector('.content');
         Messages.swipe = new Swipe(content);
     },
+    ticking: false,
 
     load: () => {
         fetch('/api/message', {
             headers: {
                 'Accept': 'application/json'
             }
-        }).then((response) => {
-            if (response.ok) {
-                return response.json().then((messages) => {
-                    Messages.placeholders.removeAll();
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((messages) => {
+                Messages.placeholders.removeAll();
 
-                    for (let i = 0; i < messages.length; i++) {
-                        Messages.message.add(messages[i]);
-                    }
+                for (let i = 0; i < messages.length; i++) {
+                    Messages.message.add(messages[i]);
+                }
 
-                    if (!messages.length) {
-                        Messages.empty.add();
-                    }
-                });
-            } else {
-                Messages.failed.add();
-            }
+                if (!messages.length) {
+                    Messages.empty.add();
+                }
+            });
+        }).catch((error) => {
+            console.log(error);
+            Messages.failed.add();
         });
     },
 
@@ -56,35 +56,6 @@ var Messages = {
         Messages.placeholders.add();
 
         Messages.load();
-    },
-
-    menu: {
-        add: (button) => {
-            let template = `<nav><ul>
-    <li><a class="button" data-click="Login.logout"><span>Logout</span><span class="progress">...</span></a></li>
-</ul></nav>`;
-
-            document.body.insertAdjacentHTML('afterBegin', template);
-            Buttons.init(document.body.querySelectorAll('nav .button'));
-
-            document.querySelector('.content').classList.add('moved');
-        },
-        remove: () => {
-
-            document.querySelector('.content').classList.remove('moved');
-
-            setTimeout(() => {
-                document.body.removeChild(document.body.querySelector('nav'));
-            }, 300);
-        },
-        toggle: (button) => {
-            button.classList.toggle('active');
-            if (button.classList.contains('active')) {
-                Messages.menu.add();
-            } else {
-                Messages.menu.remove();
-            }
-        }
     },
 
     message: {
@@ -130,36 +101,33 @@ var Messages = {
 
                 button.classList.add('progress');
 
-                let message = {
-                    replyToId: document.querySelector('.message-dialog').getAttribute('data-reply-to'),
-                    userName: Users.currentUser.userName,
-                    userId: Users.currentUser.userId,
-                    rough: Messages.message.dialog.values.content(),
-                    iconPath: Messages.message.dialog.values.icon(),
-                    images: Messages.message.dialog.values.images()
-                };
+                let messageForm = new FormData();
+                messageForm.append('replyToId', document.querySelector('.message-dialog').getAttribute('data-reply-to'));
+                messageForm.append('userName', Users.currentUser.userName);
+                messageForm.append('userId', Users.currentUser.userId);
+                messageForm.append('rough', Messages.message.dialog.values.content());
+                messageForm.append('iconPath', Messages.message.dialog.values.icon());
+                messageForm.append('images', Messages.message.dialog.values.images());
 
 
                 fetch('/api/message', {
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json;charset=UTF-8'
+                        'Accept': 'application/json'
                     },
                     method: 'POST',
-                    body: JSON.stringify(message)
-                }).then((response) => {
-                    if (response.ok) {
-                        return response.json().then((message) => {
-                            Messages.message.add(message);
+                    body: messageForm
+                }).then(Fetch.processFetchStatus).then((response) => {
+                    return response.json().then((message) => {
+                        Messages.message.add(message);
 
-                            Messages.message.dialog.remove();
-                            button.classList.remove('progress');
+                        Messages.message.dialog.remove();
+                        button.classList.remove('progress');
 
-                            document.querySelector('.messages').scrollTop = 0;
-                        });
-                    } else {
-                        console.log('ERRORRR, (...)')
-                    }
+                        document.querySelector('.messages').scrollTop = 0;
+                    });
+                }).catch((response) => {
+                    console.log('ERRORRR, (...)');
+                    console.log(response);
                 });
             }
         },
@@ -172,7 +140,7 @@ var Messages = {
             return `<section class="image">${images.map(Messages.message.image).join('')}</section>`;
         },
         image: (image)=> {
-            return `<span class="button thumbnail" data-click="Messages.image.dialog.add" data-url="${image.image}" style="background-image: url('${image.thumbnail}')"></span>`;
+            return `<span class="button thumbnail placeholder" data-click="Messages.image.dialog.add" data-id="${image.id}"></span>`;
         },
 
         formatted: (message) => {
@@ -204,10 +172,10 @@ var Messages = {
             <p class="textarea" contenteditable="true"></p>
             <ul class="buttons">
                 <li class="image button"><input name="image" type="file" multiple="multiple" accept="image/*"/></li>
-                <li class="gps button"></li>
+                <!--<li class="gps button"></li>-->
             </ul>
         </section>              
-        <p><a class="submit button" tabindex="0" data-click="Messages.message.submit"><span class="progress">...</span></a></p>
+        <p><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>
     </form>
 </section>`;
 
@@ -387,7 +355,7 @@ var Messages = {
                 `<article class="placeholder">
                     <header><div class="icon"></div></header>
                     <main>          
-                        <section><p><b>&middot;&nbsp;&middot;&nbsp;&middot;</b></p></section>
+                        <section><p class=""></p></section>
                         <footer></footer>
                     </main>
                 </article>`;
@@ -428,5 +396,42 @@ var Messages = {
                 document.body.removeChild(overlay);
             }
         }
-    }
+    },
+
+    // FIXME: for many messages, introduce some dynamic hide/show.
+    // inView: (message) => {
+    //     var elemTop = message.getBoundingClientRect().top;
+    //     var elemBottom = message.getBoundingClientRect().bottom;
+    //
+    //     return (elemTop > -200) && (elemBottom < window.innerHeight + 200);
+    // },
+
+    menu: {
+        add: (button) => {
+            let template = `<nav><ul>
+    <li><a class="button" data-click="Login.logout"><span>Logout</span><span class="progress">...</span></a></li>
+</ul></nav>`;
+
+            document.body.insertAdjacentHTML('afterBegin', template);
+            Buttons.init(document.body.querySelectorAll('nav .button'));
+
+            document.querySelector('.content').classList.add('moved');
+        },
+        remove: () => {
+
+            document.querySelector('.content').classList.remove('moved');
+
+            setTimeout(() => {
+                document.body.removeChild(document.body.querySelector('nav'));
+            }, 300);
+        },
+        toggle: (button) => {
+            button.classList.toggle('active');
+            if (button.classList.contains('active')) {
+                Messages.menu.add();
+            } else {
+                Messages.menu.remove();
+            }
+        }
+    },
 };

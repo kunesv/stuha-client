@@ -18,6 +18,7 @@ var Images = {
         for (let i = 0; i < fileList.length; i++) {
             let file = fileList[i];
 
+            console.log(i)
 
             var reader = new FileReader();
             reader.onload = (event) => {
@@ -67,7 +68,10 @@ var Images = {
         let images = document.querySelectorAll('.message-dialog .thumbnails li');
         let results = [];
         for (let i = 0; i < images.length; i++) {
-            results.push({thumbnail: images[i].getAttribute('data-src-thumb'), image: images[i].getAttribute('data-src')});
+            results.push({
+                thumbnail: images[i].getAttribute('data-src-thumb'),
+                image: images[i].getAttribute('data-src')
+            });
         }
         return results;
     }

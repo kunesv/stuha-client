@@ -69,7 +69,7 @@ gulp.task('uglify', ['uglify:assets', 'uglify:app']);
 gulp.task('uglify:assets', function () {
     return gulp.src(paths.libs)
         .pipe(uglify())
-        .pipe(gulp.dest('./build/js/'));
+        .pipe(gulp.dest('./build/js/lib/'));
 });
 
 gulp.task('uglify:app', function () {

@@ -46,13 +46,18 @@ var Messages = {
                 }
             });
         }).catch((error) => {
+            let errorMessage = 'Nepodařilo se nahrát příspěvky, zkuste to prosím ještě jednou.';
+            if (error.status === 500) {
+
+            }
             console.log(error);
-            Messages.failed.add();
+            Messages.failed.add(errorMessage);
         });
     },
 
     reload: () => {
         Messages.failed.remove();
+        Messages.placeholders.removeAll();
         Messages.placeholders.add();
 
         Messages.load();
@@ -80,8 +85,8 @@ var Messages = {
             let messages = document.querySelector('.messages');
             if (messages.querySelector('article:first-child')
                 && messages.querySelector('article:first-child').hasAttribute('data-date')
-                && messages.querySelector('article:first-child').getAttribute('data-date') != Datetime.formatDate(message.createdOn)) {
-                messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').getAttribute('data-date')));
+                && messages.querySelector('article:first-child').dataset.date != Datetime.formatDate(message.createdOn)) {
+                messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').dataset.date));
             }
 
             messages.insertAdjacentHTML('afterbegin', template);
@@ -95,14 +100,14 @@ var Messages = {
         },
         submit: (button)=> {
             if (!button.classList.contains('progress')) {
-                if (!Messages.message.dialog.validations.all()) {
+                if (!Messages.message.dialog.validations.all(true)) {
                     return;
                 }
 
                 button.classList.add('progress');
 
                 let messageForm = new FormData();
-                messageForm.append('replyToId', document.querySelector('.message-dialog').getAttribute('data-reply-to'));
+                messageForm.append('replyToId', document.querySelector('.message-dialog').dataset.replyTo);
                 messageForm.append('userName', Users.currentUser.userName);
                 messageForm.append('userId', Users.currentUser.userId);
                 messageForm.append('rough', Messages.message.dialog.values.content());
@@ -118,18 +123,53 @@ var Messages = {
                     body: messageForm
                 }).then(Fetch.processFetchStatus).then((response) => {
                     return response.json().then((message) => {
-                        Messages.message.add(message);
+                        if (Images.values.length) {
+                            Messages.message.submitImages(message.id);
+                        } else {
+                            Messages.message.dialog.remove();
+                            button.classList.remove('progress');
 
-                        Messages.message.dialog.remove();
-                        button.classList.remove('progress');
-
-                        document.querySelector('.messages').scrollTop = 0;
+                            Messages.message.add(message);
+                            document.querySelector('.messages').scrollTop = 0;
+                        }
                     });
                 }).catch((response) => {
                     console.log('ERRORRR, (...)');
                     console.log(response);
                 });
             }
+        },
+
+        submitImages: (messageId) => {
+            let imageForm = new FormData();
+            for (let i = 0; i < Images.values.length; i++) {
+                imageForm.append(`image[${i}].name`, Images.values[i].name);
+                imageForm.append(`image[${i}].thumbnail`, Images.values[i].thumbnail);
+                imageForm.append(`image[${i}].image`, Images.values[i].file);
+            }
+
+            fetch('/api/image', {
+                headers: {
+                    'Accept': 'application/json'
+                },
+                method: 'POST',
+                body: imageForm
+            }).then(Fetch.processFetchStatus).then((response) => {
+                return response.json().then((images) => {
+
+                    Messages.message.add(message);
+                    document.querySelector('.messages').scrollTop = 0;
+
+
+                    Messages.message.dialog.remove();
+                    button.classList.remove('progress');
+
+
+                });
+            }).catch((response) => {
+                console.log('ERRORRR, (...)');
+                console.log(response);
+            });
         },
 
         images: (images) => {
@@ -158,7 +198,7 @@ var Messages = {
         dialog: {
             add: (button) => {
                 let template =
-                    `<section class="message-dialog" data-reply-to="${button.getAttribute('data-reply-to')}">
+                    `<section class="message-dialog" data-reply-to="${button.dataset.replyTo}">
     <header>
         <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"></a></span>
     </header>
@@ -171,9 +211,9 @@ var Messages = {
         <section>           
             <p class="textarea" contenteditable="true"></p>
             <ul class="buttons">
-                <li class="image button"><input name="image" type="file" multiple="multiple" accept="image/*"/></li>
+                <li class="image button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
                 <!--<li class="gps button"></li>-->
-            </ul>
+            </ul>           
         </section>              
         <p><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>
     </form>
@@ -204,10 +244,10 @@ var Messages = {
                     });
 
                     let buttons = document.querySelector('.message-dialog .buttons');
-                    buttons.querySelector('.image.button').addEventListener('change', (event) => {
-                        Images.upload(event, buttons);
-                        Messages.message.dialog.validations.icons();
-                    });
+                    buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
+                    buttons.querySelector('.image.button input').addEventListener('click', (event) => {
+                        event.stopPropagation();
+                    })
                 }, 100);
             },
             remove: () => {
@@ -238,28 +278,31 @@ var Messages = {
 
                 Messages.message.dialog.validations.icons();
             },
+            clickImageInput: () => {
+                document.querySelector('.message-dialog .image.button input').click();
+            },
 
             values: {
                 icon: () => {
                     let activeIcon = document.querySelector('.message-dialog .icons .active');
-                    return activeIcon ? activeIcon.getAttribute('data-path') : null;
+                    return activeIcon ? activeIcon.dataset.path : null;
                 },
                 content: () => {
                     return document.querySelector('.message-dialog .textarea').textContent;
                 },
                 images: () => {
-                    return Images.values();
+                    return Images.values;
                 }
             },
 
             validations: {
-                all: () => {
-                    let valid = Messages.message.dialog.validations.icons();
+                all: (countAttempts) => {
+                    let valid = Messages.message.dialog.validations.icons(countAttempts);
                     valid = Messages.message.dialog.validations.content() && valid;
 
                     return valid;
                 },
-                icons: () => {
+                icons: (countAttempts) => {
                     let template = `<p class="error">Vyberte ikonku.</p>`;
 
                     let valid = Messages.message.dialog.values.icon();
@@ -267,16 +310,19 @@ var Messages = {
 
                     Validations.refresh(section, valid, template);
 
-                    Messages.message.dialog.validations.iconsTooManyAttempts.anotherTry(section, valid);
+                    if(countAttempts) {
+                        Messages.message.dialog.validations.iconsTooManyAttempts.anotherTry(section, valid);
+                    }
 
                     return valid;
                 },
                 iconsTooManyAttempts: {
                     anotherTry: (section, valid) => {
                         if (valid) {
-                            section.setAttribute('data-count', 0);
+                            section.dataset.count = 0;
                         } else {
-                            let count = section.getAttribute('data-count');
+                            let count = section.dataset.count || 0;
+
                             if (count == 3) {
                                 document.querySelector('.message-dialog .icons').insertAdjacentHTML('beforeend', Messages.message.dialog.icon({
                                     path: '0_0',
@@ -290,7 +336,7 @@ var Messages = {
                                     icon[0].classList.remove('hidden');
                                 }, 100);
                             }
-                            section.setAttribute('data-count', ++count);
+                            section.dataset.count = ++count;
                         }
                     }
                 },
@@ -323,7 +369,7 @@ var Messages = {
                 Buttons.init([imageDialog]);
 
                 let image = new Image();
-                image.src = thumbnail.getAttribute('data-url');
+                image.src = thumbnail.dataset.url;
                 image.addEventListener('load', () => {
                     imageDialog.querySelector('main').appendChild(image);
                     imageDialog.classList.add('active');
@@ -363,7 +409,7 @@ var Messages = {
             document.querySelector('.messages').insertAdjacentHTML('beforeend', template);
         },
         removeAll: () => {
-            let placeholders = document.getElementsByClassName('messages')[0].getElementsByClassName('placeholder');
+            let placeholders = document.querySelectorAll('.messages .placeholder');
             for (let i = placeholders.length; i--;) {
                 let placeholder = placeholders[i];
                 document.querySelector('.messages').removeChild(placeholder);
@@ -380,10 +426,10 @@ var Messages = {
         }
     },
     failed: {
-        add: () => {
+        add: (errorMessage) => {
             let template =
                 `<div class="overlay alert">
-    <span class="button" data-click="Messages.reload">Zatím se nepodařilo nic nahrát. <br/> Zkuste to prosím ještě jednou.</span>
+    <span class="button" data-click="Messages.reload">${errorMessage}</span>
 </div>`;
 
             document.body.insertAdjacentHTML('beforeend', template);

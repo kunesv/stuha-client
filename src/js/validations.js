@@ -10,8 +10,8 @@ var Validations = {
         }
 
         if (!valid && error) {
-            section.classList.remove(Validations.ERROR_CLASS_NAME);
-            setTimeout(() => section.classList.add(Validations.ERROR_CLASS_NAME), 100);
+            section.classList.add('blink');
+            setTimeout(() => section.classList.remove('blink'), 200);
         }
 
         if (valid && error) {

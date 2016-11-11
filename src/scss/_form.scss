@@ -8,10 +8,14 @@ form {
     margin: 0.25 * $module;
     padding: 0.25 * $module;
 
-    transition: box-shadow 300ms;
+    transition: box-shadow 200ms;
 
     &.error {
       box-shadow: 0 0 $module rgba(#c33, 0.33) inset;
+
+      &.blink {
+        box-shadow: 0 0 $module rgba(#c33, 0.03) inset;
+      }
     }
 
     > .error {

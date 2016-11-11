@@ -1,7 +1,4 @@
 var Images = {
-    thumbnail: (src, thumbnailSrc) => {
-        return `<li data-src="${src}" data-src-thumb="${thumbnailSrc}" style="background-image: url('${thumbnailSrc}')"></li>`;
-    },
 
     upload: (event, buttons) => {
         let fileList = event.target.files;
@@ -15,40 +12,51 @@ var Images = {
 
         let thumbnails = document.querySelector('.message-dialog .thumbnails');
 
+
         for (let i = 0; i < fileList.length; i++) {
+
+            thumbnails.insertAdjacentHTML('beforeend', `<li id="thumb${i}" class="placeholder"></li>`);
+
             let file = fileList[i];
+            setTimeout(() => {
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    var img = new Image();
+                    img.onload = function () {
 
-            console.log(i)
 
-            var reader = new FileReader();
-            reader.onload = (event) => {
-                var img = new Image();
-                img.onload = function () {
-                    let thumbnailCanvas = document.createElement('canvas');
-                    let thumbnailCtx = thumbnailCanvas.getContext('2d');
-                    let thumbnailDimensions = Images.newdimensions(img.width, img.height, 240);
-                    thumbnailCanvas.width = thumbnailDimensions.width;
-                    thumbnailCanvas.height = thumbnailDimensions.height;
-                    thumbnailCtx.drawImage(img, 0, 0, thumbnailDimensions.width, thumbnailDimensions.height);
+                        let canvas = Images.resizeImage(img, 1200);
+                        let thumbnailCanvas = Images.resizeImage(img, 240);
 
-                    let canvas = document.createElement('canvas');
-                    let ctx = canvas.getContext('2d');
-                    let dimensions = Images.newdimensions(img.width, img.height, 1200);
-                    canvas.width = dimensions.width;
-                    canvas.height = dimensions.height;
-                    ctx.drawImage(img, 0, 0, dimensions.width, dimensions.height);
+                        let thumbnail = thumbnails.querySelector('.placeholder#thumb' + i);
+                        thumbnail.style.backgroundImage = `url(${thumbnailCanvas.toDataURL()})`;
+                        thumbnail.classList.remove('placeholder');
 
-                    thumbnails.insertAdjacentHTML('beforeend', Images.thumbnail(canvas.toDataURL(), thumbnailCanvas.toDataURL()));
+                        // Images.values.push({name: file.name, file: canvas.toDataURL(), thumbnail: thumbnailCanvas.toDataURL()});
 
-                    Messages.message.dialog.validations.content();
+                        Messages.message.dialog.validations.all();
+
+
+                    };
+                    img.src = event.target.result;
                 };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            }, 100);
         }
+
     },
 
-    newdimensions: (width, height, max) => {
+    resizeImage: (image, max) => {
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        let dimensions = Images.newDimensions(image.width, image.height, max);
+        canvas.width = dimensions.width;
+        canvas.height = dimensions.height;
+        ctx.drawImage(image, 0, 0, dimensions.width, dimensions.height);
+        return canvas;
+    },
+
+    newDimensions: (width, height, max) => {
         if (height > width) {
             if (height > max) {
                 width = max / height * width;
@@ -64,15 +72,5 @@ var Images = {
         return {'height': height, 'width': width};
     },
 
-    values: () => {
-        let images = document.querySelectorAll('.message-dialog .thumbnails li');
-        let results = [];
-        for (let i = 0; i < images.length; i++) {
-            results.push({
-                thumbnail: images[i].getAttribute('data-src-thumb'),
-                image: images[i].getAttribute('data-src')
-            });
-        }
-        return results;
-    }
+    values: []
 };

@@ -79,15 +79,8 @@
         &.image {
           background-image: url("/images/image-icon.svg");
 
-
           input {
-            border: 0 none;
-            cursor: pointer;
-            height: 3 * $module;
-            width: 4 * $module;
-            margin: 0;
-            opacity: 0;
-            padding: 0;
+            display: none;
           }
         }
       }
@@ -112,6 +105,15 @@
 
         width: 8 * $module;
         height: 6 * $module;
+
+        overflow: hidden;
+        text-align: center;
+
+        img {
+          max-height: 240px;
+          max-width: 240px;
+          display: inline;
+        }
 
         @media (max-width: 640px) {
           width: 6 * $module;

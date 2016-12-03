@@ -32,6 +32,8 @@ var Images = {
                         thumbnail.style.backgroundImage = `url(${thumbnailCanvas.toDataURL()})`;
                         thumbnail.classList.remove('placeholder');
 
+                        // Load canvas Image
+
                         // Images.values.push({name: file.name, file: canvas.toDataURL(), thumbnail: thumbnailCanvas.toDataURL()});
 
                         Messages.message.dialog.validations.all();

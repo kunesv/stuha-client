@@ -46,10 +46,16 @@ var Messages = {
                 }
             });
         }).catch((error) => {
-            let errorMessage = 'Nepodařilo se nahrát příspěvky, zkuste to prosím ještě jednou.';
-            if (error.status === 500) {
-
+            let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
+            if(!Online.isOnline()) {
+                errorMessage = 'Vypadá to, že jste mimo internetový signál. Zkuste prosím znovu načíst příspěvky po obnovení spojení.';
+            } else {
+                if (error.status === 500) {
+                    errorMessage = 'Vypadá to, že na  zkuste to prosím ještě jednou.';
+                }
             }
+
+
             console.log(error);
             Messages.failed.add(errorMessage);
         });
@@ -68,9 +74,12 @@ var Messages = {
             message.createdOn = Datetime.arrayToDate(message.createdOn);
 
             let template =
-                `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
+                `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
+    
+    ${Messages.message.replyTo(message.replyTo)}
+    
     <header>
-        <div class="icon button" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
+        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
     </header>
     <main>          
               
@@ -107,7 +116,7 @@ var Messages = {
                 button.classList.add('progress');
 
                 let messageForm = new FormData();
-                messageForm.append('replyToId', document.querySelector('.message-dialog').dataset.replyTo);
+                messageForm.append('replyTo', document.querySelector('.message-dialog').dataset.replyTo || '');
                 messageForm.append('userName', Users.currentUser.userName);
                 messageForm.append('userId', Users.currentUser.userId);
                 messageForm.append('rough', Messages.message.dialog.values.content());
@@ -195,10 +204,17 @@ var Messages = {
             return `<div class="seperator"><span><b>${createdOn}</b></div>`;
         },
 
+        replyTo: (id) => {
+            return (id) ? `<header data-reply-to="${id}">
+    <div class="icon button" data-click="Messages.message.dialog.add" data-reply-to="${id}" style="background-image: url('/images/2_1.png')"></div>
+</header>` : '';
+        },
+
         dialog: {
             add: (button) => {
+                console.log(button)
                 let template =
-                    `<section class="message-dialog" data-reply-to="${button.dataset.replyTo}">
+                    `<section class="message-dialog" ${button.dataset.replyTo ? 'data-reply-to="' + button.dataset.replyTo + '"' : ''}>
     <header>
         <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"></a></span>
     </header>
@@ -292,6 +308,9 @@ var Messages = {
                 },
                 images: () => {
                     return Images.values;
+                },
+                replyTo: () => {
+
                 }
             },
 
@@ -310,7 +329,7 @@ var Messages = {
 
                     Validations.refresh(section, valid, template);
 
-                    if(countAttempts) {
+                    if (countAttempts) {
                         Messages.message.dialog.validations.iconsTooManyAttempts.anotherTry(section, valid);
                     }
 

@@ -24,8 +24,11 @@
   }
 
   span.button {
-    background-color: $color-background;
+    @extend .scale-button;
+
+    background-color: #666;
     border-radius: 0.125 * $module;
+    color: $color-background;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -37,10 +40,14 @@
     height: 5 * $module;
     width: 5 * $module;
 
-    color: $color-text;
+
     font-size: $base-font-size;
 
-    @extend .scale-button;
+    &:hover {
+      background-color: #606060;
+    }
+
+
   }
 
   &.alert {

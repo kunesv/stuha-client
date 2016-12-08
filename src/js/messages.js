@@ -48,22 +48,20 @@ var Messages = {
         }).catch((error) => {
             let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
             if(!Online.isOnline()) {
-                errorMessage = 'Vypadá to, že jste mimo internetový signál. Zkuste prosím znovu načíst příspěvky po obnovení spojení.';
+                errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
             } else {
                 if (error.status === 500) {
-                    errorMessage = 'Vypadá to, že na  zkuste to prosím ještě jednou.';
+                    errorMessage = 'Zdá se, že na serveru se objevily nějaké potíže.';
                 }
             }
+            Messages.placeholders.removeAll();
 
-
-            console.log(error);
             Messages.failed.add(errorMessage);
         });
     },
 
     reload: () => {
-        Messages.failed.remove();
-        Messages.placeholders.removeAll();
+        Messages.message.removeAll();
         Messages.placeholders.add();
 
         Messages.load();
@@ -208,6 +206,15 @@ var Messages = {
             return (id) ? `<header data-reply-to="${id}">
     <div class="icon button" data-click="Messages.message.dialog.add" data-reply-to="${id}" style="background-image: url('/images/2_1.png')"></div>
 </header>` : '';
+        },
+
+        removeAll: () => {
+            let messages = document.querySelectorAll('.messages article');
+            for (let i = messages.length; i--;) {
+                let message = messages[i];
+                document.querySelector('.messages').removeChild(message);
+            }
+
         },
 
         dialog: {
@@ -438,8 +445,16 @@ var Messages = {
 
     empty: {
         add: () => {
+            let message = 'Tak tady snad ještě není ani jeden příspěvek!';
             let template =
-                `<article>Tak tady se asi ještě diskuse moc nerozjela.</article>`;
+                `<article class="bot">
+    <header><div class="icon"></div></header>
+    <main>
+        <section>
+            <p><b>Stuha:</b> ${message}</p>
+        </section>
+    </main>
+</article>`;
 
             document.querySelector('.messages').insertAdjacentHTML('beforeend', template);
         }
@@ -447,12 +462,20 @@ var Messages = {
     failed: {
         add: (errorMessage) => {
             let template =
-                `<div class="overlay alert">
-    <span class="button" data-click="Messages.reload">${errorMessage}</span>
-</div>`;
+                `<article class="bot">
+    <header><div class="icon"></div></header>
+    <main>
+        <section>
+            <p><b>Stuha:</b> ${errorMessage}</p>
+            <p class="button-row">
+                <a class="button" data-click="Messages.reload">Zkusit znovu</a>
+            </p>
+        </section>
+    </main>
+</article>`;
 
-            document.body.insertAdjacentHTML('beforeend', template);
-            Buttons.init(document.querySelectorAll('.overlay .button'));
+            document.querySelector('.messages').insertAdjacentHTML('afterbegin', template);
+            Buttons.init(document.querySelectorAll('.messages article:first-child .button'));
         },
         remove: () => {
             let overlays = document.getElementsByClassName('overlay');

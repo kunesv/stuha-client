@@ -20,7 +20,7 @@
   user-select: none;
 
   &:hover {
-    background-color: #4F1B85;
+    background-color: #48177a;
   }
 
   &.clicked {
@@ -44,11 +44,17 @@
   }
 }
 
-
-
-
 form .button {
   border-radius: 0.125 * $module;
+}
+
+form.show-errors .button {
+  background-color: $color-background-error;
+  background-image: url("/images/reload.svg");
+
+  &:hover {
+    background-color: #e70707;
+  }
 }
 
 button {

@@ -115,10 +115,15 @@ article {
     section {
       p {
         background-color: transparent;
-        box-shadow: 0 0 0 1px #999 inset;
+        box-shadow: 0 0 0 1px #999;
         color: #666;
       }
     }
+  }
+
+  & + .bot {
+    transition: opacity 2s ease-out;
+    opacity: 0;
   }
 
   &.placeholder {

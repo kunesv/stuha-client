@@ -47,7 +47,7 @@ var Messages = {
             });
         }).catch((error) => {
             let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
-            if(!Online.isOnline()) {
+            if (!Online.isOnline()) {
                 errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
             } else {
                 if (error.status === 500) {
@@ -105,7 +105,7 @@ var Messages = {
             let button = form.querySelector('.submit.button');
             Messages.message.submit(button);
         },
-        submit: (button)=> {
+        submit: (button) => {
             if (!button.classList.contains('progress')) {
                 if (!Messages.message.dialog.validations.all(true)) {
                     return;
@@ -130,14 +130,18 @@ var Messages = {
                     body: messageForm
                 }).then(Fetch.processFetchStatus).then((response) => {
                     return response.json().then((message) => {
-                        if (Images.values.length) {
-                            Messages.message.submitImages(message.id);
-                        } else {
-                            Messages.message.dialog.remove();
-                            button.classList.remove('progress');
+                        button.classList.add('done');
 
+                        setTimeout(() => {
+                            Messages.message.dialog.remove();
                             Messages.message.add(message);
                             document.querySelector('.messages').scrollTop = 0;
+
+                            // check if images got loaded, if not, note the user that images are being loaded.
+                        },200);
+
+                        if (Images.values.length) {
+                            Messages.message.submitImages(message.id);
                         }
                     });
                 }).catch((response) => {
@@ -163,14 +167,7 @@ var Messages = {
                 body: imageForm
             }).then(Fetch.processFetchStatus).then((response) => {
                 return response.json().then((images) => {
-
-                    Messages.message.add(message);
-                    document.querySelector('.messages').scrollTop = 0;
-
-
-                    Messages.message.dialog.remove();
-                    button.classList.remove('progress');
-
+                    // FIXME: ok message
 
                 });
             }).catch((response) => {
@@ -186,7 +183,7 @@ var Messages = {
 
             return `<section class="image">${images.map(Messages.message.image).join('')}</section>`;
         },
-        image: (image)=> {
+        image: (image) => {
             return `<span class="button thumbnail placeholder" data-click="Messages.image.dialog.add" data-id="${image.id}"></span>`;
         },
 
@@ -214,7 +211,6 @@ var Messages = {
                 let message = messages[i];
                 document.querySelector('.messages').removeChild(message);
             }
-
         },
 
         dialog: {
@@ -286,10 +282,10 @@ var Messages = {
             icons: () => {
                 return Users.currentUser.icons.map(Messages.message.dialog.icon).join('');
             },
-            icon: (icon)=> {
+            icon: (icon) => {
                 return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/${icon.path}.png')"></li>`;
             },
-            selectIcon: (li)=> {
+            selectIcon: (li) => {
                 let icons = li.parentNode.querySelectorAll('li');
                 for (let i = 0; i < icons.length; i++) {
                     let icon = icons[i];

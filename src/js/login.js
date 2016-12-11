@@ -20,6 +20,8 @@ var Users = {
 
 var Login = {
     init: () => {
+
+
         let template = `<header>
     
 </header>
@@ -31,11 +33,11 @@ var Login = {
     </aside>
     <section id="login">   
          <form data-click="Login.submit">
-            <section>
+            <section>               
                 <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span></p>
                 <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
             </section>
-            <p><button type="submit"><span class="progress">...</span></button></p>           
+            <p><button type="submit"></button></p>           
          </form>
     </section>
 </main>`;
@@ -53,6 +55,7 @@ var Login = {
     },
     submit: (form) => {
         let button = form.querySelector('button');
+        Login.errorMessage.removeAll();
 
         if (!button.classList.contains('progress')) {
             if (!Login.validations.all()) {
@@ -60,34 +63,95 @@ var Login = {
             }
 
             button.classList.add('progress');
+
+            fetch('/api/login', {
+                headers: {
+                    'Accept': 'application/json'
+                },
+                method: 'POST',
+                body: new FormData(form)
+            }).then(Fetch.processFetchStatus).then((response) => {
+                return response.json().then((user) => {
+                    localStorage.setItem('signedIn', 'true');
+                    localStorage.setItem('userName', user.name);
+                    localStorage.setItem('userId', user.id);
+
+
+
+                    Content.clean();
+                    Messages.init();
+                });
+            }).catch((error) => {
+                console.log(error.headers);
+                if (error.status === 401) {
+                    Login.errorMessage.add('<b>Přihlášení se nezdařilo</b><br/>Zkontrolujte přihlašovací jméno a heslo.');
+                } else {
+
+                    // FIXME: Get inspired by message - read
+                }
+                button.classList.remove('progress');
+            });
+        }
+    },
+    errorMessage: {
+        add: (message) => {
+            let template = `<p class="error-message">${message}</p>`;
+            let form = document.querySelector('#login form');
+            form.querySelector('section').insertAdjacentHTML('afterEnd', template);
             setTimeout(() => {
-                Users.currentUser.userName = form.querySelector('input[name=username]').value;
-                Users.currentUser.userId = new Date().getTime() + '-' + Math.random();
+                form.classList.add('show-errors');
+            }, 10);
+        },
+        removeAll: () => {
+            let form = document.querySelector('#login form');
+            form.className = '';
 
-                localStorage.setItem('signedIn', 'true');
-                localStorage.setItem('userName', Users.currentUser.userName);
-                localStorage.setItem('userId', Users.currentUser.userId);
-
-                Content.clean();
-
-                Messages.init();
-            }, 500);
+            let errors = form.querySelectorAll('.error-message');
+            for (let i = 0; i < errors.length; i++) {
+                form.removeChild(errors[i]);
+            }
+        }
+    },
+    dialog: {
+        add: () => {
+            let template = `<div class="login-dialog">   
+    <main>
+        <section id="login">   
+             <form data-click="Login.submit">
+                <section>
+                    <p>Vy jste tu ještě?<br/>Mohli byste se, prosím, znovu přihlásit?</p>
+                    <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span></p>
+                    <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
+                </section>
+                <p><button type="submit"></button></p>           
+             </form>
+        </section>
+    </main>
+</div>`;
+            document.body.insertAdjacentHTML('beforeend', template);
+            setTimeout(() => {
+                document.body.querySelector('.login-dialog').classList.add('active');
+                Buttons.initForms(document.querySelectorAll('.login-dialog form'));
+            }, 100);
         }
     },
     logout: (button) => {
         if (!button.classList.contains('progress')) {
             button.classList.add('progress');
             setTimeout(() => {
-                Content.clean();
-                Messages.menu.remove();
-
-                localStorage.removeItem('signedIn');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('userId');
-
-                Login.init();
+                Login.logoff();
             }, 300);
         }
+    },
+    logoff: () => {
+        Content.clean();
+        Messages.menu.remove();
+
+        localStorage.removeItem('signedIn');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userId');
+
+        Login.init();
     },
     values: {
         username: () => {

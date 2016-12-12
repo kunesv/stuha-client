@@ -26,11 +26,7 @@ var Login = {
     
 </header>
 
-<main>
-    <aside>
-        <header></header>
-        <section></section>
-    </aside>
+<main>   
     <section id="login">   
          <form data-click="Login.submit">
             <section>               

@@ -23,9 +23,7 @@ var Login = {
 
 
         let template = `<header>
-    
 </header>
-
 <main>   
     <section id="login">   
          <form data-click="Login.submit">
@@ -74,6 +72,7 @@ var Login = {
 
 
 
+
                     Content.clean();
                     Messages.init();
                 });
@@ -113,9 +112,9 @@ var Login = {
             let template = `<div class="login-dialog">   
     <main>
         <section id="login">   
-             <form data-click="Login.submit">
-                <section>
-                    <p>Vy jste tu ještě?<br/>Mohli byste se, prosím, znovu přihlásit?</p>
+             <form class="show-errors" data-click="Login.submit">
+                <p class="error-message"><b>Vy jste tu ještě?</b><br/>Mohli byste se znovu přihlásit?</p>
+                <section>                   
                     <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span></p>
                     <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
                 </section>
@@ -126,8 +125,11 @@ var Login = {
 </div>`;
             document.body.insertAdjacentHTML('beforeend', template);
             setTimeout(() => {
-                document.body.querySelector('.login-dialog').classList.add('active');
-                Buttons.initForms(document.querySelectorAll('.login-dialog form'));
+                let dialogs = document.body.querySelectorAll('.login-dialog');
+                let dialog = dialogs[dialogs.length - 1];
+                dialog.classList.add('active');
+                Buttons.initForms(dialog.querySelectorAll('form'));
+                dialog.querySelector('input').focus();
             }, 100);
         }
     },
@@ -213,7 +215,15 @@ let Content = {
             content.removeChild(content.lastChild);
         }
 
+        let dialogs = document.querySelectorAll('[class*=dialog]');
 
+        for (let i = 0; i < dialogs.length; i++) {
+            dialogs[i].classList.remove('active');
+            dialogs[i].style.zIndex = 10000;
+            setTimeout(() => {
+                document.body.removeChild(dialogs[i]);
+            }, 300);
+        }
     }
 };
 

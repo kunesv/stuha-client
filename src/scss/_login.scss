@@ -40,11 +40,13 @@
 .login-dialog {
   @extend .overlay;
 
-  transition: transform 300ms ease-out, opacity 300ms ease-in-out;
+  transition: transform 300ms ease-out, opacity 300ms ease-in-out, background-color 500ms ease-out;
   transform: translate3d(0, -100%, 0);
+
   opacity: 0;
 
   &.active {
+    background-color: #f0f0f0;
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }

@@ -1,20 +1,42 @@
 var Users = {
-    currentUser: {
-        userId: 2,
-        userName: 'Houba',
-        icons: [{path: '2_1'}, {path: '2_2'}, {path: '2_3'}, {path: '2_4'}]
-    },
+    currentUser: {},
     init: () => {
-        let signedIn = localStorage.getItem('signedIn');
-        Users.currentUser.userName = localStorage.getItem('userName');
-        Users.currentUser.userId = localStorage.getItem('userId');
-
-        if (signedIn) {
+        let signedIn = Users.loadFromStorage();
+        if (signedIn === 'TRUE') {
             Messages.init();
         } else {
             Login.init();
         }
     },
+    saveToken: (token) => {
+        Users.currentUser.userId = token.userId;
+        Users.currentUser.token = token.token;
+
+        Users.saveToStorage();
+    },
+    saveToStorage: () => {
+        localStorage.setItem('userId', Users.currentUser.userId);
+        localStorage.setItem('token', Users.currentUser.token);
+        localStorage.setItem('signedIn', 'TRUE');
+    },
+    loadFromStorage: () => {
+        Users.currentUser.userId = localStorage.getItem('userId');
+        Users.currentUser.token = localStorage.getItem('token');
+
+        return localStorage.getItem('signedIn');
+    },
+    loadUserDetails: () => {
+        fetch('/api/currentUser', {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((user) => {
+                Users.currentUser.userName = user.userName;
+                Users.currentUser.icons = user.icons;
+            });
+        }).catch((error) => {
+            // FIXME: errors, errors, errors
+        });
+    }
 };
 
 
@@ -65,13 +87,8 @@ var Login = {
                 method: 'POST',
                 body: new FormData(form)
             }).then(Fetch.processFetchStatus).then((response) => {
-                return response.json().then((user) => {
-                    localStorage.setItem('signedIn', 'true');
-                    localStorage.setItem('userName', user.name);
-                    localStorage.setItem('userId', user.id);
-
-
-
+                return response.json().then((token) => {
+                    Users.saveToken(token);
 
                     Content.clean();
                     Messages.init();
@@ -109,6 +126,10 @@ var Login = {
     },
     dialog: {
         add: () => {
+            if(document.body.querySelector('.login-dialog')) {
+                return;
+            }
+
             let template = `<div class="login-dialog">   
     <main>
         <section id="login">   

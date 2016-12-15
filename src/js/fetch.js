@@ -7,5 +7,12 @@ var Fetch = {
         } else {
             return Promise.reject(response);
         }
+    },
+    headers: () => {
+        return {
+            'Accept': 'application/json',
+            'userId': Users.currentUser.userId,
+            'token': Users.currentUser.token
+        };
     }
 };

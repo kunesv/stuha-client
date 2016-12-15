@@ -25,6 +25,10 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
+aside, header, main, section {
+  display: block;
+}
+
 @import "layout";
 @import "button";
 @import "form";

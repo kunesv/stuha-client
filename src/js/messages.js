@@ -25,14 +25,14 @@ var Messages = {
 
         let content = document.querySelector('.content');
         Messages.swipe = new Swipe(content);
+
+        Users.loadUserDetails();
     },
     ticking: false,
 
     load: () => {
         fetch('/api/message', {
-            headers: {
-                'Accept': 'application/json'
-            }
+            headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
                 Messages.placeholders.removeAll();
@@ -74,7 +74,7 @@ var Messages = {
             let template =
                 `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     
-    ${Messages.message.replyTo(message.replyTo)}
+    
     
     <header>
         <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
@@ -115,17 +115,13 @@ var Messages = {
 
                 let messageForm = new FormData();
                 messageForm.append('replyTo', document.querySelector('.message-dialog').dataset.replyTo || '');
-                messageForm.append('userName', Users.currentUser.userName);
-                messageForm.append('userId', Users.currentUser.userId);
                 messageForm.append('rough', Messages.message.dialog.values.content());
                 messageForm.append('iconPath', Messages.message.dialog.values.icon());
                 messageForm.append('images', Messages.message.dialog.values.images());
 
 
                 fetch('/api/message', {
-                    headers: {
-                        'Accept': 'application/json'
-                    },
+                    headers: Fetch.headers(),
                     method: 'POST',
                     body: messageForm
                 }).then(Fetch.processFetchStatus).then((response) => {
@@ -138,7 +134,7 @@ var Messages = {
                             document.querySelector('.messages').scrollTop = 0;
 
                             // check if images got loaded, if not, note the user that images are being loaded.
-                        },200);
+                        }, 200);
 
                         if (Images.values.length) {
                             Messages.message.submitImages(message.id);
@@ -160,9 +156,7 @@ var Messages = {
             }
 
             fetch('/api/image', {
-                headers: {
-                    'Accept': 'application/json'
-                },
+                headers: Fetch.headers(),
                 method: 'POST',
                 body: imageForm
             }).then(Fetch.processFetchStatus).then((response) => {
@@ -215,7 +209,6 @@ var Messages = {
 
         dialog: {
             add: (button) => {
-                console.log(button)
                 let template =
                     `<section class="message-dialog" ${button.dataset.replyTo ? 'data-reply-to="' + button.dataset.replyTo + '"' : ''}>
     <header>

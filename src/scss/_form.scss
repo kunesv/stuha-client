@@ -61,6 +61,10 @@ input {
 
   font-family: $base-font-family;
   font-size: $base-font-size;
+
+  &[type=checkbox] {
+    display: inline-block;
+  }
 }
 
 textarea {

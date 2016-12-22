@@ -14,6 +14,10 @@ var Users = {
 
         Users.saveToStorage();
     },
+    refreshToken: (newToken) => {
+        Users.currentUser.token = newToken;
+        Users.saveToStorage();
+    },
     saveToStorage: () => {
         localStorage.setItem('userId', Users.currentUser.userId);
         localStorage.setItem('token', Users.currentUser.token);
@@ -42,8 +46,6 @@ var Users = {
 
 var Login = {
     init: () => {
-
-
         let template = `<header>
 </header>
 <main>   
@@ -52,6 +54,7 @@ var Login = {
             <section>               
                 <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span></p>
                 <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
+                <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
             </section>
             <p><button type="submit"></button></p>           
          </form>
@@ -136,8 +139,9 @@ var Login = {
              <form class="show-errors" data-click="Login.submit">
                 <p class="error-message"><b>Vy jste tu ještě?</b><br/>Mohli byste se znovu přihlásit?</p>
                 <section>                   
-                    <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span></p>
+                    <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off" autofocus/></span></p>
                     <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
+                    <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
                 </section>
                 <p><button type="submit"></button></p>           
              </form>
@@ -150,7 +154,6 @@ var Login = {
                 let dialog = dialogs[dialogs.length - 1];
                 dialog.classList.add('active');
                 Buttons.initForms(dialog.querySelectorAll('form'));
-                dialog.querySelector('input').focus();
             }, 100);
         }
     },

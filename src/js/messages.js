@@ -80,8 +80,6 @@ var Messages = {
         <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
     </header>
     <main>          
-              
-        ${Messages.message.formatted(message)}
         
         ${Messages.message.images(message.images)}
             
@@ -221,7 +219,7 @@ var Messages = {
             </ul>           
         </section>       
         <section>           
-            <p class="textarea" contenteditable="true"></p>
+            <textarea class="textarea"></textarea>
             <ul class="buttons">
                 <li class="image button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
                 <!--<li class="gps button"></li>-->
@@ -239,16 +237,13 @@ var Messages = {
                     Buttons.init(document.querySelectorAll('.message-dialog .button'));
 
                     let textarea = document.querySelector('.message-dialog .textarea');
-                    textarea.addEventListener('paste', () => {
-                        setTimeout(() => {
-                            textarea.innerHTML = textarea.textContent;
-                        }, 1);
-                    });
                     textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
                     textarea.addEventListener('blur', Messages.message.dialog.validations.content);
 
                     let validationTimeout;
                     textarea.addEventListener('input', () => {
+                        Textarea.resize(textarea);
+
                         if (validationTimeout) {
                             clearTimeout(validationTimeout);
                         }

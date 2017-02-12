@@ -4,6 +4,8 @@ form {
 
   > section {
     border-radius: .17rem;
+    display: flex;
+    flex-direction: column;
 
     margin: 0.25 * $module;
     padding: 0.25 * $module;
@@ -70,6 +72,6 @@ input {
 textarea {
   @extend input;
 
-  min-height: 1.5 * $module;
   overflow-x: auto;
+  overflow-y: hidden;
 }

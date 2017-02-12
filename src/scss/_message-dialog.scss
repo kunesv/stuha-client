@@ -16,6 +16,9 @@
   }
 
   > form {
+    margin: 0 auto;
+    max-width: 30 * $module;
+
     .icons {
       display: flex;
       justify-content: center;

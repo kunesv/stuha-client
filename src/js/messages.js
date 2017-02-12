@@ -21,7 +21,15 @@ var Messages = {
 
         Messages.placeholders.add();
 
-        Messages.load();
+        fetch('/api/userConversations', {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((conversations) => {
+                console.log(conversations.map((a) => {return a.id + ' - ' + a.title}))
+            });
+        });
+
+        Messages.load('c1');
 
         let content = document.querySelector('.content');
         Messages.swipe = new Swipe(content);
@@ -30,8 +38,8 @@ var Messages = {
     },
     ticking: false,
 
-    load: () => {
-        fetch('/api/message', {
+    load: (conversationId, pageNo = 1) => {
+        fetch('/api/message?conversationId=' + conversationId + '&pageNo=' + pageNo, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
@@ -81,6 +89,8 @@ var Messages = {
     </header>
     <main>          
         
+        ${Messages.message.formatted(message)}
+        
         ${Messages.message.images(message.images)}
             
         <footer>${Datetime.formatDate(new Date()) != Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
@@ -105,7 +115,7 @@ var Messages = {
         },
         submit: (button) => {
             if (!button.classList.contains('progress')) {
-                if (!Messages.message.dialog.validations.all(true)) {
+                if (!Messages.message.dialog.validations.all()) {
                     return;
                 }
 
@@ -184,7 +194,10 @@ var Messages = {
                 return '';
             }
 
-            return `<section><p><b>${message.userName}:</b> ${message.formatted}</p></section>`;
+            let section = document.createElement('section');
+            TextProcessor.process([{element: section, text: message.formatted}]);
+
+            return `<section>${section.innerHTML}</section>`;
         },
 
         separator: (createdOn) => {
@@ -219,7 +232,7 @@ var Messages = {
             </ul>           
         </section>       
         <section>           
-            <textarea class="textarea"></textarea>
+            <textarea class="textarea" rows="1"></textarea>
             <ul class="buttons">
                 <li class="image button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
                 <!--<li class="gps button"></li>-->
@@ -241,6 +254,7 @@ var Messages = {
                     textarea.addEventListener('blur', Messages.message.dialog.validations.content);
 
                     let validationTimeout;
+                    Textarea.resize(textarea);
                     textarea.addEventListener('input', () => {
                         Textarea.resize(textarea);
 
@@ -295,7 +309,7 @@ var Messages = {
                     return activeIcon ? activeIcon.dataset.path : null;
                 },
                 content: () => {
-                    return document.querySelector('.message-dialog .textarea').textContent;
+                    return document.querySelector('.message-dialog .textarea').value;
                 },
                 images: () => {
                     return Images.values;
@@ -306,13 +320,13 @@ var Messages = {
             },
 
             validations: {
-                all: (countAttempts) => {
-                    let valid = Messages.message.dialog.validations.icons(countAttempts);
+                all: () => {
+                    let valid = Messages.message.dialog.validations.icons();
                     valid = Messages.message.dialog.validations.content() && valid;
 
                     return valid;
                 },
-                icons: (countAttempts) => {
+                icons: () => {
                     let template = `<p class="error">Vyberte ikonku.</p>`;
 
                     let valid = Messages.message.dialog.values.icon();
@@ -320,35 +334,7 @@ var Messages = {
 
                     Validations.refresh(section, valid, template);
 
-                    if (countAttempts) {
-                        Messages.message.dialog.validations.iconsTooManyAttempts.anotherTry(section, valid);
-                    }
-
                     return valid;
-                },
-                iconsTooManyAttempts: {
-                    anotherTry: (section, valid) => {
-                        if (valid) {
-                            section.dataset.count = 0;
-                        } else {
-                            let count = section.dataset.count || 0;
-
-                            if (count == 3) {
-                                document.querySelector('.message-dialog .icons').insertAdjacentHTML('beforeend', Messages.message.dialog.icon({
-                                    path: '0_0',
-                                    hiddenOnLoad: true
-                                }));
-
-                                let icon = document.querySelectorAll('.message-dialog .icons .button:last-child');
-                                Buttons.init(icon);
-
-                                setTimeout(() => {
-                                    icon[0].classList.remove('hidden');
-                                }, 100);
-                            }
-                            section.dataset.count = ++count;
-                        }
-                    }
                 },
                 content: () => {
                     let template = `<p class="error">A ještě připojte nějaký obsah ...</p>`;

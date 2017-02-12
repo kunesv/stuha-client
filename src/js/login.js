@@ -26,7 +26,6 @@ var Users = {
     loadFromStorage: () => {
         Users.currentUser.userId = localStorage.getItem('userId');
         Users.currentUser.token = localStorage.getItem('token');
-
         return localStorage.getItem('signedIn');
     },
     loadUserDetails: () => {
@@ -40,6 +39,21 @@ var Users = {
         }).catch((error) => {
             // FIXME: errors, errors, errors
         });
+    }
+};
+
+var Conversations = {
+    lastConversation: {
+        conversationId: null,
+        saveToStorage: () => {
+            localStorage.setItem('conversationId', Users.currentUser.conversationId);
+        },
+        loadFromStorage: () => {
+            Users.currentUser.conversationId = localStorage.getItem('conversationId');
+        }
+    },
+    loadConversations: () => {
+
     }
 };
 
@@ -97,13 +111,19 @@ var Login = {
                     Messages.init();
                 });
             }).catch((error) => {
-                console.log(error.headers);
+                let errorMessage = 'Nepodařilo se přihlásit, zkuste to prosím ještě jednou.';
                 if (error.status === 401) {
-                    Login.errorMessage.add('<b>Přihlášení se nezdařilo</b><br/>Zkontrolujte přihlašovací jméno a heslo.');
+                    errorMessage = '<b>Přihlášení se nezdařilo</b><br/>Zkontrolujte přihlašovací jméno a heslo.';
                 } else {
-
-                    // FIXME: Get inspired by message - read
+                    if (!Online.isOnline()) {
+                        errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
+                    } else {
+                        if (error.status === 500) {
+                            errorMessage = 'Zdá se, že na serveru se objevily nějaké potíže.';
+                        }
+                    }
                 }
+                Login.errorMessage.add(errorMessage);
                 button.classList.remove('progress');
             });
         }

@@ -72,6 +72,12 @@ input {
 textarea {
   @extend input;
 
+  line-height: 1.4rem;
+
+  transition: height 200ms;
+
   overflow-x: auto;
   overflow-y: hidden;
+
+  resize: none;
 }

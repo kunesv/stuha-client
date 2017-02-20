@@ -25,7 +25,9 @@ var Messages = {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((conversations) => {
-                console.log(conversations.map((a) => {return a.id + ' - ' + a.title}))
+                console.log(conversations.map((a) => {
+                    return a.id + ' - ' + a.title
+                }))
             });
         });
 
@@ -87,9 +89,8 @@ var Messages = {
     <header>
         <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
     </header>
-    <main>          
-        
-        ${Messages.message.formatted(message)}
+    <main>                 
+        <section data-content="message.formatted"></section>
         
         ${Messages.message.images(message.images)}
             
@@ -105,6 +106,14 @@ var Messages = {
             }
 
             messages.insertAdjacentHTML('afterbegin', template);
+
+            let contentElement = messages.querySelector('[data-content="message.formatted"]');
+            if (message.formatted) {
+                TextProcessor.process([{'element': contentElement, 'text': message.formatted}]);
+                contentElement.removeAttribute('data-content');
+            } else {
+                contentElement.parentNode.removeChild(contentElement);
+            }
 
             Buttons.init(messages.querySelectorAll('article:first-child .button'));
         },
@@ -189,19 +198,8 @@ var Messages = {
             return `<span class="button thumbnail placeholder" data-click="Messages.image.dialog.add" data-id="${image.id}"></span>`;
         },
 
-        formatted: (message) => {
-            if (!message.formatted) {
-                return '';
-            }
-
-            let section = document.createElement('section');
-            TextProcessor.process([{element: section, text: message.formatted}]);
-
-            return `<section>${section.innerHTML}</section>`;
-        },
-
         separator: (createdOn) => {
-            return `<div class="seperator"><span><b>${createdOn}</b></div>`;
+            return `<div class="seperator"><span>${createdOn}</span></div>`;
         },
 
         replyTo: (id) => {

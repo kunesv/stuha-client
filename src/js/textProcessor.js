@@ -53,7 +53,10 @@ var TextProcessor = {
                 title += '/…';
             }
 
-            element.insertAdjacentHTML('beforeEnd', title.link(url));
+            let a = document.createElement('a');
+            a.href = encodeURI(url);
+            a.textContent = title;
+            element.appendChild(a);
 
             link = re.exec(text);
             let lastChunk = text.substring(i, link ? link.index : text.length);

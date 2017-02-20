@@ -1,6 +1,8 @@
 html, body {
   height: 100%;
   width: 100%;
+
+  font-size: $base-font-size;
 }
 
 h1, p {
@@ -8,7 +10,7 @@ h1, p {
 }
 
 body {
-  font-size: $base-font-size;
+
   font-family: $base-font-family;
   line-height: $module;
 

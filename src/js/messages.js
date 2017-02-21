@@ -2,7 +2,7 @@ var Messages = {
     init: () => {
         let template = `<header>
     <span class="menu-button"><a class="button" data-click="Messages.menu.toggle"></a></span>
-    <span>Originals</span>
+    <span data-content="currentConversation"></span>
     <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
 </header>
 
@@ -25,26 +25,29 @@ var Messages = {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((conversations) => {
-                console.log(conversations.map((a) => {
-                    return a.id + ' - ' + a.title
-                }))
+                Conversations.save(conversations);
+
+                Messages.load(Conversations.lastConversation.load());
             });
         });
 
-        Messages.load('c1');
 
         let content = document.querySelector('.content');
         Messages.swipe = new Swipe(content);
 
-        Users.loadUserDetails();
+
     },
     ticking: false,
 
-    load: (conversationId, pageNo = 1) => {
-        fetch('/api/message?conversationId=' + conversationId + '&pageNo=' + pageNo, {
+    load: (conversation, pageNo = 1) => {
+        document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.conversation.title;
+
+        fetch(`/api/message?conversationId=${conversation.id}&pageNo=${pageNo}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
+                Users.loadUserDetails();
+
                 Messages.placeholders.removeAll();
 
                 for (let i = 0; i < messages.length; i++) {
@@ -135,7 +138,7 @@ var Messages = {
                 messageForm.append('rough', Messages.message.dialog.values.content());
                 messageForm.append('iconPath', Messages.message.dialog.values.icon());
                 messageForm.append('images', Messages.message.dialog.values.images());
-
+                messageForm.append('conversationId', Conversations.lastConversation.conversation.id);
 
                 fetch('/api/message', {
                     headers: Fetch.headers(),
@@ -464,7 +467,9 @@ var Messages = {
 
     menu: {
         add: (button) => {
-            let template = `<nav><ul>
+            let template = `<nav>
+${Conversations.currentConversations}
+<ul>
     <li><a class="button" data-click="Login.logout"><span>Logout</span><span class="progress">...</span></a></li>
 </ul></nav>`;
 

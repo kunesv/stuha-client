@@ -42,22 +42,6 @@ var Users = {
     }
 };
 
-var Conversations = {
-    lastConversation: {
-        conversationId: null,
-        saveToStorage: () => {
-            localStorage.setItem('conversationId', Users.currentUser.conversationId);
-        },
-        loadFromStorage: () => {
-            Users.currentUser.conversationId = localStorage.getItem('conversationId');
-        }
-    },
-    loadConversations: () => {
-
-    }
-};
-
-
 var Login = {
     init: () => {
         let template = `<header>

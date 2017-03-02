@@ -29,16 +29,20 @@ var Users = {
         return localStorage.getItem('signedIn');
     },
     loadUserDetails: () => {
-        fetch('/api/currentUser', {
-            headers: Fetch.headers()
-        }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((user) => {
-                Users.currentUser.userName = user.userName;
-                Users.currentUser.icons = user.icons;
+
+            fetch('/api/currentUser', {
+                headers: Fetch.headers()
+            }).then(Fetch.processFetchStatus).then((response) => {
+                response.json().then((user) => {
+                    Users.currentUser.userName = user.name;
+                    Users.currentUser.icons = user.icons;
+
+                    Conversations.load();
+                });
             });
-        }).catch((error) => {
-            // FIXME: errors, errors, errors
-        });
+
+
+
     }
 };
 
@@ -54,7 +58,7 @@ var Login = {
                 <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
                 <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
             </section>
-            <p><button type="submit"></button></p>           
+            <p><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>           
          </form>
     </section>
 </main>`;
@@ -133,7 +137,7 @@ var Login = {
     },
     dialog: {
         add: () => {
-            if(document.body.querySelector('.login-dialog')) {
+            if (document.body.querySelector('.login-dialog')) {
                 return;
             }
 

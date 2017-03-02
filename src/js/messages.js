@@ -21,15 +21,7 @@ var Messages = {
 
         Messages.placeholders.add();
 
-        fetch('/api/userConversations', {
-            headers: Fetch.headers()
-        }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((conversations) => {
-                Conversations.save(conversations);
-
-                Messages.load(Conversations.lastConversation.load());
-            });
-        });
+        Users.loadUserDetails(); // FIXME: Promise!
 
 
         let content = document.querySelector('.content');
@@ -46,8 +38,6 @@ var Messages = {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
-                Users.loadUserDetails();
-
                 Messages.placeholders.removeAll();
 
                 for (let i = 0; i < messages.length; i++) {
@@ -85,7 +75,7 @@ var Messages = {
             message.createdOn = Datetime.arrayToDate(message.createdOn);
 
             let template =
-                `<article class="${Users.currentUser.userId == message.userId ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
+                `<article class="${Users.currentUser.userName} ? ${message.userName} ${Users.currentUser.userName == message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     
     
     

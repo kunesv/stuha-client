@@ -23,5 +23,16 @@ var Conversations = {
         if (!Conversations.lastConversation.conversationId) {
             Conversations.lastConversation.save(conversations[0]);
         }
+    },
+    load: () => {
+        return fetch('/api/userConversations', {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((conversations) => {
+                Conversations.save(conversations);
+
+                Messages.load(Conversations.lastConversation.load());
+            });
+        });
     }
 };

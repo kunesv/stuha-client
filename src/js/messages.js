@@ -31,10 +31,10 @@ var Messages = {
     },
     ticking: false,
 
-    load: (conversation, pageNo = 1) => {
+    load: (pageNo = 1) => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.conversation.title;
 
-        fetch(`/api/message?conversationId=${conversation.id}&pageNo=${pageNo}`, {
+        fetch(`/api/message?conversationId=${Conversations.lastConversation.conversation.id}&pageNo=${pageNo}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
@@ -67,7 +67,7 @@ var Messages = {
         Messages.message.removeAll();
         Messages.placeholders.add();
 
-        Messages.load();
+        Messages.load(1);
     },
 
     message: {
@@ -202,11 +202,7 @@ var Messages = {
         },
 
         removeAll: () => {
-            let messages = document.querySelectorAll('.messages article');
-            for (let i = messages.length; i--;) {
-                let message = messages[i];
-                document.querySelector('.messages').removeChild(message);
-            }
+            document.querySelector('.messages').innerHTML = '';
         },
 
         dialog: {
@@ -456,14 +452,27 @@ var Messages = {
     // },
 
     menu: {
-        add: (button) => {
+        add: () => {
             let template = `<nav>
-${Conversations.currentConversations}
-<ul>
+<ul class="conversations"></ul>
+<ul>    
     <li><a class="button" data-click="Login.logout"><span>Logout</span><span class="progress">...</span></a></li>
 </ul></nav>`;
 
             document.body.insertAdjacentHTML('afterBegin', template);
+
+            let conversations = document.querySelector('nav .conversations');
+            Conversations.currentConversations.forEach((conversation) => {
+                let li = document.createElement('li');
+                let a = document.createElement('a');
+                a.classList.add('button');
+                a.setAttribute('data-click', 'Conversations.select');
+                a.setAttribute('data-conversation-id', conversation.id);
+                a.textContent = conversation.title;
+                li.appendChild(a);
+                conversations.appendChild(li);
+            });
+
             Buttons.init(document.body.querySelectorAll('nav .button'));
 
             document.querySelector('.content').classList.add('moved');
@@ -476,12 +485,11 @@ ${Conversations.currentConversations}
                 document.body.removeChild(document.body.querySelector('nav'));
             }, 300);
         },
-        toggle: (button) => {
-            button.classList.toggle('active');
-            if (button.classList.contains('active')) {
-                Messages.menu.add();
-            } else {
+        toggle: () => {
+            if (document.querySelector('.content').classList.contains('moved')) {
                 Messages.menu.remove();
+            } else {
+                Messages.menu.add();
             }
         }
     },

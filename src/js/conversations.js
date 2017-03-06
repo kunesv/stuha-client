@@ -31,8 +31,23 @@ var Conversations = {
             return response.json().then((conversations) => {
                 Conversations.save(conversations);
 
-                Messages.load(Conversations.lastConversation.load());
+                Messages.load();
             });
         });
+    },
+    select: (button) => {
+        let conversationId = button.getAttribute('data-conversation-id');
+
+
+        Conversations.currentConversations.some((conversation) => {
+            if (conversation.id === conversationId) {
+                Conversations.lastConversation.save(conversation);
+                return true;
+            }
+        });
+
+        Messages.reload();
+
+        Messages.menu.remove();
     }
 };

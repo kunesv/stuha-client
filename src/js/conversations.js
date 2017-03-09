@@ -14,13 +14,18 @@ var Conversations = {
             Conversations.lastConversation.conversation = conversation;
             localStorage.setItem('conversationId', conversation.id);
             localStorage.setItem('conversationTitle', conversation.title);
+        },
+        clean: () => {
+            Conversations.lastConversation.conversation = {};
+            localStorage.removeItem('conversationId');
+            localStorage.removeItem('conversationTitle');
         }
     },
     currentConversations: [],
     save: (conversations) => {
         Conversations.currentConversations = conversations;
 
-        if (!Conversations.lastConversation.conversationId) {
+        if (!Conversations.lastConversation.load().id) {
             Conversations.lastConversation.save(conversations[0]);
         }
     },

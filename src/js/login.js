@@ -28,6 +28,13 @@ var Users = {
         Users.currentUser.token = localStorage.getItem('token');
         return localStorage.getItem('signedIn');
     },
+    clean: () => {
+        localStorage.removeItem('userId');
+        localStorage.removeItem('token');
+        localStorage.removeItem('signedIn');
+
+        Users.currentUser = {};
+    },
     loadUserDetails: () => {
         return fetch('/api/currentUser', {
             headers: Fetch.headers()
@@ -169,11 +176,11 @@ var Login = {
     },
     logoff: () => {
         Content.clean();
-        Messages.menu.remove();
+        Messages.menu.hide();
 
-        localStorage.removeItem('signedIn');
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userId');
+        Users.clean();
+
+        Conversations.lastConversation.clean();
 
         Login.init();
     },

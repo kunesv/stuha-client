@@ -24,7 +24,7 @@ var Messages = {
         Users.loadUserDetails().then(() => {
             return Conversations.load()
         }).then(() => {
-            Messages.menu.add();
+            Messages.menu.load();
             return Messages.load();
         }).catch((error) => {
             console.log("ERRORR #5"); // FIXME: handle this error
@@ -38,6 +38,8 @@ var Messages = {
 
     load: (pageNo = 1) => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.conversation.title;
+
+        Messages.menu.active();
 
         fetch(`/api/message?conversationId=${Conversations.lastConversation.conversation.id}&pageNo=${pageNo}`, {
             headers: Fetch.headers()
@@ -457,7 +459,7 @@ var Messages = {
     // },
 
     menu: {
-        add: () => {
+        load: () => {
             let template = `
 <ul class="conversations"></ul>
 <ul>    
@@ -479,14 +481,7 @@ var Messages = {
                 conversations.appendChild(li);
             });
 
-            Buttons.init(document.body.querySelectorAll('aside .conversations .button'));
-        },
-        remove: () => {
-            Messages.menu.hide();
-
-            setTimeout(() => {
-                document.body.removeChild(document.body.querySelector('nav'));
-            }, 300);
+            Buttons.init(document.body.querySelectorAll('aside .button'));
         },
         show: () => {
             document.querySelector('.content').classList.add('moved');
@@ -500,6 +495,14 @@ var Messages = {
             } else {
                 Messages.menu.show();
             }
+        },
+        active: () => {
+            let conversations = document.querySelector('aside .conversations');
+            let active = conversations.querySelector('.active');
+            if (active) {
+                active.classList.remove('active');
+            }
+            conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).parentElement.classList.add('active');
         }
     },
 };

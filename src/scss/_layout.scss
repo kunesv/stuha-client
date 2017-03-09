@@ -47,7 +47,11 @@ small {
   }
 
   &.dialog {
-    transform: translate3d(-25%, 0, 0);
+
+    @media (min-width: $small-screen-threshold + 1px) {
+      transform: translate3d(-25%, 0, 0);
+    }
+
   }
 
   @media (max-width: $small-screen-threshold) {

@@ -7,7 +7,7 @@ article {
   &:first-child {
     margin-top: 1.75 * $module;
 
-    @media (max-width: 960px) {
+    @media (max-width: $small-screen-threshold) {
       margin-top: 1.25 * $module;
     }
   }
@@ -39,7 +39,7 @@ article {
   > main {
     margin-right: 5 * $module;
 
-    @media (max-width: 960px) {
+    @media (max-width: $small-screen-threshold) {
       margin-right: 0;
     }
 
@@ -82,7 +82,7 @@ article {
       margin-left: 5 * $module;
       margin-right: 0;
 
-      @media (max-width: 960px) {
+      @media (max-width: $small-screen-threshold) {
         margin-left: 0;
       }
 

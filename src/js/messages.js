@@ -240,6 +240,7 @@ var Messages = {
 
                 setTimeout(() => {
                     document.querySelector('.message-dialog').classList.add('active');
+                    document.querySelector('.content').classList.add('dialog');
 
                     Buttons.init(document.querySelectorAll('.message-dialog .button'));
 
@@ -267,8 +268,9 @@ var Messages = {
             },
             remove: () => {
                 let dialog = document.querySelector('.message-dialog');
-
                 dialog.classList.remove('active');
+
+                document.querySelector('.content').classList.remove('dialog');
 
                 setTimeout(() => {
                     dialog.parentNode.removeChild(dialog);

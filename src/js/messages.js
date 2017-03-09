@@ -112,7 +112,7 @@ var Messages = {
                 TextProcessor.process([{'element': contentElement, 'text': message.formatted}]);
                 contentElement.removeAttribute('data-content');
             } else {
-                contentElement.parentNode.removeChild(contentElement);
+                contentElement.parentElement.removeChild(contentElement);
             }
 
             Buttons.init(messages.querySelectorAll('article:first-child .button'));
@@ -263,7 +263,9 @@ var Messages = {
                     buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
                     buttons.querySelector('.image.button input').addEventListener('click', (event) => {
                         event.stopPropagation();
-                    })
+                    });
+
+                    textarea.focus();
                 }, 100);
             },
             remove: () => {
@@ -273,7 +275,7 @@ var Messages = {
                 document.querySelector('.content').classList.remove('dialog');
 
                 setTimeout(() => {
-                    dialog.parentNode.removeChild(dialog);
+                    dialog.parentElement.removeChild(dialog);
                 }, 300);
             },
 
@@ -284,13 +286,10 @@ var Messages = {
                 return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/${icon.path}.png')"></li>`;
             },
             selectIcon: (li) => {
-                let icons = li.parentNode.querySelectorAll('li');
-                for (let i = 0; i < icons.length; i++) {
-                    let icon = icons[i];
-
-                    icon.classList.remove('active');
+                let active = li.parentElement.querySelector('.active');
+                if (active) {
+                    active.classList.remove('active');
                 }
-
                 li.classList.add('active');
 
                 Messages.message.dialog.validations.icons();
@@ -379,7 +378,7 @@ var Messages = {
                 image.classList.remove('active');
 
                 setTimeout(() => {
-                    dialog.parentNode.removeChild(dialog);
+                    dialog.parentElement.removeChild(dialog);
                 }, 300);
             }
 

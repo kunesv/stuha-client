@@ -36,7 +36,7 @@ small {
   left: 0;
   top: 0;
 
-  transition: transform 300ms ease-in-out;
+  transition: transform 300ms $animation-curve;
 
   > header {
     display: none;
@@ -83,20 +83,23 @@ small {
           padding: 0;
         }
       }
-
+      > main > aside {
+        transform: translate3d(0, 0, 0);
+      }
     }
 
     &.moved {
-      transform: translate3d(60%, 0, 0);
+      transform: translate3d(75%, 0, 0);
+
     }
 
   }
 
-  @media (max-width: 360px) {
-    &.moved {
-      transform: translate3d(9 * $module, 0, 0);
-    }
-  }
+  //@media (max-width: 360px) {
+  //  &.moved {
+  //    transform: translate3d(9 * $module, 0, 0);
+  //  }
+  //}
 
   > main {
     flex-grow: 1;
@@ -105,14 +108,69 @@ small {
     display: flex;
 
     overflow: hidden;
-    width: 100%;
+    //width: 100%;
 
     box-shadow: 0 0 0.25 * $module rgba(black, 0.1);
+
+    @media (max-width: 960px) {
+      //width: 166.66%;
+      //transform: translate3d(-40%,0,0);
+    }
+
+    > aside {
+      flex: 1 1 25%;
+
+      display: flex;
+      flex-direction: column;
+
+      background-color: white;
+      border-right: 1px solid $color-line;
+
+      @media (max-width: 960px) {
+        border-right: 0 none;
+
+        position: absolute;
+        margin-left: -75%;
+        width: 75%;
+      }
+
+      @media (max-width: 360px) {
+        //width: 9 * $module;
+      }
+
+      > header {
+        flex: 0 0 2.5 * $module;
+
+        display: flex;
+
+        border-bottom: 1px solid $color-line;
+
+        @media (max-width: 960px) {
+          display: none;
+        }
+      }
+
+      > section {
+        @extend .overflow-auto;
+
+        box-shadow: 0 0 rgba(black, 0);
+
+        > ul {
+          padding: 0;
+          margin: 0;
+          list-style: none;
+        }
+      }
+    }
 
     > section {
       @extend .overflow-auto;
 
       flex: 1 1 75%;
+
+      @media (max-width: 960px) {
+        flex: 1 1 60%;
+      }
 
       padding-left: 2 * $module;
       padding-right: 2 * $module;

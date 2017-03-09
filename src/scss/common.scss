@@ -16,6 +16,8 @@ $color-text-secondary: #999;
 
 $base-font-family: Arial, sans-serif;
 
+$animation-curve: cubic-bezier(.66, -0.24, .26, 1.2);
+
 .overflow-auto {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
@@ -29,12 +31,10 @@ aside, header, main, section {
 @import "button";
 @import "form";
 
-@import "menu";
 @import "dialog";
 @import "message-dialog";
 @import "image-dialog";
 
 @import "message";
-@import "side-panel";
 
 @import "login";

@@ -28,16 +28,13 @@ var Conversations = {
         return fetch('/api/userConversations', {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((conversations) => {
-                Conversations.save(conversations);
-
-                Messages.load();
+            return response.json().then((conversation) => {
+                Conversations.save(conversation);
             });
         });
     },
     select: (button) => {
         let conversationId = button.getAttribute('data-conversation-id');
-
 
         Conversations.currentConversations.some((conversation) => {
             if (conversation.id === conversationId) {
@@ -48,6 +45,6 @@ var Conversations = {
 
         Messages.reload();
 
-        Messages.menu.remove();
+        Messages.menu.hide();
     }
 };

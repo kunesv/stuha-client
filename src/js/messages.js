@@ -21,13 +21,18 @@ var Messages = {
 
         Messages.placeholders.add();
 
-        Users.loadUserDetails(); // FIXME: Promise!
-
+        Users.loadUserDetails().then(() => {
+            return Conversations.load()
+        }).then(() => {
+            Messages.menu.add();
+            return Messages.load();
+        }).catch((error) => {
+            console.log("ERRORR #5"); // FIXME: handle this error
+            console.log(error);
+        });
 
         let content = document.querySelector('.content');
         Messages.swipe = new Swipe(content);
-
-
     },
     ticking: false,
 
@@ -453,15 +458,16 @@ var Messages = {
 
     menu: {
         add: () => {
-            let template = `<nav>
+            let template = `
 <ul class="conversations"></ul>
 <ul>    
     <li><a class="button" data-click="Login.logout"><span>Logout</span><span class="progress">...</span></a></li>
-</ul></nav>`;
+</ul>`;
 
-            document.body.insertAdjacentHTML('afterBegin', template);
 
-            let conversations = document.querySelector('nav .conversations');
+            document.querySelector('aside section').insertAdjacentHTML('afterBegin', template);
+
+            let conversations = document.querySelector('aside .conversations');
             Conversations.currentConversations.forEach((conversation) => {
                 let li = document.createElement('li');
                 let a = document.createElement('a');
@@ -473,23 +479,26 @@ var Messages = {
                 conversations.appendChild(li);
             });
 
-            Buttons.init(document.body.querySelectorAll('nav .button'));
-
-            document.querySelector('.content').classList.add('moved');
+            Buttons.init(document.body.querySelectorAll('aside .conversations .button'));
         },
         remove: () => {
-
-            document.querySelector('.content').classList.remove('moved');
+            Messages.menu.hide();
 
             setTimeout(() => {
                 document.body.removeChild(document.body.querySelector('nav'));
             }, 300);
         },
+        show: () => {
+            document.querySelector('.content').classList.add('moved');
+        },
+        hide: () => {
+            document.querySelector('.content').classList.remove('moved');
+        },
         toggle: () => {
             if (document.querySelector('.content').classList.contains('moved')) {
-                Messages.menu.remove();
+                Messages.menu.hide();
             } else {
-                Messages.menu.add();
+                Messages.menu.show();
             }
         }
     },

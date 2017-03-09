@@ -29,20 +29,14 @@ var Users = {
         return localStorage.getItem('signedIn');
     },
     loadUserDetails: () => {
-
-            fetch('/api/currentUser', {
-                headers: Fetch.headers()
-            }).then(Fetch.processFetchStatus).then((response) => {
-                response.json().then((user) => {
-                    Users.currentUser.userName = user.name;
-                    Users.currentUser.icons = user.icons;
-
-                    Conversations.load();
-                });
+        return fetch('/api/currentUser', {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((user) => {
+                Users.currentUser.userName = user.name;
+                Users.currentUser.icons = user.icons;
             });
-
-
-
+        });
     }
 };
 

@@ -2,7 +2,7 @@
   @extend .overlay;
   background-color: $color-background-button;
 
-  transition: transform 300ms ease-in-out, opacity 300ms, background-color 300ms ease-out;
+  transition: transform 300ms $animation-curve, opacity 300ms, background-color 300ms ease-out;
   transform: scale3d(0, 0, 1);
   transform-origin: top right;
 

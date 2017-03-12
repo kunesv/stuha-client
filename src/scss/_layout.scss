@@ -145,12 +145,32 @@ small {
       > section {
         @extend .overflow-auto;
 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        height: 100%;
+
         box-shadow: 0 0 rgba(black, 0);
 
         > ul {
           padding: 0;
           margin: 0;
           list-style: none;
+
+          .button {
+            background-color: white;
+            color: #999;
+
+            &:hover {
+              background-color: #f0f0f0;
+            }
+
+          }
+
+          li.active .button {
+            background-color: #f6f6f6;
+          }
         }
       }
     }

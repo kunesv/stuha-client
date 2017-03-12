@@ -87,7 +87,7 @@ var Messages = {
     
     
     <header>
-        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
+        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" style="background-image: url('/images/${message.iconPath}.png')"></div>
     </header>
     <main>                 
         <section data-content="message.formatted"></section>
@@ -215,7 +215,7 @@ var Messages = {
         dialog: {
             add: (button) => {
                 let template =
-                    `<section class="message-dialog" ${button.dataset.replyTo ? 'data-reply-to="' + button.dataset.replyTo + '"' : ''}>
+                    `<section class="message-dialog">
     <header>
         <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"></a></span>
     </header>
@@ -236,37 +236,65 @@ var Messages = {
     </form>
 </section>`;
 
-                document.body.insertAdjacentHTML('beforeend', template);
+                if (!document.querySelector('.message-dialog')) {
+                    document.body.insertAdjacentHTML('beforeend', template);
 
-                setTimeout(() => {
-                    document.querySelector('.message-dialog').classList.add('active');
-                    document.querySelector('.content').classList.add('dialog');
 
-                    Buttons.init(document.querySelectorAll('.message-dialog .button'));
+                    setTimeout(() => {
+                        document.querySelector('.message-dialog').classList.add('active');
+                        document.querySelector('.content').classList.add('dialog');
 
-                    let textarea = document.querySelector('.message-dialog .textarea');
-                    textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
-                    textarea.addEventListener('blur', Messages.message.dialog.validations.content);
+                        Buttons.init(document.querySelectorAll('.message-dialog .button'));
 
-                    let validationTimeout;
-                    Textarea.resize(textarea);
-                    textarea.addEventListener('input', () => {
+                        let textarea = document.querySelector('.message-dialog .textarea');
+                        textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
+                        textarea.addEventListener('blur', Messages.message.dialog.validations.content);
+
+                        let validationTimeout;
                         Textarea.resize(textarea);
+                        textarea.addEventListener('input', () => {
+                            Textarea.resize(textarea);
 
-                        if (validationTimeout) {
-                            clearTimeout(validationTimeout);
-                        }
-                        validationTimeout = setTimeout(Messages.message.dialog.validations.content, 200);
-                    });
+                            if (validationTimeout) {
+                                clearTimeout(validationTimeout);
+                            }
+                            validationTimeout = setTimeout(Messages.message.dialog.validations.content, 200);
+                        });
 
-                    let buttons = document.querySelector('.message-dialog .buttons');
-                    buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
-                    buttons.querySelector('.image.button input').addEventListener('click', (event) => {
-                        event.stopPropagation();
-                    });
+                        let buttons = document.querySelector('.message-dialog .buttons');
+                        buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
+                        buttons.querySelector('.image.button input').addEventListener('click', (event) => {
+                            event.stopPropagation();
+                        });
 
-                    textarea.focus();
-                }, 100);
+                        Messages.message.dialog.activate(button, textarea);
+                    }, 100);
+                } else {
+                    Messages.message.dialog.activate(button);
+                }
+            },
+            activate: (button, textarea) => {
+                textarea = textarea || document.querySelector('.message-dialog .textarea');
+
+                if (button.dataset.replyToId) {
+                    let tag = `@${button.dataset.replyToName}`;
+                    let tagWithNo = tag;
+                    let text = textarea.value;
+                    let i = 1;
+                    if (text.includes(tag)) {
+                        tagWithNo = `${tag}(${i})`;
+                        i++;
+                    }
+                    while (text.includes(tagWithNo)){
+                        tagWithNo = `${tag}(${i})`;
+                        i++;
+                    }
+
+                    textarea.value = `${textarea.value}${textarea.value ? ' ' : ''}${tagWithNo} `;
+                    Textarea.resize(textarea);
+                }
+
+                textarea.focus();
             },
             remove: () => {
                 let dialog = document.querySelector('.message-dialog');

@@ -56,7 +56,7 @@ var Messages = {
                 }
             });
         }).catch((error) => {
-            console.log(error)
+            console.log(error);
             let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
             if (!Online.isOnline()) {
                 errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
@@ -83,7 +83,7 @@ var Messages = {
             message.createdOn = Datetime.arrayToDate(message.createdOn);
 
             let template =
-                `<article class="${Users.currentUser.userName} ? ${message.userName} ${Users.currentUser.userName == message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
+                `<article class="${Users.currentUser.userName} ? ${message.userName} ${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     
     
     
@@ -95,14 +95,14 @@ var Messages = {
         
         ${Messages.message.images(message.images)}
             
-        <footer>${Datetime.formatDate(new Date()) != Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
+        <footer>${Datetime.formatDate(new Date()) !== Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
     </main>
 </article>`;
 
             let messages = document.querySelector('.messages');
             if (messages.querySelector('article:first-child')
                 && messages.querySelector('article:first-child').hasAttribute('data-date')
-                && messages.querySelector('article:first-child').dataset.date != Datetime.formatDate(message.createdOn)) {
+                && messages.querySelector('article:first-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
                 messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').dataset.date));
             }
 
@@ -163,7 +163,7 @@ var Messages = {
                 messageForm.append('rough', Messages.message.dialog.values.content());
                 messageForm.append('iconPath', Messages.message.dialog.values.icon());
                 messageForm.append('images', Messages.message.dialog.values.images());
-                messageForm.append('conversationId', Conversations.lastConversation.conversation.id);
+                messageForm.append('conversationId', Conversations.lastConversation.load().id);
                 messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
 
 

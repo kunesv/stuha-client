@@ -123,6 +123,7 @@ var Messages = {
                                 break;
                             case 'LINK':
                                 let a = document.createElement('a');
+                                // FIXME: URL validation
                                 a.href = encodeURI(node.url);
                                 a.textContent = node.label;
                                 currentParagraph.appendChild(a);
@@ -130,7 +131,7 @@ var Messages = {
                             case 'REPLY_TO':
                                 let span = document.createElement('span');
                                 span.textContent = node.caption;
-                                span.style.backgroundImage = `url('/images/${node.iconPath}.png')`;
+                                span.style.backgroundImage = `url('/images/${node.iconPath.match(/^\d+_\d+$/) ? node.iconPath : ''}.png')`;
                                 currentParagraph.appendChild(span);
                                 break;
                         }

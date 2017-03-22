@@ -56,6 +56,7 @@ var Messages = {
                 }
             });
         }).catch((error) => {
+            console.log(error)
             let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
             if (!Online.isOnline()) {
                 errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
@@ -109,7 +110,35 @@ var Messages = {
 
             let contentElement = messages.querySelector('[data-content="message.formatted"]');
             if (message.formatted) {
-                TextProcessor.process([{'element': contentElement, 'text': message.formatted}]);
+                for (let p = 0; p < message.formatted.paragraphs.length; p++) {
+                    let paragraph = message.formatted.paragraphs[p];
+                    let currentParagraph = document.createElement('p');
+
+                    for (let n = 0; n < paragraph.length; n++) {
+                        let node = paragraph[n];
+
+                        switch (node.type) {
+                            case 'PLAIN_TEXT':
+                                currentParagraph.appendChild(document.createTextNode(node.text));
+                                break;
+                            case 'LINK':
+                                let a = document.createElement('a');
+                                a.href = encodeURI(node.url);
+                                a.textContent = node.label;
+                                currentParagraph.appendChild(a);
+                                break;
+                            case 'REPLY_TO':
+                                let span = document.createElement('span');
+                                span.textContent = node.caption;
+                                span.style.backgroundImage = `url('/images/${node.iconPath}.png')`;
+                                currentParagraph.appendChild(span);
+                                break;
+                        }
+                    }
+
+                    contentElement.appendChild(currentParagraph);
+                }
+
                 contentElement.removeAttribute('data-content');
             } else {
                 contentElement.parentElement.removeChild(contentElement);
@@ -131,11 +160,12 @@ var Messages = {
                 button.classList.add('progress');
 
                 let messageForm = new FormData();
-                messageForm.append('replyTo', document.querySelector('.message-dialog').dataset.replyTo || '');
                 messageForm.append('rough', Messages.message.dialog.values.content());
                 messageForm.append('iconPath', Messages.message.dialog.values.icon());
                 messageForm.append('images', Messages.message.dialog.values.images());
                 messageForm.append('conversationId', Conversations.lastConversation.conversation.id);
+                messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
+
 
                 fetch('/api/message', {
                     headers: Fetch.headers(),
@@ -147,6 +177,7 @@ var Messages = {
 
                         setTimeout(() => {
                             Messages.message.dialog.remove();
+                            Messages.message.dialog.messageReset();
                             Messages.message.add(message);
                             document.querySelector('.messages').scrollTop = 0;
 
@@ -213,6 +244,12 @@ var Messages = {
         },
 
         dialog: {
+            message: {},
+            messageReset: () => {
+                Messages.message.dialog.message = {
+                    replyTo: []
+                };
+            },
             add: (button) => {
                 let template =
                     `<section class="message-dialog">
@@ -226,7 +263,7 @@ var Messages = {
             </ul>           
         </section>       
         <section>           
-            <textarea class="textarea" rows="1"></textarea>
+            <textarea class="textarea"></textarea>
             <ul class="buttons">
                 <li class="image button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
                 <!--<li class="gps button"></li>-->
@@ -267,6 +304,9 @@ var Messages = {
                             event.stopPropagation();
                         });
 
+                        // FIXME: reset or load?
+                        Messages.message.dialog.messageReset();
+
                         Messages.message.dialog.activate(button, textarea);
                     }, 100);
                 } else {
@@ -285,13 +325,15 @@ var Messages = {
                         tagWithNo = `${tag}(${i})`;
                         i++;
                     }
-                    while (text.includes(tagWithNo)){
+                    while (text.includes(tagWithNo)) {
                         tagWithNo = `${tag}(${i})`;
                         i++;
                     }
 
                     textarea.value = `${textarea.value}${textarea.value ? ' ' : ''}${tagWithNo} `;
                     Textarea.resize(textarea);
+
+                    Messages.message.dialog.message.replyTo.push({replyToId: button.dataset.replyToId, key: tagWithNo});
                 }
 
                 textarea.focus();

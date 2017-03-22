@@ -5,23 +5,22 @@ var TextProcessor = {
         brackets: [{left: '(', right: ')'}, {left: '[', right: ']'}, {right: ','}, {right: '.'}, {right: ';'}],
         endings: '[.,;?]$'
     },
-    process: (items)=> {
-        items.map(TextProcessor.paragraphs).reduce((a, b) => a.concat(b)).map(TextProcessor.links);
-    },
     paragraphs: (item) => {
         let paragraphs = item.text.split('\n');
-        let items = [];
+        let paragraphContents = [];
 
         for (let p in paragraphs) {
             let paragraph = paragraphs[p];
-            let element = document.createElement('p');
-            item.element.appendChild(element);
+            let p = document.createElement('p');
+            item.element.appendChild(p);
 
-            items.push({'element': element, text: paragraph});
+            paragraphContents.push({'element': p, text: paragraph});
         }
-        return items;
+        return paragraphContents;
     },
-    links: (item)=> {
+    links: (item) => {
+        let textChunks = [];
+
         let text = item.text;
         let element = item.element;
 
@@ -29,7 +28,9 @@ var TextProcessor = {
         let link = re.exec(text);
 
         let firstChunk = link ? text.substring(0, link.index) : text;
-        element.insertAdjacentText('beforeEnd', firstChunk);
+        let span = document.createElement('span');
+        element.appendChild(span);
+        textChunks.push({'element': span, 'text': firstChunk});
 
         while (link) {
             let url = link[0];
@@ -60,7 +61,51 @@ var TextProcessor = {
 
             link = re.exec(text);
             let lastChunk = text.substring(i, link ? link.index : text.length);
-            element.insertAdjacentText('beforeEnd', lastChunk);
+            let span = document.createElement('span');
+            element.appendChild(span);
+            textChunks.push({'element': span, 'text': lastChunk});
         }
+
+        return textChunks;
+    },
+    replies: (item) => {
+        console.log(item)
+
+//         let reply = item.message.replyTo.shift();
+//         if (reply) {
+//             let theirChunks = TextProcessor.replies(item);
+//             let myChunks = [];
+//             for (let i = 0; i < theirChunks.length; i++) {
+//                 let theirChunk = theirChunks[i];
+//
+//                 let index = theirChunk.text.indexOf(reply.key);
+//                 if(index !== -1) {
+//                     console.log('hmmm')
+//                     let firstChunk = item.text.substring(0, index);
+//                     let span = document.createElement('span');
+//                     item.element.appendChild(span);
+//                     myChunks.push({'element': span, 'text': firstChunk});
+// console.log(firstChunk)
+//                     let a = document.createElement('a');
+//                     a.textContent = reply.key;
+//                     item.element.appendChild(a);
+//
+//                     let lastChunk = item.text.substring(index + reply.key.length);
+//                     let lastSpan = document.createElement('span');
+//                     item.element.appendChild(lastSpan);
+//                     myChunks.push({'element': lastSpan, 'text': lastChunk});
+//                     console.log(lastChunk)
+//                 } else {
+//                     myChunks.push(theirChunk);
+//                 }
+//             }
+//             return myChunks;
+//         } else {
+//             return [item];
+//         }
+        return [item];
+    },
+    texts: (item) => {
+        item.element.textContent = item.text;
     }
 };

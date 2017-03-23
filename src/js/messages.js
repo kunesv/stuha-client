@@ -130,8 +130,13 @@ var Messages = {
                                 break;
                             case 'REPLY_TO':
                                 let span = document.createElement('span');
-                                span.textContent = node.caption;
-                                span.style.backgroundImage = `url('/images/${node.iconPath.match(/^\d+_\d+$/) ? node.iconPath : ''}.png')`;
+
+                                let iconSpan = document.createElement('span');
+                                iconSpan.style.backgroundImage = `url('/images/${node.iconPath && node.iconPath.match(/^\d+_\d+$/) ? node.iconPath : ''}.png')`;
+                                span.appendChild(iconSpan);
+
+                                span.classList.add('replyTo');
+                                span.appendChild(document.createTextNode(node.caption));
                                 currentParagraph.appendChild(span);
                                 break;
                         }

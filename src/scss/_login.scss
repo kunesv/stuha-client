@@ -1,14 +1,12 @@
 #login {
-  display: flex;
-  flex-direction: column;
 
   @media (max-width: $small-screen-threshold) {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
   }
 
-  @media (min-width: 961px) {
-    padding-top: 7 * $module;
-  }
+
 
   min-height: 14 * $module;
 
@@ -17,6 +15,10 @@
     margin-right: auto;
     max-width: 14 * $module;
     width: 100%;
+
+    @media (min-width: $small-screen-threshold + 1) {
+      margin-top: 7 * $module;
+    }
 
     p {
       margin-top: 0.5 * $module;

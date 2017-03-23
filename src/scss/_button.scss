@@ -48,15 +48,6 @@ form .button {
   border-radius: 0.125 * $module;
 }
 
-form.show-errors .button {
-  background-color: $color-background-error;
-  background-image: url("/images/reload.svg");
-
-  &:hover {
-    background-color: #e70707;
-  }
-}
-
 button {
   @extend .button;
 
@@ -104,5 +95,14 @@ button {
 
   &.progress {
     background-image: url("/images/progress.svg");
+  }
+}
+
+form.show-errors .button, .button.error {
+  background-color: $color-background-error;
+  background-image: url("/images/reload.svg");
+
+  &:hover {
+    background-color: #e70707;
   }
 }

@@ -4,6 +4,16 @@ article {
 
   margin-bottom: 0.75 * $module;
 
+  a {
+    border-bottom: 1px solid rgba($color-link, 0.25);
+
+    transition: border-color 300ms;
+
+    &:hover {
+      border-bottom-color: $color-link;
+    }
+  }
+
   &:first-child {
     margin-top: 1.75 * $module;
 
@@ -62,11 +72,9 @@ article {
         }
 
         span.replyTo {
-          font-size: 13px;
-          color: rgba(0,0,0,0.4);
           cursor: pointer;
 
-          span {
+          .replyToIcon {
             background-color: white;
             background-size: 60%;
             background-position: center;
@@ -80,6 +88,17 @@ article {
 
             height: 1.5 * $module;
             width: 1.5 * $module;
+          }
+
+          .caption {
+            border-bottom: 1px solid rgba($color-text, 0.25);
+            opacity: .5;
+
+            transition: border-color 300ms;
+
+            &:hover {
+              border-bottom-color: $color-text;
+            }
           }
         }
       }
@@ -122,6 +141,13 @@ article {
         background-color: $color-background-my-message;
         color: $color-text-my-message;
         align-items: flex-end;
+
+        span.replyTo .caption {
+          border-bottom-color: rgba($color-text-my-message, 0.25);
+          &:hover {
+            border-bottom-color: $color-text-my-message;
+          }
+        }
       }
 
       &.image {

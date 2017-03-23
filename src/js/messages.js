@@ -48,7 +48,7 @@ var Messages = {
                 Messages.placeholders.removeAll();
 
                 for (let i = 0; i < messages.length; i++) {
-                    Messages.message.add(messages[i]);
+                    Messages.message.add(messages[i], 'beforeend');
                 }
 
                 if (!messages.length) {
@@ -79,11 +79,11 @@ var Messages = {
     },
 
     message: {
-        add: (message) => {
+        add: (message, direction = 'afterbegin') => {
             message.createdOn = Datetime.arrayToDate(message.createdOn);
 
             let template =
-                `<article class="${Users.currentUser.userName} ? ${message.userName} ${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
+                `<article class="loading ${Users.currentUser.userName} ? ${message.userName} ${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     
     
     
@@ -100,15 +100,23 @@ var Messages = {
 </article>`;
 
             let messages = document.querySelector('.messages');
-            if (messages.querySelector('article:first-child')
+            if (direction === 'afterbegin'
+                && messages.querySelector('article:first-child')
                 && messages.querySelector('article:first-child').hasAttribute('data-date')
                 && messages.querySelector('article:first-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
                 messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').dataset.date));
             }
+            if (direction === 'beforeend'
+                && messages.querySelector('article:last-child')
+                && messages.querySelector('article:last-child').hasAttribute('data-date')
+                && messages.querySelector('article:last-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
+                messages.insertAdjacentHTML('beforeend', Messages.message.separator(Datetime.formatDate(message.createdOn)));
+            }
 
-            messages.insertAdjacentHTML('afterbegin', template);
+            messages.insertAdjacentHTML(direction, template);
+            let currentArticle = messages.querySelector('article.loading');
 
-            let contentElement = messages.querySelector('[data-content="message.formatted"]');
+            let contentElement = currentArticle.querySelector('[data-content="message.formatted"]');
             if (message.formatted) {
                 for (let p = 0; p < message.formatted.paragraphs.length; p++) {
                     let paragraph = message.formatted.paragraphs[p];
@@ -129,15 +137,20 @@ var Messages = {
                                 currentParagraph.appendChild(a);
                                 break;
                             case 'REPLY_TO':
-                                let span = document.createElement('span');
+                                let replyTo = document.createElement('span');
+                                replyTo.classList.add('replyTo');
 
-                                let iconSpan = document.createElement('span');
-                                iconSpan.style.backgroundImage = `url('/images/${node.iconPath && node.iconPath.match(/^\d+_\d+$/) ? node.iconPath : ''}.png')`;
-                                span.appendChild(iconSpan);
+                                let icon = document.createElement('span');
+                                icon.classList.add('replyToIcon');
+                                icon.style.backgroundImage = `url('/images/${node.iconPath && node.iconPath.match(/^\d+_\d+$/) ? node.iconPath : ''}.png')`;
+                                replyTo.appendChild(icon);
 
-                                span.classList.add('replyTo');
-                                span.appendChild(document.createTextNode(node.caption));
-                                currentParagraph.appendChild(span);
+                                let caption = document.createElement('span');
+                                caption.classList.add('caption');
+                                caption.textContent = node.caption || '[ ... ]';
+                                replyTo.appendChild(caption);
+
+                                currentParagraph.appendChild(replyTo);
                                 break;
                         }
                     }
@@ -150,7 +163,8 @@ var Messages = {
                 contentElement.parentElement.removeChild(contentElement);
             }
 
-            Buttons.init(messages.querySelectorAll('article:first-child .button'));
+            Buttons.init(currentArticle.querySelectorAll('.button'));
+            currentArticle.classList.remove('loading');
         },
 
         submitForm: (form) => {
@@ -195,8 +209,8 @@ var Messages = {
                         }
                     });
                 }).catch((response) => {
-                    console.log('ERRORRR, (...)');
-                    console.log(response);
+                    button.classList.remove('progress');
+                    button.classList.add('error');
                 });
             }
         },
@@ -336,7 +350,7 @@ var Messages = {
                         i++;
                     }
 
-                    textarea.value = `${textarea.value}${textarea.value ? ' ' : ''}${tagWithNo} `;
+                    textarea.value = `${textarea.value}${tagWithNo}`;
                     Textarea.resize(textarea);
 
                     Messages.message.dialog.message.replyTo.push({replyToId: button.dataset.replyToId, key: tagWithNo});

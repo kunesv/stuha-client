@@ -60,6 +60,28 @@ article {
             max-width: 6 * $module;
           }
         }
+
+        span.replyTo {
+          font-size: 13px;
+          color: rgba(0,0,0,0.4);
+          cursor: pointer;
+
+          span {
+            background-color: white;
+            background-size: 60%;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: $module;
+
+            display: inline-block;
+            vertical-align: middle;
+
+            margin-right: 0.25 * $module;
+
+            height: 1.5 * $module;
+            width: 1.5 * $module;
+          }
+        }
       }
 
       p + p {

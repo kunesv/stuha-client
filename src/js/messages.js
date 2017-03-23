@@ -56,6 +56,7 @@ var Messages = {
                 }
             });
         }).catch((error) => {
+            console.log(error);
             let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
             if (!Online.isOnline()) {
                 errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
@@ -82,26 +83,26 @@ var Messages = {
             message.createdOn = Datetime.arrayToDate(message.createdOn);
 
             let template =
-                `<article class="${Users.currentUser.userName} ? ${message.userName} ${Users.currentUser.userName == message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
+                `<article class="${Users.currentUser.userName} ? ${message.userName} ${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     
     
     
     <header>
-        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to="${message.id}" style="background-image: url('/images/${message.iconPath}.png')"></div>
+        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" style="background-image: url('/images/${message.iconPath}.png')"></div>
     </header>
     <main>                 
         <section data-content="message.formatted"></section>
         
         ${Messages.message.images(message.images)}
             
-        <footer>${Datetime.formatDate(new Date()) != Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
+        <footer>${Datetime.formatDate(new Date()) !== Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
     </main>
 </article>`;
 
             let messages = document.querySelector('.messages');
             if (messages.querySelector('article:first-child')
                 && messages.querySelector('article:first-child').hasAttribute('data-date')
-                && messages.querySelector('article:first-child').dataset.date != Datetime.formatDate(message.createdOn)) {
+                && messages.querySelector('article:first-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
                 messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').dataset.date));
             }
 
@@ -109,7 +110,41 @@ var Messages = {
 
             let contentElement = messages.querySelector('[data-content="message.formatted"]');
             if (message.formatted) {
-                TextProcessor.process([{'element': contentElement, 'text': message.formatted}]);
+                for (let p = 0; p < message.formatted.paragraphs.length; p++) {
+                    let paragraph = message.formatted.paragraphs[p];
+                    let currentParagraph = document.createElement('p');
+
+                    for (let n = 0; n < paragraph.length; n++) {
+                        let node = paragraph[n];
+
+                        switch (node.type) {
+                            case 'PLAIN_TEXT':
+                                currentParagraph.appendChild(document.createTextNode(node.text));
+                                break;
+                            case 'LINK':
+                                let a = document.createElement('a');
+                                // FIXME: URL validation
+                                a.href = encodeURI(node.url);
+                                a.textContent = node.label;
+                                currentParagraph.appendChild(a);
+                                break;
+                            case 'REPLY_TO':
+                                let span = document.createElement('span');
+
+                                let iconSpan = document.createElement('span');
+                                iconSpan.style.backgroundImage = `url('/images/${node.iconPath && node.iconPath.match(/^\d+_\d+$/) ? node.iconPath : ''}.png')`;
+                                span.appendChild(iconSpan);
+
+                                span.classList.add('replyTo');
+                                span.appendChild(document.createTextNode(node.caption));
+                                currentParagraph.appendChild(span);
+                                break;
+                        }
+                    }
+
+                    contentElement.appendChild(currentParagraph);
+                }
+
                 contentElement.removeAttribute('data-content');
             } else {
                 contentElement.parentElement.removeChild(contentElement);
@@ -131,11 +166,12 @@ var Messages = {
                 button.classList.add('progress');
 
                 let messageForm = new FormData();
-                messageForm.append('replyTo', document.querySelector('.message-dialog').dataset.replyTo || '');
                 messageForm.append('rough', Messages.message.dialog.values.content());
                 messageForm.append('iconPath', Messages.message.dialog.values.icon());
                 messageForm.append('images', Messages.message.dialog.values.images());
-                messageForm.append('conversationId', Conversations.lastConversation.conversation.id);
+                messageForm.append('conversationId', Conversations.lastConversation.load().id);
+                messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
+
 
                 fetch('/api/message', {
                     headers: Fetch.headers(),
@@ -147,6 +183,7 @@ var Messages = {
 
                         setTimeout(() => {
                             Messages.message.dialog.remove();
+                            Messages.message.dialog.messageReset();
                             Messages.message.add(message);
                             document.querySelector('.messages').scrollTop = 0;
 
@@ -213,9 +250,15 @@ var Messages = {
         },
 
         dialog: {
+            message: {},
+            messageReset: () => {
+                Messages.message.dialog.message = {
+                    replyTo: []
+                };
+            },
             add: (button) => {
                 let template =
-                    `<section class="message-dialog" ${button.dataset.replyTo ? 'data-reply-to="' + button.dataset.replyTo + '"' : ''}>
+                    `<section class="message-dialog">
     <header>
         <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"></a></span>
     </header>
@@ -226,7 +269,7 @@ var Messages = {
             </ul>           
         </section>       
         <section>           
-            <textarea class="textarea" rows="1"></textarea>
+            <textarea class="textarea"></textarea>
             <ul class="buttons">
                 <li class="image button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
                 <!--<li class="gps button"></li>-->
@@ -236,37 +279,70 @@ var Messages = {
     </form>
 </section>`;
 
-                document.body.insertAdjacentHTML('beforeend', template);
+                if (!document.querySelector('.message-dialog')) {
+                    document.body.insertAdjacentHTML('beforeend', template);
 
-                setTimeout(() => {
-                    document.querySelector('.message-dialog').classList.add('active');
-                    document.querySelector('.content').classList.add('dialog');
 
-                    Buttons.init(document.querySelectorAll('.message-dialog .button'));
+                    setTimeout(() => {
+                        document.querySelector('.message-dialog').classList.add('active');
+                        document.querySelector('.content').classList.add('dialog');
 
-                    let textarea = document.querySelector('.message-dialog .textarea');
-                    textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
-                    textarea.addEventListener('blur', Messages.message.dialog.validations.content);
+                        Buttons.init(document.querySelectorAll('.message-dialog .button'));
 
-                    let validationTimeout;
-                    Textarea.resize(textarea);
-                    textarea.addEventListener('input', () => {
+                        let textarea = document.querySelector('.message-dialog .textarea');
+                        textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
+                        textarea.addEventListener('blur', Messages.message.dialog.validations.content);
+
+                        let validationTimeout;
                         Textarea.resize(textarea);
+                        textarea.addEventListener('input', () => {
+                            Textarea.resize(textarea);
 
-                        if (validationTimeout) {
-                            clearTimeout(validationTimeout);
-                        }
-                        validationTimeout = setTimeout(Messages.message.dialog.validations.content, 200);
-                    });
+                            if (validationTimeout) {
+                                clearTimeout(validationTimeout);
+                            }
+                            validationTimeout = setTimeout(Messages.message.dialog.validations.content, 200);
+                        });
 
-                    let buttons = document.querySelector('.message-dialog .buttons');
-                    buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
-                    buttons.querySelector('.image.button input').addEventListener('click', (event) => {
-                        event.stopPropagation();
-                    });
+                        let buttons = document.querySelector('.message-dialog .buttons');
+                        buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
+                        buttons.querySelector('.image.button input').addEventListener('click', (event) => {
+                            event.stopPropagation();
+                        });
 
-                    textarea.focus();
-                }, 100);
+                        // FIXME: reset or load?
+                        Messages.message.dialog.messageReset();
+
+                        Messages.message.dialog.activate(button, textarea);
+                    }, 100);
+                } else {
+                    Messages.message.dialog.activate(button);
+                }
+            },
+            activate: (button, textarea) => {
+                textarea = textarea || document.querySelector('.message-dialog .textarea');
+
+                if (button.dataset.replyToId) {
+                    let tag = `@${button.dataset.replyToName}`;
+                    let tagWithNo = tag;
+                    let text = textarea.value;
+                    let i = 1;
+                    if (text.includes(tag)) {
+                        tagWithNo = `${tag}(${i})`;
+                        i++;
+                    }
+                    while (text.includes(tagWithNo)) {
+                        tagWithNo = `${tag}(${i})`;
+                        i++;
+                    }
+
+                    textarea.value = `${textarea.value}${textarea.value ? ' ' : ''}${tagWithNo} `;
+                    Textarea.resize(textarea);
+
+                    Messages.message.dialog.message.replyTo.push({replyToId: button.dataset.replyToId, key: tagWithNo});
+                }
+
+                textarea.focus();
             },
             remove: () => {
                 let dialog = document.querySelector('.message-dialog');

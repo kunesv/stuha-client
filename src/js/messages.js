@@ -177,6 +177,7 @@ var Messages = {
                     return;
                 }
 
+                button.classList.remove('error');
                 button.classList.add('progress');
 
                 let messageForm = new FormData();

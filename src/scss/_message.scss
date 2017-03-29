@@ -3,6 +3,7 @@ article {
   align-items: center;
 
   margin-bottom: 0.75 * $module;
+  position: relative;
 
   a {
     border-bottom: 1px solid rgba($color-link, 0.25);
@@ -92,7 +93,7 @@ article {
 
           .caption {
             border-bottom: 1px solid rgba($color-text, 0.25);
-            opacity: .5;
+            opacity: 0.8;
 
             transition: border-color 300ms;
 
@@ -127,37 +128,89 @@ article {
         margin-left: 0;
       }
 
-      section p {
-        border-radius: 0.25 * $module 0 0.25 * $module 0.25 * $module;
-      }
-    }
+      > section {
+        > p {
+          border-radius: 0.25 * $module 0 0.25 * $module 0.25 * $module;
+          background-color: $color-background-my-message;
+          color: $color-text-my-message;
+          align-items: flex-end;
 
-    .icon {
-      margin: 0 0 0 $module;
-    }
+          span.replyTo .caption {
+            border-bottom-color: rgba($color-text-my-message, 0.25);
+            &:hover {
+              border-bottom-color: $color-text-my-message;
+            }
+          }
+        }
 
-    section {
-      p {
-        background-color: $color-background-my-message;
-        color: $color-text-my-message;
-        align-items: flex-end;
+        &.image {
+          text-align: right;
 
-        span.replyTo .caption {
-          border-bottom-color: rgba($color-text-my-message, 0.25);
-          &:hover {
-            border-bottom-color: $color-text-my-message;
+          > span {
+            margin: 0.25 * $module 0 0 0.25 * $module;
           }
         }
       }
+    }
 
-      &.image {
-        text-align: right;
+    > header > .icon {
+      margin: 0 0 0 $module;
+    }
+  }
 
-        > span {
-          margin: 0.25 * $module 0 0 0.25 * $module;
-        }
+  &.replyTo {
+    transition: transform 200ms $animation-curve;
+    transform: scale(1);
+
+    position: absolute;
+    z-index: 100;
+    left: 0;
+    right: 0;
+
+    &.loading {
+      transform: scale(0);
+    }
+
+    .icon, .formatted p {
+      box-shadow: 0.125 * $module 0.25 * $module 0.125 * $module rgba(0, 0, 0, 0.1);
+    }
+
+    > header {
+      padding: 0;
+    }
+
+    > main {
+
+      footer {
+        display: none;
       }
     }
+  }
+
+  &.opened {
+    opacity: 0.5;
+
+    header > .icon {
+      visibility: hidden;
+    }
+
+    main > section > p {
+      color: transparent;
+      span {
+        visibility: hidden;
+      }
+    }
+
+    .icon, .formatted p {
+      box-shadow: 0 0 0 white;
+    }
+  }
+
+  &.opened + .replyTo {
+    margin-top: -0.25 * $module;
+  }
+  &.opened + .replyTo.opened {
+    margin-top: 0;
   }
 
   &.bot {

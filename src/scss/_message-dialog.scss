@@ -8,7 +8,7 @@
   opacity: 0;
   width: 30%;
 
-  box-shadow: 0 0 0 .5 * $module rgba(black, 0.2);
+  border-left: 1px solid #e5e5e5;
 
   @media (max-width: $small-screen-threshold) {
     width: 100%;

@@ -41,7 +41,7 @@ var Messages = {
 
         Messages.menu.active();
 
-        fetch(`/api/message?conversationId=${Conversations.lastConversation.conversation.id}&pageNo=${pageNo}`, {
+        fetch(`/api/messages?conversationId=${Conversations.lastConversation.conversation.id}&pageNo=${pageNo}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
@@ -79,44 +79,21 @@ var Messages = {
     },
 
     message: {
-        add: (message, direction = 'afterbegin') => {
-            message.createdOn = Datetime.arrayToDate(message.createdOn);
-
-            let template =
-                `<article class="loading ${Users.currentUser.userName} ? ${message.userName} ${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
-    
-    
-    
+        template: (message) => {
+            let template = `<article class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
-        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" style="background-image: url('/images/${message.iconPath}.png')"></div>
+        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" style="background-image: url('/images/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
     </header>
     <main>                 
-        <section data-content="message.formatted"></section>
-        
-        ${Messages.message.images(message.images)}
+        <section class="formatted"></section>
             
         <footer>${Datetime.formatDate(new Date()) !== Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
     </main>
 </article>`;
+            let currentArticle = document.createRange().createContextualFragment(template);
 
-            let messages = document.querySelector('.messages');
-            if (direction === 'afterbegin'
-                && messages.querySelector('article:first-child')
-                && messages.querySelector('article:first-child').hasAttribute('data-date')
-                && messages.querySelector('article:first-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
-                messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').dataset.date));
-            }
-            if (direction === 'beforeend'
-                && messages.querySelector('article:last-child')
-                && messages.querySelector('article:last-child').hasAttribute('data-date')
-                && messages.querySelector('article:last-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
-                messages.insertAdjacentHTML('beforeend', Messages.message.separator(Datetime.formatDate(message.createdOn)));
-            }
+            let contentElement = currentArticle.querySelector('.formatted');
 
-            messages.insertAdjacentHTML(direction, template);
-            let currentArticle = messages.querySelector('article.loading');
-
-            let contentElement = currentArticle.querySelector('[data-content="message.formatted"]');
             if (message.formatted) {
                 for (let p = 0; p < message.formatted.paragraphs.length; p++) {
                     let paragraph = message.formatted.paragraphs[p];
@@ -137,34 +114,43 @@ var Messages = {
                                 currentParagraph.appendChild(a);
                                 break;
                             case 'REPLY_TO':
-                                let replyTo = document.createElement('span');
-                                replyTo.classList.add('replyTo');
-
-                                let icon = document.createElement('span');
-                                icon.classList.add('replyToIcon');
-                                icon.style.backgroundImage = `url('/images/${node.iconPath && node.iconPath.match(/^\d+_\d+$/) ? node.iconPath : ''}.png')`;
-                                replyTo.appendChild(icon);
-
-                                let caption = document.createElement('span');
-                                caption.classList.add('caption');
-                                caption.textContent = node.caption || '[ ... ]';
-                                replyTo.appendChild(caption);
-
-                                currentParagraph.appendChild(replyTo);
+                                Messages.message.replyTo.add(node, currentParagraph);
                                 break;
                         }
                     }
-
                     contentElement.appendChild(currentParagraph);
                 }
-
-                contentElement.removeAttribute('data-content');
             } else {
                 contentElement.parentElement.removeChild(contentElement);
             }
 
-            Buttons.init(currentArticle.querySelectorAll('.button'));
-            currentArticle.classList.remove('loading');
+            Buttons.init(currentArticle.querySelectorAll('.button, .replyTo'));
+
+            return currentArticle;
+        },
+        add: (message, direction = 'afterbegin') => {
+            message.createdOn = Datetime.arrayToDate(message.createdOn);
+
+            let messages = document.querySelector('.messages');
+
+            if (direction === 'afterbegin') {
+                if (messages.querySelector('article:first-child')
+                    && messages.querySelector('article:first-child').hasAttribute('data-date')
+                    && messages.querySelector('article:first-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
+                    messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').dataset.date));
+                }
+
+                messages.insertBefore(Messages.message.template(message), messages.firstChild);
+            }
+            if (direction === 'beforeend') {
+                if (messages.querySelector('article:last-child')
+                    && messages.querySelector('article:last-child').hasAttribute('data-date')
+                    && messages.querySelector('article:last-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
+                    messages.insertAdjacentHTML('beforeend', Messages.message.separator(Datetime.formatDate(message.createdOn)));
+                }
+
+                messages.appendChild(Messages.message.template(message));
+            }
         },
 
         submitForm: (form) => {
@@ -254,10 +240,49 @@ var Messages = {
             return `<div class="seperator"><span>${createdOn}</span></div>`;
         },
 
-        replyTo: (id) => {
-            return (id) ? `<header data-reply-to="${id}">
-    <div class="icon button" data-click="Messages.message.dialog.add" data-reply-to="${id}" style="background-image: url('/images/2_1.png')"></div>
-</header>` : '';
+        replyTo: {
+            add: (node, currentParagraph) => {
+                let id = Messages.message.validations.uuid(node.replyToId);
+                let iconPath = Messages.message.validations.icon(node.iconPath) || '';
+
+                let template = `<span class="replyTo" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
+    <span class="replyToIcon" style="background-image: url('/images/${iconPath}.png')"></span>
+    <span class="caption"></span>
+</span>`;
+
+                let replyTo = document.createRange().createContextualFragment(template);
+                replyTo.querySelector('.caption').textContent = node.caption || '[ ... ]';
+
+                currentParagraph.appendChild(replyTo);
+            },
+            show: (button) => {
+                let parentArticle = button.parentNode.parentNode.parentNode.parentNode;
+                if (parentArticle.classList.contains('opened')) {
+                    return;
+                }
+
+                fetch(`/api/message/?messageId=${button.dataset.id}`, {
+                    headers: Fetch.headers()
+                }).then(Fetch.processFetchStatus).then((response) => {
+                    return response.json().then((message) => {
+                        message.createdOn = Datetime.arrayToDate(message.createdOn);
+
+                        parentArticle.classList.add('opened');
+
+                        let article = Messages.message.template(message).querySelector('article');
+                        article.style.top = button.offsetParent.offsetTop + 'px';
+                        article.classList.add('replyTo', 'loading');
+
+                        document.querySelector('.messages').insertBefore(article, parentArticle.nextSibling);
+
+                        setTimeout(() => {
+                            article.classList.remove('loading')
+                        }, 20);
+                    });
+                }).catch((error) => {
+
+                });
+            }
         },
 
         removeAll: () => {
@@ -432,6 +457,14 @@ var Messages = {
 
                     return valid;
                 }
+            }
+        },
+        validations: {
+            uuid: (uuid) => {
+                return uuid && uuid.match(/^[\da-f-]+$/i) ? uuid : '';
+            },
+            icon: (iconPath) => {
+                return iconPath && iconPath.match(/^\d+_\d+$/) ? iconPath : '';
             }
         }
     },

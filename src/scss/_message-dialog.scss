@@ -8,6 +8,8 @@
   opacity: 0;
   width: 30%;
 
+  z-index: 500;
+
   border-left: 1px solid #e5e5e5;
 
   @media (max-width: $small-screen-threshold) {
@@ -17,7 +19,7 @@
   }
 
   &.active {
-    background-color: #f0f0f0;
+    background-color: #ececec;
 
     opacity: 1;
     transform: translate3d(0, 0, 0);

@@ -54,11 +54,11 @@ article {
       margin-right: 0;
     }
 
-    section {
-      p {
+    > section {
+      > p {
         background: $color-background-message;
         border-radius: 0 0.25 * $module 0.25 * $module 0.25 * $module;
-        padding: 0.5 * $module 0.75 * $module;
+        padding: 0.25 * $module 0.75 * $module;
 
         &.button-row {
           background: transparent;
@@ -72,14 +72,41 @@ article {
           }
         }
 
-        span.replyTo {
+        > span, a.link {
+          display: inline-block;
+          box-sizing: border-box;
+          margin: 0.25 * $module 0;
+        }
+
+        > a.replyTo {
+          color: inherit;
           cursor: pointer;
+          border-bottom: 0 none;
+          border-radius: 0.125 * $module;
+          background-color: rgba(0, 0, 0, .03);
+          display: inline-block;
+          padding: 0.25 * $module .5 * $module;
+
+          &:first-child {
+            margin-left: -0.5 * $module;
+          }
+          &:last-child {
+            margin-right: -0.5 * $module;
+          }
+
+          transition: background-color 300ms, box-shadow 100ms;
+
+          &:hover {
+            background-color: rgba(0, 0, 0, .05);
+          }
+
+          &.clicked {
+            box-shadow: 0 0 0 .5 * $module rgba(black, .04) inset;
+          }
 
           .replyToIcon {
-            background-color: white;
+            background: white no-repeat center;
             background-size: 60%;
-            background-position: center;
-            background-repeat: no-repeat;
             border-radius: $module;
 
             display: inline-block;
@@ -92,8 +119,7 @@ article {
           }
 
           .caption {
-            border-bottom: 1px solid rgba($color-text, 0.25);
-            opacity: 0.8;
+            opacity: 0.5;
 
             transition: border-color 300ms;
 
@@ -101,6 +127,10 @@ article {
               border-bottom-color: $color-text;
             }
           }
+        }
+
+        a.replyTo + span, span + a.replyTo {
+          margin-left: 0.5 * $module;
         }
       }
 
@@ -134,13 +164,6 @@ article {
           background-color: $color-background-my-message;
           color: $color-text-my-message;
           align-items: flex-end;
-
-          span.replyTo .caption {
-            border-bottom-color: rgba($color-text-my-message, 0.25);
-            &:hover {
-              border-bottom-color: $color-text-my-message;
-            }
-          }
         }
 
         &.image {
@@ -159,8 +182,8 @@ article {
   }
 
   &.replyTo {
-    transition: transform 200ms $animation-curve;
-    transform: scale(1);
+    transition: transform 300ms $animation-curve;
+    transform: scale3d(1, 1, 1);
 
     position: absolute;
     z-index: 100;
@@ -168,11 +191,15 @@ article {
     right: 0;
 
     &.loading {
-      transform: scale(0);
+      transform: scale3d(0, 0, 1);
     }
 
-    .icon, .formatted p {
+    .icon, > main > section > p {
       box-shadow: 0.125 * $module 0.25 * $module 0.125 * $module rgba(0, 0, 0, 0.1);
+    }
+
+    .icon.clicked {
+      box-shadow: 0.125 * $module 0.25 * $module 0.125 * $module rgba(0, 0, 0, 0.1), 0 0 0 0.5 * $module rgba(black, 0.5) inset;
     }
 
     > header {
@@ -180,7 +207,6 @@ article {
     }
 
     > main {
-
       footer {
         display: none;
       }
@@ -194,9 +220,14 @@ article {
       visibility: hidden;
     }
 
-    main > section > p {
-      color: transparent;
-      span {
+    main {
+      > section > p {
+        color: transparent;
+        span {
+          visibility: hidden;
+        }
+      }
+      > footer {
         visibility: hidden;
       }
     }
@@ -207,7 +238,7 @@ article {
   }
 
   &.opened + .replyTo {
-    margin-top: -0.25 * $module;
+    margin-top: -0.125 * $module;
   }
   &.opened + .replyTo.opened {
     margin-top: 0;

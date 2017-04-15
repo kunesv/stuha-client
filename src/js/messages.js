@@ -104,10 +104,13 @@ var Messages = {
 
                         switch (node.type) {
                             case 'PLAIN_TEXT':
-                                currentParagraph.appendChild(document.createTextNode(node.text));
+                                let span = document.createElement('span');
+                                span.textContent = node.text;
+                                currentParagraph.appendChild(span);
                                 break;
                             case 'LINK':
                                 let a = document.createElement('a');
+                                a.classList.add('link');
                                 // FIXME: URL validation
                                 a.href = encodeURI(node.url);
                                 a.textContent = node.label;
@@ -245,10 +248,10 @@ var Messages = {
                 let id = Messages.message.validations.uuid(node.replyToId);
                 let iconPath = Messages.message.validations.icon(node.iconPath) || '';
 
-                let template = `<span class="replyTo" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
+                let template = `<a class="replyTo" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
     <span class="replyToIcon" style="background-image: url('/images/${iconPath}.png')"></span>
     <span class="caption"></span>
-</span>`;
+</a>`;
 
                 let replyTo = document.createRange().createContextualFragment(template);
                 replyTo.querySelector('.caption').textContent = node.caption || '[ ... ]';
@@ -271,7 +274,8 @@ var Messages = {
 
                         let article = Messages.message.template(message).querySelector('article');
                         article.style.top = button.offsetParent.offsetTop + 'px';
-                        article.classList.add('replyTo', 'loading');
+                        article.classList.add('replyTo');
+                        article.classList.add('loading');
 
                         document.querySelector('.messages').insertBefore(article, parentArticle.nextSibling);
 
@@ -540,7 +544,7 @@ var Messages = {
     <header><div class="icon"></div></header>
     <main>
         <section>
-            <p><b>Stuha:</b> ${message}</p>
+            <p><span>${message}</span></p>
         </section>
     </main>
 </article>`;

@@ -7,8 +7,13 @@ form {
     display: flex;
     flex-direction: column;
 
-    margin: 0.25 * $module;
-    padding: 0.25 * $module;
+    margin: 0.5 * $module;
+    padding: 0.5 * $module;
+
+    @media (max-width: $small-screen-threshold) {
+      margin: 0.25 * $module;
+      padding: 0.25 * $module;
+    }
 
     transition: box-shadow 200ms;
 
@@ -28,7 +33,11 @@ form {
   }
 
   > p {
-    margin: 0.5 * $module;
+    margin: $module;
+
+    @media (max-width: $small-screen-threshold) {
+      margin: 0.5 * $module;
+    }
   }
 
   .error-message {
@@ -43,7 +52,6 @@ form {
 
     transition: opacity 300ms ease-in, max-height 300ms ease-out, margin 300ms ease-in-out;
   }
-
 
   &.show-errors .error-message {
     opacity: 1;

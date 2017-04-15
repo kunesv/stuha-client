@@ -14,6 +14,10 @@ a {
   text-decoration: none;
 }
 
+a, button, .button {
+  touch-action: manipulation;
+}
+
 body {
 
   font-family: $base-font-family;
@@ -71,7 +75,7 @@ small {
       box-shadow: 0 0 0.5 * $module rgba(black, 0.2);
 
       width: 100%;
-      z-index: 2;
+      z-index: 400;
 
       > span {
         flex-grow: 1;

@@ -56,9 +56,11 @@ article {
 
     > section {
       > p {
+        transition: background-color 300ms ease-out;
+
         background: $color-background-message;
         border-radius: 0 0.25 * $module 0.25 * $module 0.25 * $module;
-        padding: 0.25 * $module 0.75 * $module;
+        padding: $module-quarter 0.75 * $module;
 
         &.button-row {
           background: transparent;
@@ -75,7 +77,8 @@ article {
         > span, a.link {
           display: inline-block;
           box-sizing: border-box;
-          margin: 0.25 * $module 0;
+          margin: $module-quarter 0;
+          vertical-align: middle;
         }
 
         > a.replyTo {
@@ -86,13 +89,6 @@ article {
           background-color: rgba(0, 0, 0, .03);
           display: inline-block;
           padding: 0.25 * $module .5 * $module;
-
-          &:first-child {
-            margin-left: -0.5 * $module;
-          }
-          &:last-child {
-            margin-right: -0.5 * $module;
-          }
 
           transition: background-color 300ms, box-shadow 100ms;
 
@@ -194,10 +190,6 @@ article {
       transform: scale3d(0, 0, 1);
     }
 
-    .icon, > main > section > p {
-      box-shadow: 0.125 * $module 0.25 * $module 0.125 * $module rgba(0, 0, 0, 0.1);
-    }
-
     .icon.clicked {
       box-shadow: 0.125 * $module 0.25 * $module 0.125 * $module rgba(0, 0, 0, 0.1), 0 0 0 0.5 * $module rgba(black, 0.5) inset;
     }
@@ -211,38 +203,30 @@ article {
         display: none;
       }
     }
-  }
 
-  &.opened {
-    opacity: 0.5;
+    .close-button {
+      position: absolute;
+      right: 0;
+      top: 0;
 
-    header > .icon {
-      visibility: hidden;
-    }
+      margin: 0;
 
-    main {
-      > section > p {
-        color: transparent;
-        span {
-          visibility: hidden;
-        }
-      }
-      > footer {
-        visibility: hidden;
+      .button {
+        border: 0 none;
+
+        height: 2 * $module;
+        width: 2 * $module;
+
       }
     }
-
-    .icon, .formatted p {
-      box-shadow: 0 0 0 white;
-    }
   }
 
-  &.opened + .replyTo {
-    margin-top: -0.125 * $module;
-  }
-  &.opened + .replyTo.opened {
-    margin-top: 0;
-  }
+  //&.opened + .replyTo {
+  //  margin-top: -0.125 * $module;
+  //}
+  //&.opened + .replyTo.opened {
+  //  margin-top: 0;
+  //}
 
   &.bot {
     header {
@@ -267,7 +251,7 @@ article {
       background-image: url("/images/progress.svg");
       background-repeat: no-repeat;
       background-position: left center;
-      height: $module;
+      height: 1.5 * $module;
       width: 3 * $module;
     }
   }
@@ -296,5 +280,38 @@ article {
     top: 50%;
     width: 100%;
     z-index: -1;
+  }
+}
+
+.openedReply {
+  div.seperator {
+    opacity: 0;
+  }
+
+  article:not(.opened) {
+
+    header > .icon {
+      opacity: 0;
+    }
+
+    main {
+      > section > p {
+        background-color: #f3f3f3;
+        span, a {
+          opacity: 0;
+        }
+      }
+      > footer {
+        opacity: 0;
+      }
+    }
+
+    .icon, .formatted p {
+      box-shadow: 0 0 0 white;
+    }
+
+    .close-button {
+      visibility: hidden;
+    }
   }
 }

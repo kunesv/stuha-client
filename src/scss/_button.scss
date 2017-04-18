@@ -76,12 +76,12 @@ button {
   padding: 0;
 
   > .button {
-    background-color: #999;
+    background-color: rgba(black, 0.3);
     background-image: url("/images/ex.svg");
-    width: 3 * $module;
+    width: 2.5 * $module;
 
     &:hover {
-      background-color: #6C6C6C;
+      background-color: rgba(black, 0.4);
     }
   }
 }

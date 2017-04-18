@@ -75,6 +75,8 @@ var Messages = {
         Messages.message.removeAll();
         Messages.placeholders.add();
 
+        document.querySelector('.messages').classList.remove('openedReply');
+
         Messages.load(1);
     },
 
@@ -259,10 +261,7 @@ var Messages = {
                 currentParagraph.appendChild(replyTo);
             },
             show: (button) => {
-                let parentArticle = button.parentNode.parentNode.parentNode.parentNode;
-                if (parentArticle.classList.contains('opened')) {
-                    return;
-                }
+                let replyTo = button.offsetParent;
 
                 fetch(`/api/message/?messageId=${button.dataset.id}`, {
                     headers: Fetch.headers()
@@ -270,14 +269,24 @@ var Messages = {
                     return response.json().then((message) => {
                         message.createdOn = Datetime.arrayToDate(message.createdOn);
 
-                        parentArticle.classList.add('opened');
+                        replyTo.classList.remove('opened');
+                        document.querySelector('.messages').classList.add('openedReply');
 
                         let article = Messages.message.template(message).querySelector('article');
                         article.style.top = button.offsetParent.offsetTop + 'px';
                         article.classList.add('replyTo');
+                        article.classList.add('opened');
                         article.classList.add('loading');
 
-                        document.querySelector('.messages').insertBefore(article, parentArticle.nextSibling);
+                        let closeTemplate = `<span class="close-button">
+    <a class="button" data-click="Messages.message.replyTo.close"></a>
+</span>`;
+
+                        let close = document.createRange().createContextualFragment(closeTemplate);
+                        article.appendChild(close);
+                        Buttons.init(article.querySelectorAll('.close-button .button'));
+
+                        document.querySelector('.messages').insertBefore(article, replyTo.nextSibling);
 
                         setTimeout(() => {
                             article.classList.remove('loading')
@@ -286,6 +295,29 @@ var Messages = {
                 }).catch((error) => {
 
                 });
+            },
+            close: (button) => {
+                let article = button.offsetParent.offsetParent;
+                article.classList.add('loading');
+
+                setTimeout(() => {
+                    let replyToArticle = article.previousSibling;
+                    if (replyToArticle.classList.contains('replyTo')) {
+                        replyToArticle.classList.add('opened');
+                    } else {
+                        document.querySelector('.messages').classList.remove('openedReply');
+                    }
+
+                    article.parentNode.removeChild(article)
+                }, 200);
+            },
+            closeAll: () => {
+                let messages = document.querySelector('.messages');
+                let replies = messages.querySelectorAll('.replyTo');
+                for (let i = 0; i < replies.length; i++) {
+                    messages.removeChild(replies[i]);
+                }
+                messages.classList.remove('openedReply');
             }
         },
 

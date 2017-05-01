@@ -27,6 +27,8 @@ article {
     flex: 0 0 3.5 * $module;
     padding-bottom: $module;
 
+    transition: opacity 600ms;
+
     .icon {
       background-color: white;
       background-position: center;
@@ -56,11 +58,11 @@ article {
 
     > section {
       > p {
-        transition: background-color 300ms ease-out;
-
         background: $color-background-message;
-        border-radius: 0 0.25 * $module 0.25 * $module 0;
+        border-radius: 0 $border-radius-message $border-radius-message 0;
         padding: $module-half 0.75 * $module;
+
+        position: static;
 
         &.button-row {
           background: transparent;
@@ -77,47 +79,59 @@ article {
         &.replyTo {
           background-color: transparent;
           padding: 0;
-        }
-        > a.replyTo {
-          cursor: pointer;
-          border-bottom: 0 none;
-          border-radius: 0 $module-quarter $module-quarter 0;
-          background-color: #e6e6e6;
-          color: #666;
-          display: inline-block;
-          padding: 0.25 * $module .5 * $module;
 
-          transition: background-color 300ms, box-shadow 100ms;
+          transition: transform 300ms $animation-curve, max-height 300ms 300ms;
+          transform: translate3d(0, 0, 0);
 
-          &:hover {
-            background-color: rgba(0, 0, 0, .05);
+          &.opened {
+            transform: translate3d(-100vw, 0, 0);
+            max-height: 0;
           }
 
-          &.clicked {
-            box-shadow: 0 0 0 $module-half rgba(black, 0.1) inset;
-          }
-
-          .replyToIcon {
-            background: white no-repeat center;
-            background-size: 60%;
-            border-radius: $module;
-
+          > a {
+            cursor: pointer;
+            border-bottom: 0 none;
+            border-radius: 0 $border-radius-message $border-radius-message 0;
+            background-color: #e6e6e6;
+            color: #666;
             display: inline-block;
-            vertical-align: middle;
+            padding: 0.25 * $module .5 * $module;
+            text-align: left;
 
-            margin-right: 0.25 * $module;
-
-            height: 1.5 * $module;
-            width: 1.5 * $module;
-          }
-
-          .caption {
-            vertical-align: middle;
-
-            transition: border-color 300ms;
+            transition: background-color 300ms, box-shadow 100ms;
 
             &:hover {
-              border-bottom-color: $color-text;
+              background-color: rgba(0, 0, 0, .05);
+            }
+
+            &.clicked {
+              box-shadow: 0 0 0 $module-half rgba(black, 0.1) inset;
+            }
+
+            .replyToIcon {
+              background: white no-repeat center;
+              background-size: 60%;
+              border-radius: $module;
+
+              opacity: .75;
+
+              display: inline-block;
+              vertical-align: middle;
+
+              margin-right: 0.25 * $module;
+
+              height: 1.5 * $module;
+              width: 1.5 * $module;
+            }
+
+            .caption {
+              vertical-align: middle;
+
+              transition: border-color 300ms;
+
+              &:hover {
+                border-bottom-color: $color-text;
+              }
             }
           }
         }
@@ -159,10 +173,9 @@ article {
 
       > section {
         > p {
-          border-radius: $module-quarter 0 0 $module-quarter;
+          border-radius: $border-radius-message 0 0 $border-radius-message;
           background-color: $color-background-my-message;
           color: $color-text-my-message;
-          align-items: flex-end;
 
           &.replyTo {
             background-color: transparent;
@@ -171,17 +184,17 @@ article {
           a.replyTo {
             background-color: #b9ecfc;
             color: #578;
-            border-radius: $module-quarter 0 0 $module-quarter;
+            border-radius: $border-radius-message 0 0 $border-radius-message;
           }
 
           &:first-child, &:first-child a.replyTo {
-            border-top-right-radius: $module-quarter;
+            border-top-right-radius: $border-radius-message;
           }
           &:last-child, &:last-child a.replyTo {
-            border-bottom-right-radius: $module-quarter;
+            border-bottom-right-radius: $border-radius-message;
           }
           &:first-child:last-child, &:first-child:last-child a.replyTo {
-            border-radius: $module-quarter 0 $module-quarter $module-quarter;
+            border-radius: $border-radius-message 0 $border-radius-message $border-radius-message;
           }
         }
 
@@ -198,19 +211,33 @@ article {
     > header > .icon {
       margin: 0 0 0 $module;
     }
+
+    > main > section > article.replyTo {
+      margin-left: 0;
+      margin-right: -3.5 * $module;
+      @media (min-width: $small-screen-threshold) {
+        margin-left: -5 * $module;
+      }
+    }
   }
 
   &.replyTo {
     transition: transform 300ms $animation-curve;
-    transform: scale3d(1, 1, 1);
+    transform: translate3d(0, 0, 0);
 
-    position: absolute;
-    z-index: 100;
     left: 0;
     right: 0;
 
+    //opacity: 0.8;
+
+    margin-left: -3.5 * $module;
+    @media (min-width: $small-screen-threshold) {
+      margin-right: -5 * $module;
+    }
+    margin-bottom: 0.125 * $module;
+
     &.loading {
-      transform: scale3d(0, 0, 1);
+      transform: translate3d(100vw, 0, 0);
     }
 
     .icon.clicked {
@@ -241,6 +268,12 @@ article {
         width: 2 * $module;
 
       }
+    }
+  }
+
+  &.openedReplyTo {
+    > header {
+      opacity: 0;
     }
   }
 
@@ -296,38 +329,5 @@ article {
     top: 50%;
     width: 100%;
     z-index: -1;
-  }
-}
-
-.openedReply {
-  div.seperator {
-    opacity: 0;
-  }
-
-  article:not(.opened) {
-
-    header > .icon {
-      opacity: 0;
-    }
-
-    main {
-      > section > p {
-        background-color: #f3f3f3;
-        span, a {
-          opacity: 0;
-        }
-      }
-      > footer {
-        opacity: 0;
-      }
-    }
-
-    .icon, .formatted p {
-      box-shadow: 0 0 0 white;
-    }
-
-    .close-button {
-      visibility: hidden;
-    }
   }
 }

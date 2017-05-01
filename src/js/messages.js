@@ -97,33 +97,48 @@ var Messages = {
             let contentElement = currentArticle.querySelector('.formatted');
 
             if (message.formatted) {
-                for (let p = 0; p < message.formatted.paragraphs.length; p++) {
-                    let paragraph = message.formatted.paragraphs[p];
-                    let currentParagraph = document.createElement('p');
+                let currentParagraph = document.createElement('p');
 
-                    for (let n = 0; n < paragraph.length; n++) {
-                        let node = paragraph[n];
+                for (let p = 0; p < message.formatted.textNodes.length; p++) {
+                    let node = message.formatted.textNodes[p];
 
-                        switch (node.type) {
-                            case 'PLAIN_TEXT':
-                                let span = document.createElement('span');
-                                span.textContent = node.text;
-                                currentParagraph.appendChild(span);
-                                break;
-                            case 'LINK':
-                                let a = document.createElement('a');
-                                a.classList.add('link');
-                                // FIXME: URL validation
-                                a.href = encodeURI(node.url);
-                                a.textContent = node.label;
-                                currentParagraph.appendChild(a);
-                                break;
-                            case 'REPLY_TO':
-                                Messages.message.replyTo.add(node, currentParagraph);
-                                break;
-                        }
+                    switch (node.type) {
+                        case 'PLAIN_TEXT':
+                            let span = document.createElement('span');
+                            span.textContent = node.text;
+                            currentParagraph.appendChild(span);
+                            if (p === message.formatted.textNodes.length - 1 || message.formatted.textNodes[p + 1].type === 'REPLY_TO') {
+                                contentElement.appendChild(currentParagraph);
+                                currentParagraph = document.createElement('p');
+                            }
+                            break;
+                        case 'LINK':
+                            let a = document.createElement('a');
+                            a.classList.add('link');
+                            // FIXME: URL validation
+                            a.href = encodeURI(node.url);
+                            a.textContent = node.label;
+                            currentParagraph.appendChild(a);
+                            if (p === message.formatted.textNodes.length - 1 || message.formatted.textNodes[p + 1].type === 'REPLY_TO') {
+                                contentElement.appendChild(currentParagraph);
+                                currentParagraph = document.createElement('p');
+                            }
+                            break;
+                        case 'NEW_LINE':
+                            let br = document.createElement('br');
+                            currentParagraph.appendChild(br);
+                            if (p === message.formatted.textNodes.length - 1 || message.formatted.textNodes[p + 1].type === 'REPLY_TO') {
+                                contentElement.appendChild(currentParagraph);
+                                currentParagraph = document.createElement('p');
+                            }
+                            break;
+                        case 'REPLY_TO':
+                            Messages.message.replyTo.add(node, currentParagraph);
+                            currentParagraph.classList.add('replyTo');
+                            contentElement.appendChild(currentParagraph);
+                            currentParagraph = document.createElement('p');
+                            break;
                     }
-                    contentElement.appendChild(currentParagraph);
                 }
             } else {
                 contentElement.parentElement.removeChild(contentElement);

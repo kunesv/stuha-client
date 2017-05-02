@@ -95,7 +95,7 @@ article {
             background-color: #e6e6e6;
             color: #666;
             display: inline-block;
-            padding: 0.25 * $module .5 * $module;
+            padding: $module-quarter 0.75 * $module $module-quarter $module-quarter;
             text-align: left;
 
             transition: background-color 300ms, box-shadow 100ms;
@@ -118,14 +118,23 @@ article {
               display: inline-block;
               vertical-align: middle;
 
-              margin-right: 0.25 * $module;
-
               height: 1.5 * $module;
               width: 1.5 * $module;
             }
 
             .caption {
+              display: inline-block;
+              margin-left: $module-quarter;
+
               vertical-align: middle;
+
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+
+              width: calc(100% - #{1.7501 * $module}) ;
+
+
 
               transition: border-color 300ms;
 
@@ -137,10 +146,10 @@ article {
         }
 
         &:first-child, &:first-child a.replyTo {
-          border-top-left-radius: $module-quarter;
+          border-top-left-radius: $border-radius-message;
         }
         &:last-child, &:last-child a.replyTo {
-          border-bottom-left-radius: $module-quarter;
+          border-bottom-left-radius: $border-radius-message;
         }
         &:first-child:last-child, &:first-child:last-child a.replyTo {
           border-top-left-radius: 0;

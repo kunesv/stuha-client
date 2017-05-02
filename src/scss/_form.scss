@@ -80,6 +80,9 @@ input {
 textarea {
   @extend input;
 
+  border-radius: $border-radius-message 0 $border-radius-message $border-radius-message;
+  padding: $module-half 0.75 * $module;
+
   line-height: 1.4rem;
 
   transition: height 200ms;

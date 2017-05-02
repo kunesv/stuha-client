@@ -264,8 +264,7 @@ var Messages = {
                 let iconPath = Messages.message.validations.icon(node.iconPath) || '';
 
                 let template = `<a class="replyTo" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
-    <span class="replyToIcon" style="background-image: url('/images/${iconPath}.png')"></span>
-    <span class="caption"></span>
+    <span class="replyToIcon" style="background-image: url('/images/${iconPath}.png')"></span><span class="caption"></span>
 </a>`;
 
                 let replyTo = document.createRange().createContextualFragment(template);
@@ -275,7 +274,6 @@ var Messages = {
             },
             show: (button) => {
                 let replyToArticle = button.offsetParent.offsetParent;
-                console.log(replyToArticle)
                 let replyTo = button.parentNode;
 
                 fetch(`/api/message/?messageId=${button.dataset.id}`, {

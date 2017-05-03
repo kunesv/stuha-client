@@ -113,7 +113,7 @@ article {
               background-size: 60%;
               border-radius: $module;
 
-              opacity: .75;
+              //opacity: .75;
 
               display: inline-block;
               vertical-align: middle;
@@ -223,10 +223,14 @@ article {
 
     > main > section > article.replyTo {
       margin-left: 0;
-      margin-right: -3.5 * $module;
+      margin-right: -.5 * $module;
       @media (min-width: $small-screen-threshold) {
+        margin-right: -4.5 * $module;
         margin-left: -5 * $module;
       }
+    }
+    &.replyTo > main > section > article.replyTo {
+      margin-right: -3.5 * $module;
     }
   }
 
@@ -239,7 +243,7 @@ article {
 
     //opacity: 0.8;
 
-    margin-left: -3.5 * $module;
+    margin-left: -4.5 * $module;
     @media (min-width: $small-screen-threshold) {
       margin-right: -5 * $module;
     }

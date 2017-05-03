@@ -1,6 +1,6 @@
 .message-dialog {
   @extend .overlay;
-  background-color: $color-background-button;
+  background-color: #ececec;
 
   transition: transform 300ms $animation-curve, opacity 300ms, background-color 300ms ease-out;
   transform: translate3d(100%, 0, 0);
@@ -13,6 +13,8 @@
   border-left: 1px solid #e5e5e5;
 
   @media (max-width: $small-screen-threshold) {
+    background-color: $color-background-button;
+
     width: 100%;
     transform: scale3d(0, 0, 1);
     transform-origin: top right;

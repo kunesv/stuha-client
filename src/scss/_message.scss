@@ -95,6 +95,7 @@ article {
             background-color: #e6e6e6;
             color: #666;
             display: inline-block;
+            outline: 0 none;
             padding: $module-quarter 0.75 * $module $module-quarter $module-quarter;
             text-align: left;
 
@@ -132,9 +133,7 @@ article {
               white-space: nowrap;
               text-overflow: ellipsis;
 
-              width: calc(100% - #{1.7501 * $module}) ;
-
-
+              width: calc(100% - #{1.7501 * $module});
 
               transition: border-color 300ms;
 
@@ -223,14 +222,16 @@ article {
 
     > main > section > article.replyTo {
       margin-left: 0;
-      margin-right: -.5 * $module;
+      margin-right: -3.5 * $module;
       @media (min-width: $small-screen-threshold) {
-        margin-right: -4.5 * $module;
         margin-left: -5 * $module;
+        margin-right: -4.5 * $module;
       }
     }
     &.replyTo > main > section > article.replyTo {
-      margin-right: -3.5 * $module;
+      @media (min-width: $small-screen-threshold) {
+        margin-right: -3.5 * $module;
+      }
     }
   }
 
@@ -243,9 +244,15 @@ article {
 
     //opacity: 0.8;
 
-    margin-left: -4.5 * $module;
+    margin-left: -3.5 * $module;
     @media (min-width: $small-screen-threshold) {
+      margin-left: -4.5 * $module;
       margin-right: -5 * $module;
+    }
+    > main > section > article.replyTo {
+      @media (min-width: $small-screen-threshold) {
+        margin-left: -3.5 * $module;
+      }
     }
     margin-bottom: 0.125 * $module;
 

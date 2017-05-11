@@ -82,7 +82,7 @@ var Messages = {
         template: (message) => {
             let template = `<article class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
-        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" style="background-image: url('/images/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
+        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
     </header>
     <main>                 
         <section class="formatted"></section>
@@ -264,7 +264,7 @@ var Messages = {
                 let iconPath = Messages.message.validations.icon(node.iconPath) || '';
 
                 let template = `<a class="replyTo" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
-    <span class="replyToIcon" style="background-image: url('/images/${iconPath}.png')"></span><span class="caption"></span>
+    <span class="replyToIcon" style="background-image: url('/images/icons/${iconPath}.png')"></span><span class="caption"></span>
 </a>`;
 
                 let replyTo = document.createRange().createContextualFragment(template);
@@ -434,7 +434,7 @@ var Messages = {
                 return Users.currentUser.icons.map(Messages.message.dialog.icon).join('');
             },
             icon: (icon) => {
-                return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/${icon.path}.png')"></li>`;
+                return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/icons/${icon.path}.png')"></li>`;
             },
             selectIcon: (li) => {
                 let active = li.parentElement.querySelector('.active');

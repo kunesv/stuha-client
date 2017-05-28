@@ -1,3 +1,27 @@
+header {
+  .conversation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon {
+      height: 2.5 * $module;
+      width: 2.5 * $module;
+
+      background: #f69;
+      border-radius: 50%;
+      //box-shadow: 0 2px 2px #f99;
+    }
+
+    .name {
+      color: #999;
+      font-size: 12px;
+      //background-color: $color-background;
+      //box-shadow: 0 0 5px 2px $color-background;
+    }
+  }
+}
+
 article {
   display: flex;
   align-items: center;
@@ -19,7 +43,7 @@ article {
     margin-top: 1.75 * $module;
 
     @media (max-width: $small-screen-threshold) {
-      margin-top: 1.25 * $module;
+      margin-top: 5 * $module;
     }
   }
 
@@ -82,10 +106,10 @@ article {
           padding: 0;
 
           transition: transform 300ms $animation-curve, max-height 300ms 300ms;
-          transform: translate3d(0, 0, 0);
+          transform: scale3d(1, 1, 1);
 
           &.opened {
-            transform: translate3d(-100vw, 0, 0);
+            transform: scale3d(0, 0, 1);
             max-height: 0;
           }
 
@@ -93,9 +117,10 @@ article {
             cursor: pointer;
             border-bottom: 0 none;
             border-radius: 0 $border-radius-message $border-radius-message 0;
-            background-color: #e6e6e6;
+            background-color: #d6d6d6;
             color: #666;
             display: inline-block;
+            height: auto;
             outline: 0 none;
             padding: $module-quarter 0.75 * $module $module-quarter $module-quarter;
             text-align: left;
@@ -103,7 +128,7 @@ article {
             transition: background-color 300ms, box-shadow 100ms;
 
             &:hover {
-              background-color: rgba(0, 0, 0, .05);
+              background-color: #d0d0d0;
             }
 
             &.clicked {
@@ -114,8 +139,6 @@ article {
               background: white no-repeat center;
               background-size: 60%;
               border-radius: $module;
-
-              //opacity: .75;
 
               display: inline-block;
               vertical-align: middle;
@@ -145,13 +168,13 @@ article {
           }
         }
 
-        &:first-child, &:first-child a.replyTo {
+        &:first-child, &.replyTo:first-child a {
           border-top-left-radius: $border-radius-message;
         }
-        &:last-child, &:last-child a.replyTo {
+        &:last-child, &.replyTo:last-child a {
           border-bottom-left-radius: $border-radius-message;
         }
-        &:first-child:last-child, &:first-child:last-child a.replyTo {
+        &:first-child:last-child, &.replyTo:first-child:last-child a {
           border-top-left-radius: 0;
         }
       }
@@ -189,20 +212,19 @@ article {
           &.replyTo {
             background-color: transparent;
             text-align: right;
-          }
-          a.replyTo {
-            background-color: #b9ecfc;
-            color: #578;
-            border-radius: $border-radius-message 0 0 $border-radius-message;
+
+            > a {
+              border-radius: $border-radius-message 0 0 $border-radius-message;
+            }
           }
 
-          &:first-child, &:first-child a.replyTo {
+          &:first-child, &.replyTo:first-child a {
             border-top-right-radius: $border-radius-message;
           }
-          &:last-child, &:last-child a.replyTo {
+          &:last-child, &.replyTo:last-child a {
             border-bottom-right-radius: $border-radius-message;
           }
-          &:first-child:last-child, &:first-child:last-child a.replyTo {
+          &:first-child:last-child, &.replyTo:first-child:last-child a {
             border-radius: $border-radius-message 0 $border-radius-message $border-radius-message;
           }
         }
@@ -238,12 +260,10 @@ article {
 
   &.replyTo {
     transition: transform 300ms $animation-curve;
-    transform: translate3d(0, 0, 0);
+    transform: scale3d(1, 1, 1);
 
     left: 0;
     right: 0;
-
-    //opacity: 0.8;
 
     margin-left: -3.5 * $module;
     @media (min-width: $small-screen-threshold) {
@@ -258,7 +278,7 @@ article {
     margin-bottom: 0.125 * $module;
 
     &.loading {
-      transform: translate3d(100vw, 0, 0);
+      transform: scale3d(0, 0, 1);
     }
 
     .icon.clicked {

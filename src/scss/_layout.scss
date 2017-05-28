@@ -65,14 +65,13 @@ small {
 
   @media (max-width: $small-screen-threshold) {
     > header {
-      flex: 0 0 2.5 * $module;
-
       display: flex;
-      align-items: center;
+      //align-items: center;
       justify-content: space-around;
 
-      background-color: white;
-      box-shadow: 0 0 0.5 * $module rgba(black, 0.2);
+      position: absolute;
+
+      padding: $module-half 0 0;
 
       width: 100%;
       z-index: 400;
@@ -87,7 +86,6 @@ small {
 
         &.menu-button {
           flex: 0 0 2.5 * $module;
-          padding: 0;
 
           .button {
             background-color: transparent;
@@ -97,7 +95,6 @@ small {
 
         &.add-button {
           flex: 0 0 2.5 * $module;
-          padding: 0;
         }
       }
       > main > aside {
@@ -113,8 +110,6 @@ small {
   }
 
   > main {
-    flex-grow: 1;
-
     background-color: $color-background;
     display: flex;
 

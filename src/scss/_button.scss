@@ -27,19 +27,16 @@
     box-shadow: 0 0 0 0.5 * $module rgba(black, 0.5) inset;
   }
 
-  span.progress {
-    display: none;
-  }
-
   &.progress {
-    background-color: #ccc;
-    transition: background-color 100ms;
+    background: $color-background-message url("/images/progress.svg") no-repeat left center;
+    cursor: inherit;
+
+    &:hover {
+      background-color: $color-background-message;
+    }
 
     span {
-      display: none;
-    }
-    span.progress {
-      display: flex;
+      visibility: hidden;
     }
   }
 }
@@ -70,18 +67,24 @@ button {
 
 .add-button .button {
   background-image: url("/images/plus.svg");
+  border-radius: 50%;
+  box-shadow: 2px 2px 4px #bac;
+
+  &.clicked {
+    box-shadow: 2px 2px 4px #bac, 0 0 0 0.5 * $module rgba(black, 0.8) inset;
+  }
 }
 
 .close-button {
   padding: 0;
 
   > .button {
-    background-color: rgba(black, 0.3);
+    background-color: $color-background-button-secondary;
     background-image: url("/images/ex.svg");
     width: 2.5 * $module;
 
     &:hover {
-      background-color: rgba(black, 0.4);
+      background-color: #c0c0c0;
     }
   }
 }
@@ -92,10 +95,6 @@ button {
 
 .submit.button, button[type=submit] {
   background-image: url("/images/submit.svg");
-
-  &.progress {
-    background-image: url("/images/progress.svg");
-  }
 }
 
 form.show-errors .button, .button.error {

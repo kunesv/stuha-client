@@ -2,7 +2,10 @@ var Messages = {
     init: () => {
         let template = `<header>
     <span class="menu-button"><a class="button" data-click="Messages.menu.toggle"></a></span>
-    <span data-content="currentConversation"></span>
+    <span class="conversation" >
+        <span class="icon"></span>
+        <span class="name" data-content="currentConversation"></span>
+    </span>
     <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
 </header>
 
@@ -90,9 +93,9 @@ var Messages = {
         <footer>${Datetime.formatDate(new Date()) !== Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
     </main>
 </article>`;
-            let currentArticle = document.createRange().createContextualFragment(template);
+            let article = document.createRange().createContextualFragment(template);
 
-            let contentElement = currentArticle.querySelector('.formatted');
+            let contentElement = article.querySelector('.formatted');
 
             if (message.formatted) {
                 let currentParagraph = document.createElement('p');
@@ -142,9 +145,9 @@ var Messages = {
                 contentElement.parentElement.removeChild(contentElement);
             }
 
-            Buttons.init(currentArticle.querySelectorAll('.button, .replyTo a'));
+            Buttons.init(article.querySelectorAll('.button'));
 
-            return currentArticle;
+            return article;
         },
         add: (message, direction = 'afterbegin') => {
             message.createdOn = Datetime.arrayToDate(message.createdOn);
@@ -263,7 +266,7 @@ var Messages = {
                 let id = Messages.message.validations.uuid(node.replyToId);
                 let iconPath = Messages.message.validations.icon(node.iconPath) || '';
 
-                let template = `<a class="replyTo" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
+                let template = `<a class="button" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
     <span class="replyToIcon" style="background-image: url('/images/icons/${iconPath}.png')"></span><span class="caption"></span>
 </a>`;
 
@@ -276,36 +279,44 @@ var Messages = {
                 let replyToArticle = button.offsetParent.offsetParent;
                 let replyTo = button.parentNode;
 
-                fetch(`/api/message/?messageId=${button.dataset.id}`, {
-                    headers: Fetch.headers()
-                }).then(Fetch.processFetchStatus).then((response) => {
-                    return response.json().then((message) => {
-                        message.createdOn = Datetime.arrayToDate(message.createdOn);
+                replyTo.classList.remove('error');
+                if (!button.classList.contains('progress')) {
 
-                        replyTo.classList.add('opened');
-                        replyToArticle.classList.add('openedReplyTo');
+                    button.classList.add('progress');
 
-                        let article = Messages.message.template(message).querySelector('article');
-                        article.classList.add('replyTo');
-                        article.classList.add('loading');
+                    fetch(`/api/message/?messageId=${button.dataset.id}`, {
+                        headers: Fetch.headers()
+                    }).then(Fetch.processFetchStatus).then((response) => {
+                        return response.json().then((message) => {
+                            message.createdOn = Datetime.arrayToDate(message.createdOn);
 
-                        let closeTemplate = `<span class="close-button">
+                            button.classList.remove('progress');
+                            replyTo.classList.add('opened');
+                            replyToArticle.classList.add('openedReplyTo');
+
+                            let article = Messages.message.template(message).querySelector('article');
+                            article.classList.add('replyTo');
+                            article.classList.add('loading');
+
+                            let closeTemplate = `<span class="close-button">
     <a class="button" data-click="Messages.message.replyTo.close"></a>
 </span>`;
 
-                        let close = document.createRange().createContextualFragment(closeTemplate);
-                        article.appendChild(close);
-                        Buttons.init(article.querySelectorAll('.close-button .button'));
+                            let close = document.createRange().createContextualFragment(closeTemplate);
+                            article.appendChild(close);
+                            Buttons.init(article.querySelectorAll('.close-button .button'));
 
-                        replyTo.parentNode.insertBefore(article, replyTo.nextSibling);
+                            replyTo.parentNode.insertBefore(article, replyTo.nextSibling);
 
-                        setTimeout(() => {
-                            article.classList.remove('loading')
-                        }, 20);
+                            setTimeout(() => {
+                                article.classList.remove('loading')
+                            }, 20);
+                        });
+                    }).catch((error) => {
+                        button.classList.remove('progress');
+                        replyTo.classList.add('error');
                     });
-                }).catch((error) => {
-
-                });
+                }
             },
             close: (button) => {
                 let article = button.offsetParent.offsetParent;

@@ -14,7 +14,7 @@
    viewBox="0 0 100 100"
    version="1.1"
    id="svg8"
-   sodipodi:docname="ex.svg"
+   sodipodi:docname="conversation-bg.svg"
    inkscape:version="0.92.1 r15371">
   <defs
      id="defs2" />
@@ -25,22 +25,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="199.42452"
-     inkscape:cy="153.0453"
+     inkscape:zoom="2"
+     inkscape:cx="183.34419"
+     inkscape:cy="231.30119"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1600"
+     inkscape:window-width="1440"
      inkscape:window-height="837"
-     inkscape:window-x="1432"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:snap-global="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4613" />
-  </sodipodi:namedview>
+     inkscape:snap-global="false" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -59,14 +55,21 @@
      id="layer1"
      transform="translate(0,-197)">
     <path
-       style="fill:none;stroke:#ffffff;stroke-width:2.64583302;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 63.088561,233.91144 36.911439,260.08856"
-       id="path4492"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:2.64583302;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 63.088561,260.08856 36.911439,233.91144"
-       id="path4492-4"
-       inkscape:connector-curvature="0" />
+       sodipodi:type="star"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.24966902"
+       id="path4501"
+       sodipodi:sides="8"
+       sodipodi:cx="50"
+       sodipodi:cy="247"
+       sodipodi:r1="50"
+       sodipodi:r2="46.193974"
+       sodipodi:arg1="0.78539816"
+       sodipodi:arg2="1.1780972"
+       inkscape:flatsided="true"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 85.355339,282.35534 50,297 14.644661,282.35534 0,247 14.644661,211.64466 50,197 85.355339,211.64466 100,247 Z"
+       inkscape:transform-center-x="1.1053963e-006"
+       inkscape:transform-center-y="3.5851787e-006" />
   </g>
 </svg>

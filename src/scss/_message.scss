@@ -8,16 +8,32 @@ header {
       height: 2.5 * $module;
       width: 2.5 * $module;
 
-      background: #f69;
+      background-color: transparent;
+      background-image: url("/images/conversation.svg");
       border-radius: 50%;
-      //box-shadow: 0 2px 2px #f99;
     }
+  }
+}
 
-    .name {
-      color: #999;
-      font-size: 12px;
-      //background-color: $color-background;
-      //box-shadow: 0 0 5px 2px $color-background;
+.conversation-name {
+  margin-top: 3.5 * $module;
+
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+
+
+  @media (min-width: $small-screen-threshold) {
+    display: none;
+  }
+}
+
+.messages > article {
+  &:first-child {
+    margin-top: 1.5 * $module;
+
+    @media (max-width: $small-screen-threshold) {
+      margin-top: 0.75 * $module;
     }
   }
 }
@@ -39,14 +55,6 @@ article {
     }
   }
 
-  &:first-child {
-    margin-top: 1.75 * $module;
-
-    @media (max-width: $small-screen-threshold) {
-      margin-top: 5 * $module;
-    }
-  }
-
   > header {
     flex: 0 0 3.5 * $module;
     padding-bottom: $module;
@@ -58,7 +66,7 @@ article {
       background-position: center;
       background-repeat: no-repeat;
       background-size: 60%;
-      border-radius: 1.25 * $module;
+      border-radius: 50%;
       height: 2.5 * $module;
       margin-right: $module;
       text-align: center;
@@ -86,8 +94,6 @@ article {
         background: $color-background-message;
         border-radius: 0 $border-radius-message $border-radius-message 0;
         padding: $module-half 0.75 * $module;
-
-        position: static;
 
         &.button-row {
           background: transparent;
@@ -242,20 +248,6 @@ article {
     > header > .icon {
       margin: 0 0 0 $module;
     }
-
-    > main > section > article.replyTo {
-      margin-left: 0;
-      margin-right: -3.5 * $module;
-      @media (min-width: $small-screen-threshold) {
-        margin-left: -5 * $module;
-        margin-right: -4.5 * $module;
-      }
-    }
-    &.replyTo > main > section > article.replyTo {
-      @media (min-width: $small-screen-threshold) {
-        margin-right: -3.5 * $module;
-      }
-    }
   }
 
   &.replyTo {
@@ -265,19 +257,12 @@ article {
     left: 0;
     right: 0;
 
-    margin-left: -3.5 * $module;
-    @media (min-width: $small-screen-threshold) {
-      margin-left: -4.5 * $module;
-      margin-right: -5 * $module;
-    }
     > main > section > article.replyTo {
-      @media (min-width: $small-screen-threshold) {
-        margin-left: -3.5 * $module;
-      }
+      margin-left: -3.5 * $module;
     }
     margin-bottom: 0.125 * $module;
 
-    &.loading {
+    &.progress {
       transform: scale3d(0, 0, 1);
     }
 
@@ -292,22 +277,6 @@ article {
     > main {
       footer {
         display: none;
-      }
-    }
-
-    .close-button {
-      position: absolute;
-      right: 0;
-      top: 0;
-
-      margin: 0;
-
-      .button {
-        border: 0 none;
-
-        height: 2 * $module;
-        width: 2 * $module;
-
       }
     }
   }
@@ -347,6 +316,11 @@ article {
   }
 }
 
+article.my > main > section > article.replyTo {
+  margin-left: 0;
+  margin-right: -3.5 * $module;
+}
+
 .seperator {
   margin-bottom: 1.75 * $module;
   position: relative;
@@ -370,5 +344,44 @@ article {
     top: 50%;
     width: 100%;
     z-index: -1;
+  }
+}
+
+.replyToWrapper {
+  transition: transform 300ms $animation-curve;
+  transform: scale3d(1, 1, 1);
+
+  background: linear-gradient(50deg, transparent, transparent, $color-background-message);
+
+  border-radius: 0 $module 1.25 * $module 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+
+  margin-left: -3.5 * $module;
+  margin-bottom: 0.125 * $module;
+
+  &.progress {
+    transform: scale3d(0, 0, 1);
+  }
+
+  > .close-button {
+    margin: $module-quarter;
+
+    .button {
+      border: 0 none;
+
+      border-radius: 50%;
+      height: 2 * $module;
+      width: 2 * $module;
+    }
+  }
+}
+
+article.my {
+  .replyToWrapper {
+    margin-left: 0;
+    margin-right: -3.5 * $module;
   }
 }

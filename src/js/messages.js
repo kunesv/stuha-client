@@ -3,8 +3,7 @@ var Messages = {
         let template = `<header>
     <span class="menu-button"><a class="button" data-click="Messages.menu.toggle"></a></span>
     <span class="conversation" >
-        <span class="icon"></span>
-        <span class="name" data-content="currentConversation"></span>
+        <span class="icon button"></span>
     </span>
     <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
 </header>
@@ -14,7 +13,11 @@ var Messages = {
         <header></header>
         <section></section>
     </aside>
-    <section class="messages"></section>
+    <section>
+        <div class="conversation-name " data-content="currentConversation"></div>
+        <div class="messages"></div>
+        <div>Load More? </div>
+    </section>
 </main>`;
 
         document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
@@ -85,7 +88,8 @@ var Messages = {
         template: (message) => {
             let template = `<article class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
-        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
+        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" 
+            style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
     </header>
     <main>                 
         <section class="formatted"></section>
@@ -207,7 +211,7 @@ var Messages = {
                             Messages.message.dialog.remove();
                             Messages.message.dialog.messageReset();
                             Messages.message.add(message);
-                            document.querySelector('.messages').scrollTop = 0;
+                            document.querySelector('.messages').parentNode.scrollTop = 0;
 
                             // check if images got loaded, if not, note the user that images are being loaded.
                         }, 200);
@@ -296,20 +300,32 @@ var Messages = {
 
                             let article = Messages.message.template(message).querySelector('article');
                             article.classList.add('replyTo');
-                            article.classList.add('loading');
 
-                            let closeTemplate = `<span class="close-button">
+                            let replyToWrapper = document.createElement('div');
+
+                            if (replyToArticle.parentNode.classList.contains('messages')) {
+
+                                replyToWrapper.classList.add('progress');
+                                replyToWrapper.classList.add('replyToWrapper');
+
+                                replyToWrapper.appendChild(article);
+                                replyTo.parentNode.insertBefore(replyToWrapper, replyTo.nextSibling);
+
+                                let closeTemplate = `<span class="close-button">
     <a class="button" data-click="Messages.message.replyTo.close"></a>
 </span>`;
 
-                            let close = document.createRange().createContextualFragment(closeTemplate);
-                            article.appendChild(close);
-                            Buttons.init(article.querySelectorAll('.close-button .button'));
-
-                            replyTo.parentNode.insertBefore(article, replyTo.nextSibling);
+                                let close = document.createRange().createContextualFragment(closeTemplate);
+                                replyToWrapper.insertBefore(close, replyToWrapper.firstChild);
+                                Buttons.init(replyToWrapper.querySelectorAll('.close-button .button'));
+                            } else {
+                                article.classList.add('progress');
+                                replyTo.parentNode.insertBefore(article, replyTo.nextSibling);
+                            }
 
                             setTimeout(() => {
-                                article.classList.remove('loading')
+                                article.classList.remove('progress');
+                                replyToWrapper.classList.remove('progress');
                             }, 20);
                         });
                     }).catch((error) => {
@@ -319,14 +335,20 @@ var Messages = {
                 }
             },
             close: (button) => {
-                let article = button.offsetParent.offsetParent;
-                article.classList.add('loading');
+                let replyToWrapper = button.parentNode.parentNode;
+                replyToWrapper.classList.add('progress');
 
                 setTimeout(() => {
-                    let replyTo = article.previousSibling;
+                    let replyTo = replyToWrapper.previousSibling;
                     replyTo.classList.remove('opened');
-                    article.offsetParent.classList.remove('openedReplyTo');
-                    article.parentNode.removeChild(article);
+
+                    let parentArticle = replyToWrapper.offsetParent;
+
+                    if (parentArticle.querySelectorAll('.replyToWrapper').length <= 1) {
+                        parentArticle.classList.remove('openedReplyTo');
+                    }
+
+                    replyToWrapper.parentNode.removeChild(replyToWrapper);
                 }, 200);
             }
         },
@@ -376,8 +398,6 @@ var Messages = {
                         Buttons.init(document.querySelectorAll('.message-dialog .button'));
 
                         let textarea = document.querySelector('.message-dialog .textarea');
-                        textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
-                        textarea.addEventListener('blur', Messages.message.dialog.validations.content);
 
                         let validationTimeout;
                         Textarea.resize(textarea);
@@ -400,6 +420,10 @@ var Messages = {
                         Messages.message.dialog.messageReset();
 
                         Messages.message.dialog.activate(button, textarea);
+
+                        textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
+                        textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.icons, 300));
+                        textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.content, 300));
                     }, 100);
                 } else {
                     Messages.message.dialog.activate(button);
@@ -634,7 +658,7 @@ var Messages = {
             let template = `
 <ul class="conversations"></ul>
 <ul>    
-    <li><a class="button" data-click="Login.logout"><span>Logout</span><span class="progress">...</span></a></li>
+    <li><a class="button" data-click="Login.logout"><span>Logout</span></a></li>
 </ul>`;
 
 

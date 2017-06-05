@@ -88,7 +88,6 @@ small {
           flex: 0 0 2.5 * $module;
 
           .button {
-            background-color: transparent;
             color: #666;
           }
         }
@@ -114,6 +113,8 @@ small {
     display: flex;
 
     overflow: hidden;
+
+    height: 100%;
 
     box-shadow: 0 0 0.25 * $module rgba(black, 0.1);
 
@@ -162,6 +163,8 @@ small {
           margin: 0;
           list-style: none;
 
+          display: flex;
+
           .button {
             background-color: white;
             color: #999;
@@ -185,7 +188,7 @@ small {
       flex: 1 1 75%;
       position: relative;
 
-      > * {
+      > div > * {
         margin-left: auto;
         margin-right: auto;
         max-width: $small-screen-threshold;

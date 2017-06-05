@@ -6,6 +6,7 @@
   background-color: $color-background-button;
   background-position: center;
   background-repeat: no-repeat;
+  background-size: auto 100%;
 
   color: rgba(white, 0.8);
   cursor: pointer;
@@ -42,7 +43,7 @@
 }
 
 form .button {
-  border-radius: 0.125 * $module;
+  border-radius: 1.25 * $module;
 }
 
 button {
@@ -68,20 +69,17 @@ button {
 .add-button .button {
   background-image: url("/images/plus.svg");
   border-radius: 50%;
-  box-shadow: 2px 2px 4px #bac;
-
-  &.clicked {
-    box-shadow: 2px 2px 4px #bac, 0 0 0 0.5 * $module rgba(black, 0.8) inset;
-  }
 }
 
 .close-button {
-  padding: 0;
+  margin: 0.75 * $module;
 
   > .button {
     background-color: $color-background-button-secondary;
     background-image: url("/images/ex.svg");
-    width: 2.5 * $module;
+    border-radius: 50%;
+    height: 2 * $module;
+    width: 2 * $module;
 
     &:hover {
       background-color: #c0c0c0;
@@ -90,11 +88,19 @@ button {
 }
 
 .menu-button .button {
-  background-image: url("/images/menu.svg");
+  background-color: $color-background-button-secondary;
+  background-image: url("/images/conversations.svg");
+
+  border-radius: 50%;
 }
 
 .submit.button, button[type=submit] {
   background-image: url("/images/submit.svg");
+
+  &.progress {
+    @extend .button.progress;
+    background-position: center;
+  }
 }
 
 form.show-errors .button, .button.error {

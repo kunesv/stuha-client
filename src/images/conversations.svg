@@ -14,7 +14,7 @@
    viewBox="0 0 100 100"
    version="1.1"
    id="svg8"
-   sodipodi:docname="ex.svg"
+   sodipodi:docname="conversations.svg"
    inkscape:version="0.92.1 r15371">
   <defs
      id="defs2" />
@@ -49,7 +49,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -59,14 +59,9 @@
      id="layer1"
      transform="translate(0,-197)">
     <path
-       style="fill:none;stroke:#ffffff;stroke-width:2.64583302;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 63.088561,233.91144 36.911439,260.08856"
-       id="path4492"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:none;stroke:#ffffff;stroke-width:2.64583302;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 63.088561,260.08856 36.911439,233.91144"
-       id="path4492-4"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:2.11666656;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 43.615712,227.47365 -5.795728,1.52558 5.184038,5.18404 -1.234712,4.60742 -4.607059,1.23435 -5.141284,-5.14129 -1.525942,5.59439 7.508027,7.57527 4.390008,-1.15542 18.085117,18.08511 a 5.2916663,5.2916663 0 0 0 7.483546,0 5.2916663,5.2916663 0 0 0 0,-7.48354 l -18.040535,-18.04054 1.202555,-4.4101 z"
+       id="path5012"
        inkscape:connector-curvature="0" />
   </g>
 </svg>

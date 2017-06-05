@@ -3,7 +3,7 @@ form {
   padding: 0;
 
   > section {
-    border-radius: .17rem;
+    border-radius: 1.25 * $module;
     display: flex;
     flex-direction: column;
 
@@ -15,10 +15,12 @@ form {
       padding: 0.25 * $module;
     }
 
-    transition: box-shadow 200ms;
+    transition: background 300ms;
+
+    background: linear-gradient(-25deg, transparent, transparent, transparent);
 
     &.error {
-      box-shadow: 0 0 $module rgba(#c33, 0.33) inset;
+      background: linear-gradient(-25deg, transparent, transparent, transparent, #f09090);
 
       &.blink {
         box-shadow: 0 0 $module rgba(#c33, 0.03) inset;
@@ -64,10 +66,10 @@ form {
 input {
   background-color: white;
   border: 0 none;
-  border-radius: 0.125 * $module;
+  border-radius: 0;
   display: block;
   outline: 0 none;
-  padding: 0.5 * $module;
+  padding: $module-half;
 
   font-family: $base-font-family;
   font-size: $base-font-size;

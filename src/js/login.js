@@ -59,7 +59,7 @@ var Login = {
                 <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
                 <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
             </section>
-            <p><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>           
+            <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>           
          </form>
     </section>
 </main>`;

@@ -51,6 +51,10 @@ button {
 
   border: 0 none;
   width: 100%;
+
+  &.clicked {
+    @extend .button.clicked;
+  }
 }
 
 .scale-button {
@@ -72,14 +76,14 @@ button {
 }
 
 .close-button {
-  margin: 0.75 * $module;
+  margin: $module-half;
 
   > .button {
     background-color: $color-background-button-secondary;
     background-image: url("/images/ex.svg");
     border-radius: 50%;
-    height: 2 * $module;
-    width: 2 * $module;
+    height: 2.5 * $module;
+    width: 2.5 * $module;
 
     &:hover {
       background-color: #c0c0c0;
@@ -96,6 +100,12 @@ button {
 
 .submit.button, button[type=submit] {
   background-image: url("/images/submit.svg");
+  background-size: 90%;
+
+  height: 3 * $module;
+  width: 3 * $module;
+
+  border-radius: 1.5 * $module;
 
   &.progress {
     @extend .button.progress;

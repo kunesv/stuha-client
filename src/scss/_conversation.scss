@@ -1,0 +1,89 @@
+header {
+  .conversation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon {
+      height: 2.5 * $module;
+      width: 2.5 * $module;
+
+      background-color: transparent;
+      background-image: url("/images/conversation.svg");
+      border-radius: 50%;
+    }
+  }
+}
+
+main > section > .conversation-name {
+  margin-top: 3.5 * $module;
+
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+
+  min-height: $module;
+
+  @media (min-width: $small-screen-threshold) {
+    display: none;
+  }
+}
+
+.conversations {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  display: flex;
+  align-items: left;
+  flex-wrap: wrap;
+
+  li.button {
+    height: auto;
+    flex-direction: column;
+    align-items: center;
+
+    flex: 1 0 2.5 * $module;
+
+    padding: $module-half;
+
+    transition: background-color 300ms;
+
+    background: transparent;
+
+    > a {
+      background: transparent url("/images/conversation.svg") center no-repeat;
+      background-size: 100%;
+      height: 2.5 * $module;
+      width: 2.5 * $module;
+
+      border-radius: 50%;
+
+      transition: box-shadow 100ms;
+    }
+
+    .conversation-name {
+      color: #999;
+      font-size: 12px;
+      padding: $module-quarter;
+      text-align: center;
+    }
+
+    &.clicked {
+      box-shadow: none;
+
+      > a {
+        box-shadow: 0 0 0 0.5 * $module rgba(black, 0.5) inset;
+        background-image: url("/images/conversation-active.svg"), url("/images/conversation.svg");
+      }
+    }
+
+    &.active {
+      //background-color: #f6f6f6;
+
+      > a {
+        background-image: url("/images/conversation-active.svg"), url("/images/conversation.svg");
+      }
+    }
+  }
+}

@@ -1,33 +1,3 @@
-header {
-  .conversation {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .icon {
-      height: 2.5 * $module;
-      width: 2.5 * $module;
-
-      background-color: transparent;
-      background-image: url("/images/conversation.svg");
-      border-radius: 50%;
-    }
-  }
-}
-
-.conversation-name {
-  margin-top: 3.5 * $module;
-
-  color: #999;
-  font-size: 12px;
-  text-align: center;
-
-
-  @media (min-width: $small-screen-threshold) {
-    display: none;
-  }
-}
-
 .messages > article {
   &:first-child {
     margin-top: 1.5 * $module;
@@ -61,6 +31,10 @@ article {
 
     transition: opacity 600ms;
 
+    @media (max-width: $small-screen-threshold) {
+      flex: 0 0 3 * $module;
+    }
+
     .icon {
       background-color: white;
       background-position: center;
@@ -71,6 +45,10 @@ article {
       margin-right: $module;
       text-align: center;
       width: 2.5 * $module;
+
+      @media (max-width: $small-screen-threshold) {
+        margin-right: $module-half;
+      }
 
       &:hover {
         background-color: white;
@@ -97,7 +75,6 @@ article {
 
         &.button-row {
           background: transparent;
-          box-shadow: none;
           margin-top: 0.25 * $module;
           padding: 0;
 
@@ -159,9 +136,9 @@ article {
 
               vertical-align: middle;
 
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
+              //overflow: hidden;
+              //white-space: nowrap;
+              //text-overflow: ellipsis;
 
               width: calc(100% - #{1.7501 * $module});
 
@@ -247,6 +224,10 @@ article {
 
     > header > .icon {
       margin: 0 0 0 $module;
+
+      @media (max-width: $small-screen-threshold) {
+        margin-left: $module-half;
+      }
     }
   }
 
@@ -307,9 +288,6 @@ article {
 
   &.placeholder {
     p {
-      background-image: url("/images/progress.svg");
-      background-repeat: no-repeat;
-      background-position: left center;
       height: $module;
       width: 3 * $module;
     }
@@ -351,22 +329,32 @@ article.my > main > section > article.replyTo {
   transition: transform 300ms $animation-curve;
   transform: scale3d(1, 1, 1);
 
-  background: linear-gradient(50deg, transparent, transparent, $color-background-message);
-
-  border-radius: 0 $module 1.25 * $module 0;
+  background: linear-gradient(215deg, $color-background-message, transparent 3 * $module);
 
   display: flex;
   flex-direction: column;
-  align-items: right;
+
 
   margin-left: -3.5 * $module;
   margin-bottom: 0.125 * $module;
+
+  @media (max-width: $small-screen-threshold) {
+    margin-left: -3 * $module;
+  }
 
   &.progress {
     transform: scale3d(0, 0, 1);
   }
 
+  article > main {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   > .close-button {
+    display: flex;
+    justify-content: right;
+
     margin: $module-quarter;
 
     .button {
@@ -381,7 +369,13 @@ article.my > main > section > article.replyTo {
 
 article.my {
   .replyToWrapper {
+    align-items: right;
+
     margin-left: 0;
     margin-right: -3.5 * $module;
+
+    @media (max-width: $small-screen-threshold) {
+      margin-right: -3 * $module;
+    }
   }
 }

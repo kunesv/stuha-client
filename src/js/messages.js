@@ -1,22 +1,21 @@
 var Messages = {
     init: () => {
         let template = `<header>
-    <span class="menu-button"><a class="button" data-click="Messages.menu.toggle"></a></span>
+    <span class="menu-button"><!--<a class="button"></a>--></span>
     <span class="conversation" >
-        <span class="icon button"></span>
+        <span class="icon button" data-click="Messages.menu.toggle"></span>
     </span>
     <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
 </header>
 
 <main>
-    <aside>
-        <header></header>
+    <aside> 
         <section></section>
     </aside>
     <section>
         <div class="conversation-name " data-content="currentConversation"></div>
         <div class="messages"></div>
-        <div>Load More? </div>
+        <div>Load more ... ve výstavbě</div>
     </section>
 </main>`;
 
@@ -383,7 +382,7 @@ var Messages = {
                 <!--<li class="gps button"></li>-->
             </ul>           
         </section>              
-        <p><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>
+        <p class="button-row"><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>
     </form>
 </section>`;
 
@@ -656,27 +655,35 @@ var Messages = {
     menu: {
         load: () => {
             let template = `
-<ul class="conversations"></ul>
+<ul class="conversations">
+    <li class="button">
+        <a></a>
+        <span class="conversation-name">Začít novou</span>
+    </li>
+</ul>
 <ul>    
-    <li><a class="button" data-click="Login.logout"><span>Logout</span></a></li>
+    <!-- Not HERE. <li><a class="button" data-click="Login.logout"><span>Logout</span></a></li>-->
 </ul>`;
+            let conversationTemplate = `<li class="button" data-click="Conversations.select">
+    <a></a>
+    <span class="conversation-name"></span>
+</li>`;
 
 
             document.querySelector('aside section').insertAdjacentHTML('afterBegin', template);
 
             let conversations = document.querySelector('aside .conversations');
+
             Conversations.currentConversations.forEach((conversation) => {
-                let li = document.createElement('li');
-                let a = document.createElement('a');
-                a.classList.add('button');
-                a.setAttribute('data-click', 'Conversations.select');
-                a.setAttribute('data-conversation-id', conversation.id);
-                a.textContent = conversation.title;
-                li.appendChild(a);
-                conversations.appendChild(li);
+                let c = document.createRange().createContextualFragment(conversationTemplate);
+                c.querySelector('.button').setAttribute('data-conversation-id', conversation.id);
+                c.querySelector('.conversation-name').textContent = conversation.title;
+
+
+                conversations.appendChild(c);
             });
 
-            Buttons.init(document.body.querySelectorAll('aside .button'));
+            Buttons.init(conversations.querySelectorAll('.button'));
         },
         show: () => {
             document.querySelector('.content').classList.add('moved');
@@ -697,7 +704,7 @@ var Messages = {
             if (active) {
                 active.classList.remove('active');
             }
-            conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).parentElement.classList.add('active');
+            conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).classList.add('active');
         }
     },
 };

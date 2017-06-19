@@ -18,17 +18,22 @@
 
     @media (min-width: $small-screen-threshold + 1) {
       margin-top: 7 * $module;
+
+      p {
+        margin: $module-half;
+      }
     }
 
     p {
-      margin-top: 0.5 * $module;
+      margin: $module-half;
     }
 
     label {
       color: #666;
+      font-size: 12px;
     }
 
-    input, button {
+    input {
       width: 100%;
 
       &[type=checkbox] {

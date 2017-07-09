@@ -329,8 +329,6 @@ article.my > main > section > article.replyTo {
   transition: transform 300ms $animation-curve;
   transform: scale3d(1, 1, 1);
 
-  background: linear-gradient(215deg, $color-background-message, transparent 3 * $module);
-
   display: flex;
   flex-direction: column;
 
@@ -355,7 +353,7 @@ article.my > main > section > article.replyTo {
     display: flex;
     justify-content: right;
 
-    margin: $module-quarter;
+    margin: 0 0 $module-quarter;
 
     .button {
       border: 0 none;

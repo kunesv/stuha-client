@@ -12,8 +12,6 @@ const uglify = require('gulp-uglify');
 const watch = require('gulp-watch');
 const webserver = require('gulp-webserver');
 const svgmin = require('gulp-svgmin');
-// for packaging purposes ... has to be set up in hpptd configuration first
-const zopfli = require('gulp-zopfli');
 
 const paths = {
     images: {

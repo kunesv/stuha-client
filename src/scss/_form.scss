@@ -14,43 +14,47 @@ form {
       margin: 0.25 * $module;
       padding: 0.25 * $module;
     }
-
-    transition: background 300ms;
-
-    background: linear-gradient(-25deg, transparent, transparent, transparent);
-
-    &.error {
-      background: linear-gradient(-25deg, transparent, transparent, transparent, #f09090);
-
-      &.blink {
-        box-shadow: 0 0 $module rgba(#c33, 0.03) inset;
-      }
-    }
-
-    > .error {
-      color: #c33;
-      font-size: 13px;
-      padding: 0.25 * $module;
-    }
   }
 
   > p {
-    margin: $module;
+    margin: $module-half;
+
+    position: relative;
 
     @media (max-width: $small-screen-threshold) {
       margin: 0.5 * $module;
+    }
+
+    span {
+      display: flex;
+
+
+      &.error {
+        display: none;
+
+        background-color: $color-background-message;
+        border-radius: 0 $module-half $module-half $module-half;
+        font-size: 13px;
+        padding: 0 $module-half;
+      }
+    }
+
+    &.error {
+      span.error {
+        display: inline-block;
+      }
     }
   }
 
   .error-message {
     opacity: 0;
     max-height: 0;
-    margin: 0 0.5 * $module;
-    padding: 0.5 * $module;
-    padding-left: 2.5 * $module;
+    margin: 0 $module-half;
+    padding: $module-half 0.75 * $module;
 
     background-color: $color-background-message;
-    border-radius: 0.125 * $module;
+    border-radius: 0 $module-half $module-half $module-half;
+    //font-size: 13px;
 
     transition: opacity 300ms ease-in, max-height 300ms ease-out, margin 300ms ease-in-out;
   }
@@ -58,7 +62,7 @@ form {
   &.show-errors .error-message {
     opacity: 1;
     max-height: 200px;
-    margin-bottom: 0.5 * $module;
+    margin-bottom: $module-half;
   }
 
 }

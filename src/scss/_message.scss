@@ -17,7 +17,6 @@ article {
 
   a {
     border-bottom: 1px solid rgba($color-link, 0.25);
-
     transition: border-color 300ms;
 
     &:hover {
@@ -240,6 +239,10 @@ article {
 
     > main > section > article.replyTo {
       margin-left: -3.5 * $module;
+
+      @media (max-width: $small-screen-threshold) {
+        margin-left: -3 * $module;
+      }
     }
     margin-bottom: 0.125 * $module;
 
@@ -297,6 +300,10 @@ article {
 article.my > main > section > article.replyTo {
   margin-left: 0;
   margin-right: -3.5 * $module;
+
+  @media (max-width: $small-screen-threshold) {
+    margin-right: -3 * $module;
+  }
 }
 
 .seperator {
@@ -332,9 +339,8 @@ article.my > main > section > article.replyTo {
   display: flex;
   flex-direction: column;
 
-
   margin-left: -3.5 * $module;
-  margin-bottom: 0.125 * $module;
+  margin-bottom: $module-quarter;
 
   @media (max-width: $small-screen-threshold) {
     margin-left: -3 * $module;
@@ -347,11 +353,19 @@ article.my > main > section > article.replyTo {
   article > main {
     margin-left: 0;
     margin-right: 0;
+
+    > section > p:not(.replyTo) {
+      box-shadow: 0 0  $module-quarter / 2 $color-background;
+    }
+    > section > p.replyTo a {
+      box-shadow: 0 0  $module-quarter / 2 $color-background;
+    }
+
   }
 
   > .close-button {
     display: flex;
-    justify-content: right;
+    justify-content: flex-end;
 
     margin: 0 0 $module-quarter;
 
@@ -367,7 +381,7 @@ article.my > main > section > article.replyTo {
 
 article.my {
   .replyToWrapper {
-    align-items: right;
+    align-items: flex-end;
 
     margin-left: 0;
     margin-right: -3.5 * $module;

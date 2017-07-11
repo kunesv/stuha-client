@@ -70,8 +70,6 @@ small {
 
       position: absolute;
 
-      padding: $module-half 0 0;
-
       width: 100%;
       z-index: 400;
 
@@ -80,7 +78,8 @@ small {
 
         color: #666;
         line-height: $module;
-        padding: 0 0.5 * $module;
+        padding-left: $module-half;
+        padding-right: $module-half;
         text-align: center;
 
         &.menu-button {
@@ -93,6 +92,7 @@ small {
 
         &.add-button {
           flex: 0 0 2.5 * $module;
+          padding-right: 0;
         }
       }
       > main > aside {

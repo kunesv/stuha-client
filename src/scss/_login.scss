@@ -19,13 +19,6 @@
     @media (min-width: $small-screen-threshold + 1) {
       margin-top: 7 * $module;
 
-      p {
-        margin: $module-half;
-      }
-    }
-
-    p {
-      margin: $module-half;
     }
 
     label {
@@ -41,11 +34,6 @@
         width: auto;
       }
     }
-
-    span {
-      display: flex;
-    }
-
   }
 
 }

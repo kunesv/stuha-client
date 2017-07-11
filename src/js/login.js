@@ -48,23 +48,34 @@ var Users = {
 };
 
 var Login = {
-    init: () => {
+    template: () => {
         let template = `<header>
 </header>
 <main>   
     <section id="login">   
-         <form data-click="Login.submit">
-            <section>               
-                <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off"/></span></p>
-                <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
-                <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
-            </section>
+         <form data-click="Login.submit">                       
+            <p>
+                <label>Přihlašovací jméno</label>
+                <span><input name="username" type="text" autocomplete="off" autofocus/></span>
+                <span class="error">Chybí přihlašovací jméno.</span>
+            </p>
+            <p>
+                <label>Heslo</label>
+                <span><input name="password" type="password"/></span>
+                <span class="error">Chybí heslo.</span>
+            </p>
+            
+            <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
+            
             <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>           
          </form>
     </section>
 </main>`;
 
-        document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
+        return document.createRange().createContextualFragment(template);
+    },
+    init: () => {
+        document.querySelector('.content').appendChild(Login.template());
 
         document.querySelector('input[name=username]').addEventListener('blur', Login.validations.username);
 
@@ -121,7 +132,7 @@ var Login = {
         add: (message) => {
             let template = `<p class="error-message">${message}</p>`;
             let form = document.querySelector('#login form');
-            form.querySelector('section').insertAdjacentHTML('afterEnd', template);
+            form.querySelector('.button-row').insertAdjacentHTML('beforeBegin', template);
             setTimeout(() => {
                 form.classList.add('show-errors');
             }, 10);
@@ -142,22 +153,12 @@ var Login = {
                 return;
             }
 
-            let template = `<div class="login-dialog">   
-    <main>
-        <section id="login">   
-             <form class="show-errors" data-click="Login.submit">
-                <p class="error-message"><b>Vy jste tu ještě?</b><br/>Mohli byste se znovu přihlásit?</p>
-                <section>                   
-                    <p><label>Přihlašovací jméno</label><span><input name="username" type="text" autocomplete="off" autofocus/></span></p>
-                    <p><label>Heslo</label><span><input name="password" type="password"/></span></p>
-                    <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
-                </section>
-                <p><button type="submit"></button></p>           
-             </form>
-        </section>
-    </main>
-</div>`;
-            document.body.insertAdjacentHTML('beforeend', template);
+            let dialog = document.createElement('div');
+            dialog.classList.add('login-dialog');
+            dialog.appendChild(Login.template());
+
+            document.body.appendChild(dialog);
+
             setTimeout(() => {
                 let dialogs = document.body.querySelectorAll('.login-dialog');
                 let dialog = dialogs[dialogs.length - 1];
@@ -200,39 +201,31 @@ var Login = {
             return valid;
         },
         username: () => {
-            let template = `<p class="error">Chybí přihlašovací jméno.</p>`;
-
             let valid = Login.values.username();
-            let section = document.querySelector('input[name=username]').parentNode.parentNode.parentNode;
+            let section = document.querySelector('input[name=username]').offsetParent;
             let error = section.classList.contains('error');
 
             if (!valid && !error) {
-                section.insertAdjacentHTML('beforeend', template);
                 section.classList.add('error');
             }
 
             if (valid && error) {
                 section.classList.remove('error');
-                section.removeChild(section.querySelector('.error'));
             }
 
             return valid;
         },
         password: () => {
-            let template = `<p class="error">A ještě heslo.</p>`;
-
             let valid = Login.values.password();
-            let section = document.querySelector('input[name=password]').parentNode.parentNode.parentNode;
+            let section = document.querySelector('input[name=password]').offsetParent;
             let error = section.classList.contains('error');
 
             if (!valid && !error) {
-                section.insertAdjacentHTML('beforeend', template);
                 section.classList.add('error');
             }
 
             if (valid && error) {
                 section.classList.remove('error');
-                section.removeChild(section.querySelector('.error'));
             }
 
             return valid;

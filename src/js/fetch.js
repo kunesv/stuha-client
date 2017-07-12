@@ -9,7 +9,6 @@ var Fetch = {
         } else if (response.status === 403) {
             Login.dialog.add();
         } else {
-            if (console) console.error(response);
             return Promise.reject(response);
         }
     },

@@ -1,6 +1,6 @@
 var Conversations = {
     lastConversation: {
-        conversation: null,
+        conversation: {},
         load: () => {
             if (!Conversations.lastConversation.conversation) {
                 Conversations.lastConversation.conversation = {

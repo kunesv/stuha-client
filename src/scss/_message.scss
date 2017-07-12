@@ -74,12 +74,16 @@ article {
 
         &.button-row {
           background: transparent;
-          margin-top: 0.25 * $module;
+          box-shadow: none;
           padding: 0;
 
+          justify-content: flex-start;
+
           .button {
-            border-radius: 0.125 * $module;
-            max-width: 6 * $module;
+            flex: 0 1 6 * $module;
+
+            border-radius: 0 $module $module $module;
+            height: 2 * $module;
           }
         }
 
@@ -390,4 +394,8 @@ article.my {
       margin-right: -3 * $module;
     }
   }
+}
+
+.load-more {
+  display: none;
 }

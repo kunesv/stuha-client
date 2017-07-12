@@ -15,7 +15,7 @@ var Messages = {
     <section>
         <div class="conversation-name " data-content="currentConversation"></div>
         <div class="messages"></div>
-        <div>Load more ... ve výstavbě</div>
+        <div class="load-more">Load more</div>
     </section>
 </main>`;
 
@@ -26,27 +26,18 @@ var Messages = {
 
         Messages.placeholders.add();
 
-        Users.loadUserDetails().then(() => {
-            return Conversations.load()
-        }).then(() => {
-            Messages.menu.load();
-            return Messages.load();
-        }).catch((error) => {
-            console.log("ERRORR #5"); // FIXME: handle this error
-            console.log(error);
-        });
+        Messages.reload();
 
         let content = document.querySelector('.content');
         Messages.swipe = new Swipe(content);
     },
-    ticking: false,
 
     load: (pageNo = 1) => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.conversation.title;
 
         Messages.menu.active();
 
-        fetch(`/api/messages?conversationId=${Conversations.lastConversation.conversation.id}&pageNo=${pageNo}`, {
+        return fetch(`/api/messages?conversationId=${Conversations.lastConversation.conversation.id}&pageNo=${pageNo}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
@@ -60,19 +51,6 @@ var Messages = {
                     Messages.empty.add();
                 }
             });
-        }).catch((error) => {
-            console.log(error);
-            let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
-            if (!Online.isOnline()) {
-                errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
-            } else {
-                if (error.status === 500) {
-                    errorMessage = 'Zdá se, že na serveru se objevily nějaké potíže.';
-                }
-            }
-            Messages.placeholders.removeAll();
-
-            Messages.failed.add(errorMessage);
         });
     },
 
@@ -80,7 +58,26 @@ var Messages = {
         Messages.message.removeAll();
         Messages.placeholders.add();
 
-        Messages.load(1);
+        Users.loadUserDetails().then(() => {
+            return Conversations.load();
+        }).then(() => {
+            Messages.menu.load();
+            return Messages.load();
+        }).catch(Messages.error);
+    },
+
+    error: (error) => {
+        let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
+        if (!Online.isOnline()) {
+            errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
+        } else {
+            if (error.status === 500) {
+                errorMessage = 'Zdá se, že na serveru se objevily nějaké potíže.';
+            }
+        }
+        Messages.placeholders.removeAll();
+
+        Messages.failed.add(errorMessage);
     },
 
     message: {
@@ -624,9 +621,9 @@ var Messages = {
     <header><div class="icon"></div></header>
     <main>
         <section>
-            <p><b>Stuha:</b> ${errorMessage}</p>
+            <p>${errorMessage}</p>
             <p class="button-row">
-                <a class="button" data-click="Messages.reload">Zkusit znovu</a>
+                <a class="secondary button" data-click="Messages.reload">Zkusit znovu</a>
             </p>
         </section>
     </main>

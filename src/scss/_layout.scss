@@ -92,7 +92,7 @@ small {
 
         &.add-button {
           flex: 0 0 2.5 * $module;
-          padding-right: 0;
+          padding: $module-half;
         }
       }
       > main > aside {

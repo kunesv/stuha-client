@@ -70,8 +70,13 @@ button {
   }
 }
 
-.add-button .button {
-  background-image: url("/images/plus.svg");
+.add-button {
+  > .button {
+    background-image: url("/images/plus.svg");
+    border-radius: 50%;
+    height: 2.5 * $module;
+    width: 2.5 * $module;
+  }
 }
 
 .close-button {

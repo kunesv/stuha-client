@@ -651,6 +651,10 @@ var Messages = {
 
     menu: {
         load: () => {
+            if(document.querySelector('aside .conversations')) {
+                return;
+            }
+
             let template = `
 <ul class="conversations">
     <li class="button">

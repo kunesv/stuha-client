@@ -57,12 +57,12 @@ var Login = {
             <p>
                 <label>Přihlašovací jméno</label>
                 <span><input name="username" type="text" autocomplete="off" autofocus/></span>
-                <span class="error">Chybí přihlašovací jméno.</span>
+                <span class="error">Tady chybí přihlašovací jméno.</span>
             </p>
             <p>
                 <label>Heslo</label>
                 <span><input name="password" type="password"/></span>
-                <span class="error">Chybí heslo.</span>
+                <span class="error">Tady chybí heslo.</span>
             </p>
             
             <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
@@ -77,12 +77,15 @@ var Login = {
     init: () => {
         document.querySelector('.content').appendChild(Login.template());
 
-        document.querySelector('input[name=username]').addEventListener('blur', Login.validations.username);
+        let username = document.querySelector('input[name=username]');
+        username.addEventListener('blur', Login.validations.username);
+        username.addEventListener('input', Login.validations.username);
 
         let password = document.querySelector('input[name=password]');
 
         password.addEventListener('focus', Login.validations.username);
         password.addEventListener('blur', Login.validations.password);
+        password.addEventListener('input', Login.validations.password);
 
         Buttons.initForms(document.querySelectorAll('form'));
     },

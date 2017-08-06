@@ -29,7 +29,23 @@ const paths = {
     ],
     // These files are for your app's JavaScript
     js: [
-        './src/**/*.js'
+        './src/js/registerServiceWorkers.js',
+
+        './src/js/fetch.js',
+        './src/js/datetime.js',
+        './src/js/online.js',
+        './src/js/buttons.js',
+        './src/js/textarea.js',
+        './src/js/swipe.js',
+        './src/js/validations.js',
+        './src/js/images.js',
+        './src/js/conversations.js',
+        './src/js/login.js',
+        './src/js/messages.js',
+        './src/js/mockMessages.js',
+    ],
+    sw: [
+        './src/*.js'
     ],
     app: [
         './src/index.html',
@@ -44,6 +60,9 @@ gulp.task('default', ['server'], function () {
 
     // Watch JavaScript
     gulp.watch(paths.js, ['uglify:app']);
+
+    // Watch JavaScript - Service Workers
+    gulp.watch(paths.sw, ['uglify:serviceWorkers']);
 
     // Watch static files
     gulp.watch(paths.app, ['copy:app']);
@@ -84,17 +103,25 @@ gulp.task('copy:svg', function () {
         .pipe(gulp.dest('./build'));
 });
 
-gulp.task('uglify', ['uglify:libs', 'uglify:app']);
+gulp.task('uglify', ['uglify:libs', 'uglify:app', 'uglify:serviceWorkers']);
 
 gulp.task('uglify:libs', function () {
     return gulp.src(paths.libs)
-        .pipe(uglify())
-        .pipe(gulp.dest('./build/js/lib/'));
+        .pipe(concat('lib.js'))
+        .pipe(gulp.dest('./build/js/'));
 });
 
 gulp.task('uglify:app', function () {
     return gulp.src(paths.js)
-    // .pipe(concat('app.js'))
+        .pipe(concat('app.js'))
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(gulp.dest('./build/js/'));
+});
+
+gulp.task('uglify:serviceWorkers', function () {
+    return gulp.src(paths.sw)
         .pipe(babel({
             presets: ['es2015']
         }))

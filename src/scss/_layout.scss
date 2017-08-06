@@ -47,10 +47,6 @@ small {
 
   transition: transform 300ms $animation-curve;
 
-  > header {
-    display: none;
-  }
-
   &.swiping {
     transition: initial;
   }
@@ -59,52 +55,74 @@ small {
 
     @media (min-width: $small-screen-threshold + 1px) {
       transform: translate3d(-25%, 0, 0);
+
+      header {
+        opacity: 0;
+      }
     }
 
   }
 
-  @media (max-width: $small-screen-threshold) {
-    > header {
-      display: flex;
-      justify-content: space-around;
+  > header {
+    display: flex;
 
+    transition: opacity 300ms;
+
+    span {
+      display: flex;
+      flex: 0 0 2.5 * $module;
+
+      > .button {
+        width: 100%;
+      }
+    }
+
+    &.brief {
       position: absolute;
+
+      justify-content: space-between;
 
       width: 100%;
       z-index: 400;
 
+      @media (min-width: $small-screen-threshold + 1px) {
+        display: none;
+      }
+
       > span {
-        flex-grow: 1;
+        padding: $module-half $module-half 0;
 
-        color: #666;
-        line-height: $module;
-        padding-left: $module-half;
-        padding-right: $module-half;
-        text-align: center;
-
-        &.menu-button {
-          flex: 0 0 2.5 * $module;
-
-          .button {
-            color: #666;
-          }
-        }
-
-        &.add-button {
-          flex: 0 0 2.5 * $module;
-          padding: $module-half;
+        > .button {
+          border-radius: 50%;
         }
       }
-      > main > aside {
-        transform: translate3d(0, 0, 0);
-      }
+
     }
 
-    &.moved {
+    &.full {
+      aside {
+        flex: 0 0 25%;
+
+        background-color: #ececec;
+      }
+      section {
+        display: flex;
+        flex: 0 0 75%;
+      }
+      @media (max-width: $small-screen-threshold) {
+        display: none;
+      }
+    }
+  }
+
+  > main > aside {
+    transform: translate3d(0, 0, 0);
+  }
+
+  &.moved {
+    @media (max-width: $small-screen-threshold) {
       transform: translate3d(75%, 0, 0);
-
     }
-
   }
 
   > main {
@@ -115,7 +133,9 @@ small {
 
     height: 100%;
 
-    box-shadow: 0 0 0.25 * $module rgba(black, 0.1);
+    @media (max-width: $small-screen-threshold) {
+      box-shadow: 0 0 0.25 * $module rgba(black, 0.1);
+    }
 
     > aside {
       flex: 1 1 25%;

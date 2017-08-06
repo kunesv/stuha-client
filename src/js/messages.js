@@ -1,11 +1,20 @@
 var Messages = {
     init: () => {
-        let template = `<header>
-    <span class="menu-button"><!--<a class="button"></a>--></span>
-    <span class="conversation" >
-        <span class="icon button" data-click="Messages.menu.toggle"></span>
-    </span>
+        let template = `<header class="brief">
+    <span class="menu-button"><a class="icon button" data-click="Messages.menu.toggle"></a></span>
+    <span class="conversation"><a class="icon button" ></a></span>
     <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
+</header>
+
+<header class="full">
+    <aside>
+        
+    </aside>
+    <section>
+        <span><a class="secondary button" data-click="Messages.message.dialog.add"></a></span>
+        <span><a class="secondary button" data-click="Messages.message.dialog.add"></a></span>
+        <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
+    </section>
 </header>
 
 <main>

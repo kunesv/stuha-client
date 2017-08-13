@@ -7,13 +7,8 @@ form {
     display: flex;
     flex-direction: column;
 
-    margin: 0.25 * $module;
-    padding: 0.25 * $module;
-
-    @media (max-width: $small-screen-threshold) {
-      margin: 0.25 * $module;
-      padding: 0.25 * $module;
-    }
+    margin: $module-half 0;
+    padding: 0 $module-half;
   }
 
   > p {
@@ -24,10 +19,11 @@ form {
     @media (max-width: $small-screen-threshold) {
       margin: 0.5 * $module;
     }
+  }
 
+  p {
     span {
       display: flex;
-
 
       &.error {
         display: none;
@@ -44,6 +40,13 @@ form {
       span.error {
         display: inline-block;
       }
+    }
+  }
+
+  section > p.error {
+    text-align: right;
+    span.error {
+      border-radius: $module 0 $module $module;
     }
   }
 

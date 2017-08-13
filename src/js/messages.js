@@ -2,7 +2,7 @@ var Messages = {
     init: () => {
         let template = `<header class="brief">
     <span class="menu-button"><a class="icon button" data-click="Messages.menu.toggle"></a></span>
-    <span class="conversation"><a class="icon button" ></a></span>
+    <span class="conversation"><a class="icon button" data-click="Messages.menuConversation.show"></a></span>
     <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
 </header>
 
@@ -11,8 +11,7 @@ var Messages = {
         
     </aside>
     <section>
-        <span><a class="secondary button" data-click="Messages.message.dialog.add"></a></span>
-        <span><a class="secondary button" data-click="Messages.message.dialog.add"></a></span>
+        <span class="conversation-member-add"><a class="secondary button" data-click="Conversations.member.add"></a></span>
         <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
     </section>
 </header>
@@ -26,11 +25,20 @@ var Messages = {
         <div class="messages"></div>
         <div class="load-more">Load more</div>
     </section>
-</main>`;
+</main>
+
+<section class="conversation-menu">
+    <header>
+        <span class="close-button"><a class="button" data-click="Messages.menuConversation.hide"></a></span>
+    </header>
+    <ul>
+        <li class="conversation-member-add"><button class="button secondary" data-click="Conversations.member.add"></button></li>
+    </ul>
+</section>`;
 
         document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
 
-        let headerButtons = document.querySelectorAll('.content > header .button');
+        let headerButtons = document.querySelectorAll('.content .button');
         Buttons.init(headerButtons);
 
         Messages.placeholders.add();
@@ -59,6 +67,8 @@ var Messages = {
                 if (!messages.length) {
                     Messages.empty.add();
                 }
+
+                document.querySelector('.content').classList.remove('loading');
             });
         });
     },
@@ -360,6 +370,7 @@ var Messages = {
 
         removeAll: () => {
             document.querySelector('.messages').innerHTML = '';
+            document.querySelector('.content').classList.add('loading');
         },
 
         dialog: {
@@ -513,7 +524,7 @@ var Messages = {
                     return valid;
                 },
                 icons: () => {
-                    let template = `<p class="error">Vyberte ikonku.</p>`;
+                    let template = `<p class="error"><span class="error">Měla bych vybrat ikonku.</span></p>`;
 
                     let valid = Messages.message.dialog.values.icon();
                     let section = document.querySelector('.message-dialog .icons').parentNode;
@@ -523,7 +534,7 @@ var Messages = {
                     return valid;
                 },
                 content: () => {
-                    let template = `<p class="error">A ještě připojte nějaký obsah ...</p>`;
+                    let template = `<p class="error"><span class="error">A nějaký obsah ...</span></p>`;
 
                     let valid = Messages.message.dialog.values.content() || (Messages.message.dialog.values.images() && Messages.message.dialog.values.images().length);
                     let section = document.querySelector('.message-dialog .textarea').parentNode;
@@ -660,7 +671,7 @@ var Messages = {
 
     menu: {
         load: () => {
-            if(document.querySelector('aside .conversations')) {
+            if (document.querySelector('aside .conversations')) {
                 return;
             }
 
@@ -696,6 +707,7 @@ var Messages = {
             Buttons.init(conversations.querySelectorAll('.button'));
         },
         show: () => {
+            document.querySelector('.content').classList.remove('moved-down');
             document.querySelector('.content').classList.add('moved');
         },
         hide: () => {
@@ -717,4 +729,14 @@ var Messages = {
             conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).classList.add('active');
         }
     },
+    menuConversation: {
+        show: () => {
+            document.querySelector('.content').classList.add('dialog');
+            document.querySelector('.conversation-menu').classList.add('active');
+        },
+        hide: () => {
+            document.querySelector('.content').classList.remove('dialog');
+            document.querySelector('.conversation-menu').classList.remove('active');
+        }
+    }
 };

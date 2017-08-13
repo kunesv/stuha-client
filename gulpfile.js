@@ -29,23 +29,10 @@ const paths = {
     ],
     // These files are for your app's JavaScript
     js: [
-        './src/js/registerServiceWorkers.js',
-
-        './src/js/fetch.js',
-        './src/js/datetime.js',
-        './src/js/online.js',
-        './src/js/buttons.js',
-        './src/js/textarea.js',
-        './src/js/swipe.js',
-        './src/js/validations.js',
-        './src/js/images.js',
-        './src/js/conversations.js',
-        './src/js/login.js',
-        './src/js/messages.js',
-        './src/js/mockMessages.js',
+        './src/js/*.js'
     ],
     sw: [
-        './src/*.js'
+        './src/js/sw/*.js'
     ],
     app: [
         './src/index.html',
@@ -107,13 +94,13 @@ gulp.task('uglify', ['uglify:libs', 'uglify:app', 'uglify:serviceWorkers']);
 
 gulp.task('uglify:libs', function () {
     return gulp.src(paths.libs)
-        .pipe(concat('lib.js'))
-        .pipe(gulp.dest('./build/js/'));
+        // .pipe(concat('lib.js'))
+        .pipe(gulp.dest('./build/js/lib/'));
 });
 
 gulp.task('uglify:app', function () {
     return gulp.src(paths.js)
-        .pipe(concat('app.js'))
+        // .pipe(concat('app.js'))
         .pipe(babel({
             presets: ['es2015']
         }))
@@ -122,6 +109,7 @@ gulp.task('uglify:app', function () {
 
 gulp.task('uglify:serviceWorkers', function () {
     return gulp.src(paths.sw)
+        .pipe(concat('service-worker.js'))
         .pipe(babel({
             presets: ['es2015']
         }))

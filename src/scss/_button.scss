@@ -110,6 +110,14 @@ form.show-errors .button, .button.error {
 
 .secondary.button {
   background-color: $color-background-button-secondary;
+
+  &:hover {
+    background-color: #c0c0c0;
+  }
+}
+
+.conversation-member-add .button {
+  background-image: url("/images/conversation-member-add.svg");
 }
 
 .close-button .button {
@@ -120,4 +128,9 @@ form.show-errors .button, .button.error {
 .submit.button, button[type=submit] {
   background-image: url("/images/submit.svg");
   background-size: auto 100%;
+}
+
+.conversation .button {
+  background-color: transparent;
+  background-image: url("/images/conversation-settings.svg");
 }

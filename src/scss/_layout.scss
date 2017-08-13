@@ -56,7 +56,7 @@ small {
     @media (min-width: $small-screen-threshold + 1px) {
       transform: translate3d(-25%, 0, 0);
 
-      header {
+      & > header .button {
         opacity: 0;
       }
     }
@@ -66,13 +66,13 @@ small {
   > header {
     display: flex;
 
-    transition: opacity 300ms;
-
     span {
       display: flex;
       flex: 0 0 2.5 * $module;
 
       > .button {
+        transition: opacity 300ms;
+
         width: 100%;
       }
     }
@@ -104,15 +104,22 @@ small {
         flex: 0 0 25%;
 
         background-color: #ececec;
+        border-right: 1px solid #e5e5e5;
       }
       section {
         display: flex;
         flex: 0 0 75%;
+
+        justify-content: space-between;
       }
       @media (max-width: $small-screen-threshold) {
         display: none;
       }
     }
+  }
+
+  &.loading > header .button {
+    opacity: 0;
   }
 
   > main > aside {

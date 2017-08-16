@@ -88,23 +88,14 @@ small {
       @media (min-width: $small-screen-threshold + 1px) {
         display: none;
       }
-
-      > span {
-        padding: $module-half $module-half 0;
-
-        > .button {
-          border-radius: 50%;
-        }
-      }
-
     }
 
     &.full {
       aside {
         flex: 0 0 25%;
 
-        background-color: #ececec;
-        border-right: 1px solid #e5e5e5;
+        background-color: #e6e6e6;
+        border-right: 1px solid #e0e0e0;
       }
       section {
         display: flex;
@@ -152,7 +143,7 @@ small {
 
       background-color: white;
 
-      border-right: 1px solid #e5e5e5;
+      border-right: 1px solid #e0e0e0;
 
       @media (max-width: $small-screen-threshold) {
         border-right: 0 none;
@@ -183,7 +174,7 @@ small {
 
         height: 100%;
 
-        background-color: #ececec;
+        background-color: #e6e6e6;
         box-shadow: 0 0 rgba(black, 0);
       }
     }

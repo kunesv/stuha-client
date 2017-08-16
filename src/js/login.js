@@ -119,7 +119,7 @@ var Login = {
                     errorMessage = '<b>Přihlášení se nezdařilo</b><br/>Zkontrolujte přihlašovací jméno a heslo.';
                 } else {
                     if (!Online.isOnline()) {
-                        errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
+                        errorMessage = 'Zdá se, že jste mimo signál Internetu.';
                     } else {
                         if (error.status === 500) {
                             errorMessage = 'Zdá se, že na serveru se objevily nějaké potíže.';

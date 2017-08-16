@@ -15,7 +15,7 @@ var Datetime = {
 
     formatTime: (date) => {
         try {
-            return ('0' + date.getHours()).slice(-2) + '.' + ('0' + date.getMinutes()).slice(-2);
+            return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
         } catch (e) {
             console.log(e);
         }

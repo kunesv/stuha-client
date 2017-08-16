@@ -62,35 +62,26 @@ article {
   > main {
     margin-right: 5 * $module;
 
+    max-width: calc(100% - #{3.5 * $module});;
+
     @media (max-width: $small-screen-threshold) {
       margin-right: 0;
+      max-width: calc(100% - #{3 * $module});;
     }
 
     > section {
       > p {
-        background: $color-background-message;
-        border-radius: 0 $border-radius-message $border-radius-message 0;
-        padding: $module-half 0.75 * $module;
 
-        &.button-row {
-          background: transparent;
-          box-shadow: none;
-          padding: 0;
+        &.plain-text {
+          background: $color-background-message;
+          border-radius: 0 $border-radius-message $border-radius-message 0;
+          padding: $module-half 0.75 * $module;
 
-          justify-content: flex-start;
-
-          .button {
-            flex: 0 1 6 * $module;
-
-            border-radius: 0 $module $module $module;
-            height: 2 * $module;
-          }
+          display: inline-block;
+          text-align: left;
         }
 
         &.replyTo {
-          background-color: transparent;
-          padding: 0;
-
           transition: transform 300ms $animation-curve, max-height 300ms 300ms;
           transform: scale3d(1, 1, 1);
 
@@ -109,9 +100,10 @@ article {
             height: auto;
             outline: 0 none;
             padding: $module-quarter 0.75 * $module $module-quarter $module-quarter;
-            text-align: left;
 
             transition: background-color 300ms, box-shadow 100ms;
+
+            max-width: calc(100% - #{1.7501 * $module});
 
             &:hover {
               background-color: #d0d0d0;
@@ -139,11 +131,11 @@ article {
 
               vertical-align: middle;
 
-              //overflow: hidden;
-              //white-space: nowrap;
-              //text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: pre;
+              text-overflow: ellipsis;
 
-              width: calc(100% - #{1.7501 * $module});
+              max-width: calc(100% - #{1.7501 * $module});
 
               transition: border-color 300ms;
 
@@ -190,6 +182,8 @@ article {
       }
 
       > section {
+        text-align: right;
+
         > p {
           border-radius: $border-radius-message 0 0 $border-radius-message;
           background-color: $color-background-my-message;
@@ -197,7 +191,6 @@ article {
 
           &.replyTo {
             background-color: transparent;
-            text-align: right;
 
             > a {
               border-radius: $border-radius-message 0 0 $border-radius-message;
@@ -237,9 +230,6 @@ article {
   &.replyTo {
     transition: transform 300ms $animation-curve;
     transform: scale3d(1, 1, 1);
-
-    left: 0;
-    right: 0;
 
     > main > section > article.replyTo {
       margin-left: -3.5 * $module;

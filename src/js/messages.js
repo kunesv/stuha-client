@@ -3,7 +3,7 @@ var Messages = {
         let template = `<header class="brief">
     <span class="menu-button"><a class="icon button" data-click="Messages.menu.toggle"></a></span>
     <span class="conversation"><a class="icon button" data-click="Messages.menuConversation.show"></a></span>
-    <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
+    <span class="add-button"><a class="button" data-click="Messages.message.dialog.show"></a></span>
 </header>
 
 <header class="full">
@@ -12,7 +12,7 @@ var Messages = {
     </aside>
     <section>
         <span class="conversation-member-add"><a class="secondary button" data-click="Conversations.member.add"></a></span>
-        <span class="add-button"><a class="button" data-click="Messages.message.dialog.add"></a></span>
+        <span class="add-button"><a class="button" data-click="Messages.message.dialog.show"></a></span>
     </section>
 </header>
 
@@ -25,25 +25,59 @@ var Messages = {
         <div class="messages"></div>
         <div class="load-more">Load more</div>
     </section>
-</main>
+</main>`;
+
+        document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
+
+        let dialogs = `<section class="message-dialog">
+    <header>
+        <span class="close-button"><a class="button" data-click="Messages.message.dialog.hide"></a></span>
+    </header>
+    <form>
+        <section>
+            <ul class="icons"></ul>
+            <p>
+                <span class="error">Měla bych vybrat ikonku.</span>
+            </p>           
+        </section>       
+        <section>           
+            <textarea class="textarea"></textarea>
+            <ul class="buttons">
+                <li class="image button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
+                <!--<li class="gps button"></li>-->
+            </ul>     
+            <p>
+                <span class="error">A nějaký obsah ...</span>
+            </p>      
+        </section>              
+        <p class="button-row"><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>
+    </form>
+</section>
 
 <section class="conversation-menu">
     <header>
         <span class="close-button"><a class="button" data-click="Messages.menuConversation.hide"></a></span>
     </header>
-    <ul>
-        <li class="conversation-member-add"><button class="button secondary" data-click="Conversations.member.add"></button></li>
+    <ul class="menu">
+        <li class="button conversation-member-add" data-click="Conversations.member.add"><a></a><span>Přidat konverzující</span></li>
     </ul>
 </section>`;
 
-        document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
+        document.body.insertAdjacentHTML('beforeEnd', dialogs);
 
-        let headerButtons = document.querySelectorAll('.content .button');
-        Buttons.init(headerButtons);
+        let buttons = document.querySelectorAll('.button');
+        Buttons.init(buttons);
 
         Messages.placeholders.add();
 
-        Messages.reload();
+        Users.loadUserDetails().then(() => {
+            Messages.message.dialog.init();
+
+            return Conversations.load();
+        }).then(() => {
+            Messages.menu.load();
+            return Messages.load();
+        }).catch(Messages.error);
 
         let content = document.querySelector('.content');
         Messages.swipe = new Swipe(content);
@@ -77,12 +111,7 @@ var Messages = {
         Messages.message.removeAll();
         Messages.placeholders.add();
 
-        Users.loadUserDetails().then(() => {
-            return Conversations.load();
-        }).then(() => {
-            Messages.menu.load();
-            return Messages.load();
-        }).catch(Messages.error);
+        return Messages.load();
     },
 
     error: (error) => {
@@ -103,7 +132,7 @@ var Messages = {
         template: (message) => {
             let template = `<article class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
-        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.add" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" 
+        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.show" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" 
             style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
     </header>
     <main>                 
@@ -124,6 +153,7 @@ var Messages = {
 
                     switch (node.type) {
                         case 'PLAIN_TEXT':
+                            currentParagraph.classList.add('plain-text');
                             let span = document.createElement('span');
                             span.textContent = node.text;
                             currentParagraph.appendChild(span);
@@ -137,7 +167,7 @@ var Messages = {
                             a.classList.add('link');
                             // FIXME: URL validation
                             a.href = encodeURI(node.url);
-                            a.textContent = node.label;
+                            a.textContent = node.label + (node.shortened ? ' …' : '');
                             currentParagraph.appendChild(a);
                             if (p === message.formatted.textNodes.length - 1 || message.formatted.textNodes[p + 1].type === 'REPLY_TO') {
                                 contentElement.appendChild(currentParagraph);
@@ -223,7 +253,7 @@ var Messages = {
                         button.classList.add('done');
 
                         setTimeout(() => {
-                            Messages.message.dialog.remove();
+                            Messages.message.dialog.hide();
                             Messages.message.dialog.messageReset();
                             Messages.message.add(message);
                             document.querySelector('.messages').parentNode.scrollTop = 0;
@@ -379,74 +409,50 @@ var Messages = {
                 Messages.message.dialog.message = {
                     replyTo: []
                 };
-            },
-            add: (button) => {
-                let template =
-                    `<section class="message-dialog">
-    <header>
-        <span class="close-button"><a class="button" data-click="Messages.message.dialog.remove"></a></span>
-    </header>
-    <form>
-        <section>
-            <ul class="icons">
-                ${Messages.message.dialog.icons()}                                                                        
-            </ul>           
-        </section>       
-        <section>           
-            <textarea class="textarea"></textarea>
-            <ul class="buttons">
-                <li class="image button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
-                <!--<li class="gps button"></li>-->
-            </ul>           
-        </section>              
-        <p class="button-row"><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>
-    </form>
-</section>`;
-
-                if (!document.querySelector('.message-dialog')) {
-                    document.body.insertAdjacentHTML('beforeend', template);
-
-
-                    setTimeout(() => {
-                        document.querySelector('.message-dialog').classList.add('active');
-                        document.querySelector('.content').classList.add('dialog');
-
-                        Buttons.init(document.querySelectorAll('.message-dialog .button'));
-
-                        let textarea = document.querySelector('.message-dialog .textarea');
-
-                        let validationTimeout;
-                        Textarea.resize(textarea);
-                        textarea.addEventListener('input', () => {
-                            Textarea.resize(textarea);
-
-                            if (validationTimeout) {
-                                clearTimeout(validationTimeout);
-                            }
-                            validationTimeout = setTimeout(Messages.message.dialog.validations.content, 200);
-                        });
-
-                        let buttons = document.querySelector('.message-dialog .buttons');
-                        buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
-                        buttons.querySelector('.image.button input').addEventListener('click', (event) => {
-                            event.stopPropagation();
-                        });
-
-                        // FIXME: reset or load?
-                        Messages.message.dialog.messageReset();
-
-                        Messages.message.dialog.activate(button, textarea);
-
-                        textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
-                        textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.icons, 300));
-                        textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.content, 300));
-                    }, 100);
-                } else {
-                    Messages.message.dialog.activate(button);
+                let activeIcon = document.querySelector('.message-dialog .icons .active');
+                if (activeIcon) {
+                    activeIcon.classList.remove('active');
                 }
+                document.querySelector('.message-dialog .textarea').value = '';
+                document.querySelector('.message-dialog .submit.button').classList.remove('progress');
+                document.querySelector('.message-dialog .submit.button').classList.remove('done');
             },
-            activate: (button, textarea) => {
-                textarea = textarea || document.querySelector('.message-dialog .textarea');
+            init: () => {
+                document.querySelector('.message-dialog .icons').insertAdjacentHTML('afterBegin', Messages.message.dialog.icons());
+
+                Buttons.init(document.querySelectorAll('.message-dialog .button'));
+
+                let textarea = document.querySelector('.message-dialog .textarea');
+
+                let validationTimeout;
+                Textarea.resize(textarea);
+                textarea.addEventListener('input', () => {
+                    Textarea.resize(textarea);
+
+                    if (validationTimeout) {
+                        clearTimeout(validationTimeout);
+                    }
+                    validationTimeout = setTimeout(Messages.message.dialog.validations.content, 200);
+                });
+
+                let buttons = document.querySelector('.message-dialog .buttons');
+                buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
+                buttons.querySelector('.image.button input').addEventListener('click', (event) => {
+                    event.stopPropagation();
+                });
+
+                // FIXME: reset or load?
+                Messages.message.dialog.messageReset();
+
+                // textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
+                textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.icons, 300));
+                textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.content, 300));
+            },
+            show: (button) => {
+                document.querySelector('.message-dialog').classList.add('active');
+                document.querySelector('.content').classList.add('dialog');
+
+                let textarea = document.querySelector('.message-dialog .textarea');
 
                 if (button.dataset.replyToId) {
                     let tag = `@${button.dataset.replyToName}`;
@@ -470,15 +476,11 @@ var Messages = {
 
                 textarea.focus();
             },
-            remove: () => {
-                let dialog = document.querySelector('.message-dialog');
-                dialog.classList.remove('active');
-
+            hide: () => {
+                document.querySelector('.message-dialog').classList.remove('active');
                 document.querySelector('.content').classList.remove('dialog');
 
-                setTimeout(() => {
-                    dialog.parentElement.removeChild(dialog);
-                }, 300);
+                setTimeout(Messages.message.dialog.validations.reset, 300);
             },
 
             icons: () => {
@@ -492,8 +494,9 @@ var Messages = {
                 if (active) {
                     active.classList.remove('active');
                 }
-                li.classList.add('active');
-
+                if (li) {
+                    li.classList.add('active');
+                }
                 Messages.message.dialog.validations.icons();
             },
             clickImageInput: () => {
@@ -523,24 +526,32 @@ var Messages = {
 
                     return valid;
                 },
+                reset: () => {
+                    let errors = document.querySelectorAll('.message-dialog section.error');
+                    for (let i = 0; i < errors.length; i++) {
+                        errors[i].classList.remove('error');
+                    }
+                },
                 icons: () => {
-                    let template = `<p class="error"><span class="error">Měla bych vybrat ikonku.</span></p>`;
-
                     let valid = Messages.message.dialog.values.icon();
+
                     let section = document.querySelector('.message-dialog .icons').parentNode;
-
-                    Validations.refresh(section, valid, template);
-
+                    if (valid) {
+                        section.classList.remove('error');
+                    } else {
+                        section.classList.add('error');
+                    }
                     return valid;
                 },
                 content: () => {
-                    let template = `<p class="error"><span class="error">A nějaký obsah ...</span></p>`;
-
                     let valid = Messages.message.dialog.values.content() || (Messages.message.dialog.values.images() && Messages.message.dialog.values.images().length);
                     let section = document.querySelector('.message-dialog .textarea').parentNode;
 
-                    Validations.refresh(section, valid, template);
-
+                    if (valid) {
+                        section.classList.remove('error');
+                    } else {
+                        section.classList.add('error');
+                    }
                     return valid;
                 }
             }
@@ -676,17 +687,17 @@ var Messages = {
             }
 
             let template = `
-<ul class="conversations">
+<ul class="conversations menu">
     <li class="button">
-        <a></a>
+        <a class="add"></a>
         <span class="conversation-name">Začít novou</span>
     </li>
 </ul>
-<ul>    
-    <!-- Not HERE. <li><a class="button" data-click="Login.logout"><span>Logout</span></a></li>-->
-</ul>`;
+<!-- Not HERE. <ul>    
+     <li><a class="button" data-click="Login.logout"><span>Logout</span></a></li>
+</ul>-->`;
             let conversationTemplate = `<li class="button" data-click="Conversations.select">
-    <a></a>
+    <a class="add"></a>
     <span class="conversation-name"></span>
 </li>`;
 

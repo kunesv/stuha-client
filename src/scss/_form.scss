@@ -35,15 +35,15 @@ form {
         margin-top: 0.5 * $module-quarter;
       }
     }
+  }
 
-    &.error {
-      span.error {
-        display: inline-block;
-      }
+  .error {
+    span.error {
+      display: inline-block;
     }
   }
 
-  section > p.error {
+  section.error > p {
     text-align: right;
     span.error {
       border-radius: $module 0 $module $module;

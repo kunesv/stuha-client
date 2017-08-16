@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="100mm"
-   height="100mm"
-   viewBox="0 0 100 100"
+   width="100"
+   height="100"
+   viewBox="0 0 26.458333 26.458333"
    version="1.1"
    id="svg8"
-   sodipodi:docname="conversation-bg.svg"
+   sodipodi:docname="conversation.svg"
    inkscape:version="0.92.1 r15371">
   <defs
      id="defs2" />
@@ -26,17 +26,18 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="183.34419"
-     inkscape:cy="231.30119"
-     inkscape:document-units="mm"
+     inkscape:cx="102.09419"
+     inkscape:cy="131.30119"
+     inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1440"
+     inkscape:window-width="1600"
      inkscape:window-height="837"
-     inkscape:window-x="-8"
+     inkscape:window-x="1432"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:snap-global="false" />
+     inkscape:snap-global="false"
+     units="px" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -53,23 +54,21 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-197)">
+     transform="translate(0,-270.54167)">
     <path
        sodipodi:type="star"
-       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.24966902"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.249669"
        id="path4501"
        sodipodi:sides="8"
-       sodipodi:cx="50"
-       sodipodi:cy="247"
-       sodipodi:r1="50"
-       sodipodi:r2="46.193974"
+       sodipodi:cx="13.229166"
+       sodipodi:cy="283.77084"
+       sodipodi:r1="12.567708"
+       sodipodi:r2="11.611046"
        sodipodi:arg1="0.78539816"
        sodipodi:arg2="1.1780972"
        inkscape:flatsided="true"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="M 85.355339,282.35534 50,297 14.644661,282.35534 0,247 14.644661,211.64466 50,197 85.355339,211.64466 100,247 Z"
-       inkscape:transform-center-x="1.1053963e-006"
-       inkscape:transform-center-y="3.5851787e-006" />
+       d="m 22.115878,292.65756 -8.886712,3.68099 -8.8867115,-3.68099 -3.68099648,-8.88672 3.68099638,-8.88671 8.8867116,-3.68099 8.886712,3.68099 3.680996,8.88671 z" />
   </g>
 </svg>

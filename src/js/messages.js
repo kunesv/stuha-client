@@ -43,7 +43,7 @@ var Messages = {
         <section>           
             <textarea class="textarea"></textarea>
             <ul class="buttons">
-                <li class="image button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
+                <li class="image secondary button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
                 <!--<li class="gps button"></li>-->
             </ul>     
             <p>

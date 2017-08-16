@@ -71,24 +71,14 @@
     }
 
     .buttons {
-      display: flex;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-
       margin: 0;
       padding: 0;
       list-style: none;
 
       li {
-        background-color: #e6e6e6;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-blend-mode: darken;
-
-        border-radius: 0.125 * $module;
-        height: 3 * $module;
-        margin: 0.25 * $module 0.25 * $module 0 0;
-        width: 4 * $module;
+        border-radius: 50%;
+        margin: $module-half;
+        width: 2.5 * $module;
 
         &.gps {
           background-image: url("/images/gps-icon.svg");
@@ -138,10 +128,6 @@
           height: 4.5 * $module;
         }
       }
-    }
-
-    .error .buttons li {
-      background-color: transparent;
     }
   }
 }

@@ -78,7 +78,7 @@ button {
     width: 2.5 * $module;
 
     &:hover {
-      background-color: #c0c0c0;
+      background-color: $color-background-button-secondary-active;
     }
   }
 }
@@ -112,7 +112,7 @@ form.show-errors .button, .button.error {
   background-color: $color-background-button-secondary;
 
   &:hover {
-    background-color: #c0c0c0;
+    background-color: $color-background-button-secondary-active;
   }
 }
 

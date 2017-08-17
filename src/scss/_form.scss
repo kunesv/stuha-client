@@ -125,7 +125,7 @@ label {
     &.check-box {
       display: inline-block;
 
-      background-color: #ccc;
+      background-color: $color-background-button-secondary;
 
       background-position: left center;
       background-repeat: no-repeat;
@@ -141,7 +141,7 @@ label {
       transition: background-color 200ms;
 
       &.active {
-        background-color: #888;
+        background-color: $color-background-button-secondary-active;
 
 
         > span {

@@ -1,16 +1,14 @@
 var Images = {
 
-    upload: (event, buttons) => {
+    upload: (event) => {
         let fileList = event.target.files;
         if (!fileList.length) {
             // Notify user!
             return;
         }
 
-        let template = `<ul class="thumbnails"></ul>`;
-        buttons.insertAdjacentHTML('beforebegin', template);
-
         let thumbnails = document.querySelector('.message-dialog .thumbnails');
+        thumbnails.classList.add('active');
 
 
         for (let i = 0; i < fileList.length; i++) {
@@ -34,7 +32,7 @@ var Images = {
 
                         // Load canvas Image
 
-                        // Images.values.push({name: file.name, file: canvas.toDataURL(), thumbnail: thumbnailCanvas.toDataURL()});
+                        Images.values.push({name: file.name, file: canvas.toDataURL(), thumbnail: thumbnailCanvas.toDataURL()});
 
                         Messages.message.dialog.validations.all();
 

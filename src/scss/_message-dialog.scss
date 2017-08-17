@@ -71,7 +71,7 @@
     }
 
     .buttons {
-      margin: 0;
+      margin: 0 -1 * $module-half;
       padding: 0;
       list-style: none;
 
@@ -95,21 +95,24 @@
     }
 
     .thumbnails {
-      display: flex;
+      display: none;
       justify-content: flex-start;
       flex-wrap: wrap;
 
-      margin: 0;
+      margin: 0 $module-half * -1;
       padding: 0;
       list-style: none;
+
+      &.active {
+        display: flex;
+      }
 
       li {
         background-color: $color-background-message;
         background-position: center;
         background-repeat: no-repeat;
 
-        border-radius: 0.125 * $module;
-        margin: 0.25 * $module 0.25 * $module 0 0;
+        margin: $module-half;
 
         width: 8 * $module;
         height: 6 * $module;

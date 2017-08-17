@@ -57,15 +57,21 @@ var Login = {
             <p>
                 <label>Přihlašovací jméno</label>
                 <span><input name="username" type="text" autocomplete="off" autofocus/></span>
-                <span class="error">Tady chybí přihlašovací jméno.</span>
+                <span class="error">Sem dám přihlašovací jméno.</span>
             </p>
             <p>
                 <label>Heslo</label>
                 <span><input name="password" type="password"/></span>
-                <span class="error">Tady chybí heslo.</span>
+                <span class="error">Sem dám heslo.</span>
             </p>
             
-            <p><label><input type="checkbox" name="remember" /> Zapamatovat přihlášení</label></p>
+            <p>
+                <label>
+                    <input type="checkbox" name="remember" /> 
+                    <span class="check-box"><span></span></span>
+                    <span>Zapamatovat přihlášení</span>
+                </label>
+            </p>
             
             <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>           
          </form>
@@ -86,6 +92,13 @@ var Login = {
         password.addEventListener('focus', Login.validations.username);
         password.addEventListener('blur', Login.validations.password);
         password.addEventListener('input', Login.validations.password);
+
+        let boxes = document.querySelectorAll('#login input[type=checkbox]');
+        for (let i = 0; i < boxes.length; i++) {
+            let checkbox = boxes[i];
+            checkbox.parentNode.querySelector('.check-box').classList.toggle('active', checkbox.checked);
+            checkbox.addEventListener('change', (event) => event.target.parentNode.querySelector('.check-box').classList.toggle('active', event.target.checked));
+        }
 
         Buttons.initForms(document.querySelectorAll('form'));
     },
@@ -114,12 +127,12 @@ var Login = {
                     Messages.init();
                 });
             }).catch((error) => {
-                let errorMessage = 'Nepodařilo se přihlásit, zkuste to prosím ještě jednou.';
+                let errorMessage = 'Se mi nepodařilo se přihlásit. Tak to zkusím ještě jednou.';
                 if (error.status === 401) {
-                    errorMessage = '<b>Přihlášení se nezdařilo</b><br/>Zkontrolujte přihlašovací jméno a heslo.';
+                    errorMessage = 'Se mi nepodařilo přihlásit. Radši zkontroluju jméno a heslo.';
                 } else {
                     if (!Online.isOnline()) {
-                        errorMessage = 'Zdá se, že jste mimo signál Internetu.';
+                        errorMessage = 'Zdá se, že jsem mimo signál Internetu.';
                     } else {
                         if (error.status === 500) {
                             errorMessage = 'Zdá se, že na serveru se objevily nějaké potíže.';

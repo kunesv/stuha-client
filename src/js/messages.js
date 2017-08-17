@@ -42,6 +42,7 @@ var Messages = {
         </section>       
         <section>           
             <textarea class="textarea"></textarea>
+            <ul class="thumbnails"></ul>
             <ul class="buttons">
                 <li class="image secondary button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
                 <!--<li class="gps button"></li>-->
@@ -239,7 +240,11 @@ var Messages = {
                 let messageForm = new FormData();
                 messageForm.append('rough', Messages.message.dialog.values.content());
                 messageForm.append('iconPath', Messages.message.dialog.values.icon());
-                messageForm.append('images', Messages.message.dialog.values.images());
+                for (let i = 0; i < Messages.message.dialog.values.images().length; i++) {
+                    messageForm.append(`images[${i}].name`, Messages.message.dialog.values.images()[i].name);
+                    messageForm.append(`images[${i}].thumbnail`, Messages.message.dialog.values.images()[i].thumbnail);
+                    messageForm.append(`images[${i}].image`, Messages.message.dialog.values.images()[i].file);
+                }
                 messageForm.append('conversationId', Conversations.lastConversation.load().id);
                 messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
 
@@ -436,10 +441,8 @@ var Messages = {
                 });
 
                 let buttons = document.querySelector('.message-dialog .buttons');
-                buttons.querySelector('.image.button input').addEventListener('change', (event) => Images.upload(event, buttons));
-                buttons.querySelector('.image.button input').addEventListener('click', (event) => {
-                    event.stopPropagation();
-                });
+                buttons.querySelector('.image.button input').addEventListener('change', Images.upload);
+                buttons.querySelector('.image.button input').addEventListener('click', (event) => event.stopPropagation());
 
                 // FIXME: reset or load?
                 Messages.message.dialog.messageReset();

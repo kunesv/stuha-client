@@ -136,6 +136,13 @@ form.show-errors .button, .button.error {
   background-image: url("/images/conversation-settings.svg");
 }
 
+.reload.button {
+  background-image: url("/images/reload.svg");
+  border-radius: 50%;
+  height: 2.5 * $module;
+  width: 2.5 * $module;
+}
+
 ul.menu li.button {
   height: auto;
   flex-direction: column;

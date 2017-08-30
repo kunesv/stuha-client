@@ -270,9 +270,9 @@ article {
       padding-bottom: 0;
     }
     section {
-      p {
+      p.plain-text {
         background-color: transparent;
-        box-shadow: 0 0 0 1px #999;
+        box-shadow: 0 0 0 1px #999 inset;
         color: #666;
       }
     }
@@ -388,4 +388,8 @@ article.my {
 
 .load-more {
   display: none;
+}
+
+.thumbnails + .formatted {
+  margin-top: $module-quarter;
 }

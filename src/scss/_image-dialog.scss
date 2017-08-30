@@ -38,14 +38,18 @@
   transform: scale3d(1, 1, 1);
 }
 
+.thumbnails {
+  margin: -$module-quarter;
+}
+
 .thumbnail.button {
   @extend .scale-button;
 
   background: $color-background-message none center;
-  border-radius: 1/8 * $module;
+  border-radius: $module;
   cursor: zoom-in;
   display: inline-block;
-  margin: 0.25 * $module 0.25 * $module 0 0;
+  margin: $module-quarter;
   opacity: 1;
   vertical-align: bottom;
 

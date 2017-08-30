@@ -78,7 +78,16 @@ var Login = {
     </section>
 </main>`;
 
-        return document.createRange().createContextualFragment(template);
+        let loginForm = document.createRange().createContextualFragment(template);
+
+        let boxes = loginForm.querySelectorAll('#login input[type=checkbox]');
+        for (let i = 0; i < boxes.length; i++) {
+            let checkbox = boxes[i];
+            checkbox.parentNode.querySelector('.check-box').classList.toggle('active', checkbox.checked);
+            checkbox.addEventListener('change', (event) => event.target.parentNode.querySelector('.check-box').classList.toggle('active', event.target.checked));
+        }
+
+        return loginForm;
     },
     init: () => {
         document.querySelector('.content').appendChild(Login.template());
@@ -92,13 +101,6 @@ var Login = {
         password.addEventListener('focus', Login.validations.username);
         password.addEventListener('blur', Login.validations.password);
         password.addEventListener('input', Login.validations.password);
-
-        let boxes = document.querySelectorAll('#login input[type=checkbox]');
-        for (let i = 0; i < boxes.length; i++) {
-            let checkbox = boxes[i];
-            checkbox.parentNode.querySelector('.check-box').classList.toggle('active', checkbox.checked);
-            checkbox.addEventListener('change', (event) => event.target.parentNode.querySelector('.check-box').classList.toggle('active', event.target.checked));
-        }
 
         Buttons.initForms(document.querySelectorAll('form'));
     },

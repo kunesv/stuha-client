@@ -69,6 +69,14 @@ var Messages = {
         let buttons = document.querySelectorAll('.button');
         Buttons.init(buttons);
 
+        Messages.loadEverything();
+
+        // FIXME: No more swipe, until dealt with.
+        // let content = document.querySelector('.content');
+        // Messages.swipe = new Swipe(content);
+    },
+
+    loadEverything: () => {
         Messages.placeholders.add();
 
         Users.loadUserDetails().then(() => {
@@ -78,10 +86,9 @@ var Messages = {
         }).then(() => {
             Messages.menu.load();
             return Messages.load();
+        }).then(() => {
+            return Messages.image.load();
         }).catch(Messages.error);
-
-        let content = document.querySelector('.content');
-        Messages.swipe = new Swipe(content);
     },
 
     load: (pageNo = 1) => {
@@ -110,9 +117,12 @@ var Messages = {
 
     reload: () => {
         Messages.message.removeAll();
-        Messages.placeholders.add();
 
-        return Messages.load();
+        if (!document.querySelector('aside .conversations')) {
+            return Messages.loadEverything();
+        } else {
+            return Messages.load();
+        }
     },
 
     error: (error) => {
@@ -137,6 +147,7 @@ var Messages = {
             style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
     </header>
     <main>                 
+       
         <section class="formatted"></section>
             
         <footer>${Datetime.formatDate(new Date()) !== Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
@@ -145,6 +156,23 @@ var Messages = {
             let article = document.createRange().createContextualFragment(template);
 
             let contentElement = article.querySelector('.formatted');
+
+            if (message.imageIds.length) {
+                let thumbnails = document.createElement('section');
+
+                thumbnails.classList.add('thumbnails');
+
+                for (let i = 0; i < message.imageIds.length; i++) {
+                    let thumb = document.createElement('p');
+                    thumb.classList.add('button');
+                    thumb.classList.add('thumbnail');
+                    thumb.dataset.imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
+
+                    thumbnails.appendChild(thumb);
+                }
+
+                contentElement.parentNode.insertBefore(thumbnails, contentElement);
+            }
 
             if (message.formatted) {
                 let currentParagraph = document.createElement('p');
@@ -191,8 +219,6 @@ var Messages = {
                             break;
                     }
                 }
-            } else {
-                contentElement.parentElement.removeChild(contentElement);
             }
 
             Buttons.init(article.querySelectorAll('.button'));
@@ -243,7 +269,10 @@ var Messages = {
                 for (let i = 0; i < Messages.message.dialog.values.images().length; i++) {
                     messageForm.append(`images[${i}].name`, Messages.message.dialog.values.images()[i].name);
                     messageForm.append(`images[${i}].thumbnail`, Messages.message.dialog.values.images()[i].thumbnail);
-                    messageForm.append(`images[${i}].image`, Messages.message.dialog.values.images()[i].file);
+
+                    // FIXME: Resolve the size issues first
+                    // messageForm.append(`images[${i}].image`, Messages.message.dialog.values.images()[i].file);
+                    messageForm.append(`images[${i}].image`, '');
                 }
                 messageForm.append('conversationId', Conversations.lastConversation.load().id);
                 messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
@@ -606,6 +635,22 @@ var Messages = {
                 }, 300);
             }
 
+        },
+        load: () => {
+            let all = document.querySelectorAll('.messages .thumbnail');
+            for (let i = 0; i < all.length; i++) {
+                let thumb = all[i];
+
+                fetch(`/api/thumbnail/${thumb.dataset.imageId}`, {
+                    headers: Fetch.headers()
+                }).then(Fetch.processFetchStatus).then((response) => {
+                    return response.json().then((image) => {
+                        thumb.style.backgroundImage = `url(${image.thumbnail})`;
+
+                        // TODO: add open-full-screen logic
+                    });
+                });
+            }
         }
     },
 
@@ -616,7 +661,7 @@ var Messages = {
                 `<article class="placeholder">
                     <header><div class="icon"></div></header>
                     <main>          
-                        <section><p class=""></p></section>
+                        <section><p class="plain-text"></p></section>
                         <footer></footer>
                     </main>
                 </article>`;
@@ -634,13 +679,12 @@ var Messages = {
 
     empty: {
         add: () => {
-            let message = 'Tak tady snad ještě není ani jeden příspěvek!';
             let template =
                 `<article class="bot">
     <header><div class="icon"></div></header>
     <main>
         <section>
-            <p><span>${message}</span></p>
+            <p class="plain-text"><span>Sem by někdo měl přidat první příspěvek...</span></p>
         </section>
     </main>
 </article>`;
@@ -655,9 +699,9 @@ var Messages = {
     <header><div class="icon"></div></header>
     <main>
         <section>
-            <p>${errorMessage}</p>
+            <p class="plain-text">${errorMessage}</p>
             <p class="button-row">
-                <a class="secondary button" data-click="Messages.reload">Zkusit znovu</a>
+                <button class="secondary reload button" data-click="Messages.reload"></button>
             </p>
         </section>
     </main>

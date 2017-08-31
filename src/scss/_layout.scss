@@ -63,49 +63,77 @@ small {
 
   }
 
-  > header {
-    display: flex;
+  > main {
+    @media (max-width: $small-screen-threshold) {
+      flex-direction: column;
+    }
+  }
 
-    span {
+  > main > header {
+    display: none;
+    flex: 0 0 2.5 * $module;
+    flex-direction: column;
+
+    @media (max-width: $small-screen-threshold) {
       display: flex;
-      flex: 0 0 2.5 * $module;
-
-      > .button {
-        transition: opacity 300ms;
-
-        width: 100%;
-      }
     }
 
-    &.brief {
-      position: absolute;
-
+    div {
+      display: flex;
       justify-content: space-between;
 
-      width: 100%;
-      z-index: 400;
+      span {
+        display: flex;
+        flex: 0 0 2.5 * $module;
 
-      @media (min-width: $small-screen-threshold + 1px) {
-        display: none;
+        color: #999;
+        font-size: 12px;
+        text-align: center;
+
+        &.conversation-name {
+          flex: 1 1 100%;
+          min-height: $module;
+          justify-content: center;
+        }
+
+        > .button {
+          transition: opacity 300ms;
+
+          width: 100%;
+        }
       }
     }
 
     &.full {
-      aside {
-        flex: 0 0 25%;
-
-        background-color: #e6e6e6;
-        border-right: 1px solid #e0e0e0;
-      }
-      section {
-        display: flex;
-        flex: 0 0 75%;
-
-        justify-content: space-between;
-      }
-      @media (max-width: $small-screen-threshold) {
-        display: none;
-      }
+      display: none;
+      //aside {
+      //  flex: 0 0 25%;
+      //
+      //  background-color: #e6e6e6;
+      //  border-right: 1px solid #e0e0e0;
+      //
+      //  z-index: 11;
+      //}
+      //section {
+      //  background-color: #e6e6e6;
+      //  border-bottom: 1px solid #e0e0e0;
+      //
+      //  display: flex;
+      //  flex: 0 0 75%;
+      //
+      //  //justify-content: space-between;
+      //
+      //  span .button {
+      //    padding-left: 2 * $module;
+      //    padding-right: $module-half;
+      //    background-position: left center;
+      //    line-height: .75 * $module;
+      //    white-space: nowrap;
+      //  }
+      //}
+      //@media (max-width: $small-screen-threshold) {
+      //  display: none;
+      //}
     }
   }
 
@@ -141,9 +169,10 @@ small {
       display: flex;
       flex-direction: column;
 
-      background-color: white;
-
+      background-color: #e6e6e6;
       border-right: 1px solid #e0e0e0;
+
+      z-index: 11;
 
       @media (max-width: $small-screen-threshold) {
         border-right: 0 none;
@@ -174,7 +203,6 @@ small {
 
         height: 100%;
 
-        background-color: #e6e6e6;
         box-shadow: 0 0 rgba(black, 0);
       }
     }

@@ -1,18 +1,4 @@
-main > section > .conversation-name {
-  margin-top: 3 * $module;
-
-  color: #999;
-  font-size: 12px;
-  text-align: center;
-
-  min-height: $module;
-
-  @media (min-width: $small-screen-threshold) {
-    display: none;
-  }
-}
-
-.conversations {
+.conversations.menu {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -20,6 +6,47 @@ main > section > .conversation-name {
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
+
+  li.button {
+    height: auto;
+    transition: background-color 300ms;
+
+    > a {
+      border-radius: 50%;
+      transition: box-shadow 100ms;
+
+      background-image: url("/images/conversation.svg");
+
+      &.add {
+        background-image: url("/images/plus-dark.svg"), url("/images/conversation.svg");
+      }
+    }
+
+    &.clicked {
+      box-shadow: none;
+
+      > a {
+        box-shadow: 0 0 0 0.5 * $module rgba(black, 0.5) inset;
+        background-image: url("/images/conversation-active.svg"), url("/images/conversation.svg");
+
+        &.add {
+          background-image: url("/images/plus-dark.svg"), url("/images/conversation-active.svg"), url("/images/conversation.svg");
+        }
+      }
+    }
+
+    &.active {
+      //background-color: #f6f6f6;
+
+      > a {
+        background-image: url("/images/conversation-active.svg"), url("/images/conversation.svg");
+
+        &.add {
+          background-image: url("/images/plus-dark.svg"), url("/images/conversation-active.svg"), url("/images/conversation.svg");
+        }
+      }
+    }
+  }
 }
 
 .conversation-menu {
@@ -44,18 +71,12 @@ main > section > .conversation-name {
     margin: 0;
     padding: 0;
 
-    justify-content: space-around;
+    justify-content: flex-start;
     flex-wrap: wrap;
 
     li {
       padding: $module-half;
       width: 2.5 * $module;
-
-      button {
-        @media (max-width: $small-screen-threshold) {
-          border-radius: 50%;
-        }
-      }
     }
   }
 }

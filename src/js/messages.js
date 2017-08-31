@@ -1,27 +1,33 @@
 var Messages = {
     init: () => {
-        let template = `<header class="brief">
-    <span class="menu-button"><a class="icon button" data-click="Messages.menu.toggle"></a></span>
-    <span class="conversation"><a class="icon button" data-click="Messages.menuConversation.show"></a></span>
-    <span class="add-button"><a class="button" data-click="Messages.message.dialog.show"></a></span>
-</header>
+        let template = `
 
-<header class="full">
+<!--<header class="full">
     <aside>
         
     </aside>
     <section>
-        <span class="conversation-member-add"><a class="secondary button" data-click="Conversations.member.add"></a></span>
-        <span class="add-button"><a class="button" data-click="Messages.message.dialog.show"></a></span>
+        <span class="conversation-member-add"><a class="light button" data-click="Conversations.member.add">Přidat konverzující</a></span>
+        <span class="add-button"><a class="light button" data-click="Messages.message.dialog.show">Nový příspěvek</a></span>
     </section>
-</header>
+</header>-->
 
 <main>
+    <header>
+        <div>
+            <span class="menu-button"><a class="secondary button" data-click="Messages.menu.toggle"></a></span>
+            <span class="conversation"><a class="secondary button" data-click="Messages.menuConversation.show"></a></span>
+            <span class="add-button"><a class="button" data-click="Messages.message.dialog.show"></a></span>
+        </div>
+        <div>
+            <span class="conversation-name " data-content="currentConversation"></span>
+        </div>
+    </header>
     <aside> 
+        <header></header>
         <section></section>
     </aside>
     <section>
-        <div class="conversation-name " data-content="currentConversation"></div>
         <div class="messages"></div>
         <div class="load-more">Load more</div>
     </section>
@@ -86,8 +92,6 @@ var Messages = {
         }).then(() => {
             Messages.menu.load();
             return Messages.load();
-        }).then(() => {
-            return Messages.image.load();
         }).catch(Messages.error);
     },
 
@@ -111,6 +115,8 @@ var Messages = {
                 }
 
                 document.querySelector('.content').classList.remove('loading');
+
+                Messages.image.load();
             });
         });
     },
@@ -163,9 +169,10 @@ var Messages = {
                 thumbnails.classList.add('thumbnails');
 
                 for (let i = 0; i < message.imageIds.length; i++) {
-                    let thumb = document.createElement('p');
+                    let thumb = document.createElement('span');
                     thumb.classList.add('button');
                     thumb.classList.add('thumbnail');
+                    thumb.classList.add('toLoad');
                     thumb.dataset.imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
 
                     thumbnails.appendChild(thumb);
@@ -291,6 +298,8 @@ var Messages = {
                             Messages.message.dialog.messageReset();
                             Messages.message.add(message);
                             document.querySelector('.messages').parentNode.scrollTop = 0;
+
+                            Messages.image.load();
 
                             // check if images got loaded, if not, note the user that images are being loaded.
                         }, 200);
@@ -637,7 +646,7 @@ var Messages = {
 
         },
         load: () => {
-            let all = document.querySelectorAll('.messages .thumbnail');
+            let all = document.querySelectorAll('.messages .thumbnail.toLoad');
             for (let i = 0; i < all.length; i++) {
                 let thumb = all[i];
 
@@ -646,9 +655,12 @@ var Messages = {
                 }).then(Fetch.processFetchStatus).then((response) => {
                     return response.json().then((image) => {
                         thumb.style.backgroundImage = `url(${image.thumbnail})`;
+                        thumb.classList.remove('toLoad');
 
                         // TODO: add open-full-screen logic
                     });
+                }).catch(() => {
+                    thumb.classList.add('error');
                 });
             }
         }
@@ -744,7 +756,7 @@ var Messages = {
      <li><a class="button" data-click="Login.logout"><span>Logout</span></a></li>
 </ul>-->`;
             let conversationTemplate = `<li class="button" data-click="Conversations.select">
-    <a class="add"></a>
+    <a></a>
     <span class="conversation-name"></span>
 </li>`;
 

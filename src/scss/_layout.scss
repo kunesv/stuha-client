@@ -71,7 +71,6 @@ small {
 
   > main > header {
     display: none;
-    flex: 0 0 2.5 * $module;
     flex-direction: column;
 
     @media (max-width: $small-screen-threshold) {
@@ -210,8 +209,11 @@ small {
     > section {
       @extend .overflow-auto;
 
-      flex: 1 1 75%;
       position: relative;
+
+      @media (min-width: $small-screen-threshold + 1px) {
+        flex: 1 1 75%;
+      }
 
       > div > * {
         margin-left: auto;

@@ -414,6 +414,8 @@ var Messages = {
                             setTimeout(() => {
                                 article.classList.remove('progress');
                                 replyToWrapper.classList.remove('progress');
+
+                                Messages.image.load();
                             }, 20);
                         });
                     }).catch((error) => {

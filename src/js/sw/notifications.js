@@ -12,3 +12,7 @@ self.addEventListener('push', function (event) {
         })
     );
 });
+
+function registerPush() {
+
+}

@@ -8,9 +8,14 @@ var Buttons = {
 
             button.addEventListener('mousedown', () => button.classList.add(Buttons.CLICKED_CLASSNAME));
 
+            button.addEventListener('touchstart', () => button.classList.add(Buttons.CLICKED_CLASSNAME));
+
             button.addEventListener('click', (event) => Buttons.click(button, event));
 
             button.addEventListener('mouseleave', () => {
+                button.classList.remove('clicked');
+            });
+            button.addEventListener('touchend', () => {
                 button.classList.remove('clicked');
             });
 

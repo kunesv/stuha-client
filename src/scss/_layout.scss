@@ -72,6 +72,7 @@ small {
   > main > header {
     display: none;
     flex-direction: column;
+    flex: 0 0 3.5 * $module;
 
     @media (max-width: $small-screen-threshold) {
       display: flex;
@@ -96,8 +97,6 @@ small {
         }
 
         > .button {
-          transition: opacity 300ms;
-
           width: 100%;
         }
       }

@@ -13,7 +13,9 @@ var Images = {
 
         for (let i = 0; i < fileList.length; i++) {
 
-            thumbnails.insertAdjacentHTML('beforeend', `<li id="thumb${i}" class="placeholder"></li>`);
+            thumbnails.insertAdjacentHTML('beforeend', `<li id="thumb${i}" class="placeholder">
+    <span class="close-button"><a class="button" data-click="Images.removeOne"></a></span>
+</li>`);
 
             let file = fileList[i];
             setTimeout(() => {
@@ -32,7 +34,11 @@ var Images = {
 
                         // Load canvas Image
 
-                        Images.values.push({name: file.name, file: canvas.toDataURL(), thumbnail: thumbnailCanvas.toDataURL()});
+                        Images.values.push({
+                            name: file.name,
+                            file: canvas.toDataURL(),
+                            thumbnail: thumbnailCanvas.toDataURL()
+                        });
 
                         Messages.message.dialog.validations.all();
 
@@ -44,6 +50,7 @@ var Images = {
             }, 100);
         }
 
+        Buttons.init(thumbnails.querySelectorAll('.button'));
     },
 
     resizeImage: (image, max) => {
@@ -70,6 +77,23 @@ var Images = {
         }
 
         return {'height': height, 'width': width};
+    },
+
+    removeAll: () => {
+        while (Images.values.length) {
+            Images.remove(0);
+        }
+    },
+
+    remove: (i) => {
+        let thumbnail = document.querySelectorAll('.message-dialog .thumbnails li')[i];
+        thumbnail.parentNode.removeChild(thumbnail);
+
+        Images.values.splice(i, 1);
+    },
+
+    removeOne: (button) => {
+        console.log(button)
     },
 
     values: []

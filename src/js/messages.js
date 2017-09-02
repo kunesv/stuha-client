@@ -15,9 +15,10 @@ var Messages = {
 <main>
     <header>
         <div>
-            <span class="menu-button"><a class="secondary button" data-click="Messages.menu.toggle"></a></span>
-            <span class="conversation"><a class="secondary button" data-click="Messages.menuConversation.show"></a></span>
-            <span class="add-button"><a class="button" data-click="Messages.message.dialog.show"></a></span>
+            <span class="menu-button"><button class="secondary button" data-click="Messages.menu.toggle"></button></span>
+            <span class="conversation"><button class="secondary button" data-click="Messages.menuConversation.show"></button></span>
+            <span class="update"><button class="light button" data-click="Messages.update"></button></span>
+            <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
         </div>
         <div>
             <span class="conversation-name " data-content="currentConversation"></span>
@@ -75,6 +76,8 @@ var Messages = {
         let buttons = document.querySelectorAll('.button');
         Buttons.init(buttons);
 
+        Messages.placeholders.add();
+
         Messages.loadEverything();
 
         // FIXME: No more swipe, until dealt with.
@@ -83,8 +86,6 @@ var Messages = {
     },
 
     loadEverything: () => {
-        Messages.placeholders.add();
-
         Users.loadUserDetails().then(() => {
             Messages.message.dialog.init();
 
@@ -123,12 +124,20 @@ var Messages = {
 
     reload: () => {
         Messages.message.removeAll();
+        Messages.placeholders.add();
 
         if (!document.querySelector('aside .conversations')) {
             return Messages.loadEverything();
         } else {
             return Messages.load();
         }
+    },
+
+    update: () => {
+        // Ask to enable notifications when first clicked ..
+
+        // FIXME: Make smarter
+        Messages.reload();
     },
 
     error: (error) => {
@@ -299,43 +308,18 @@ var Messages = {
                             Messages.message.add(message);
                             document.querySelector('.messages').parentNode.scrollTop = 0;
 
+                            Images.removeAll();
+
                             Messages.image.load();
 
                             // check if images got loaded, if not, note the user that images are being loaded.
                         }, 200);
-
-                        if (Images.values.length) {
-                            Messages.message.submitImages(message.id);
-                        }
                     });
                 }).catch((response) => {
                     button.classList.remove('progress');
                     button.classList.add('error');
                 });
             }
-        },
-
-        submitImages: (messageId) => {
-            let imageForm = new FormData();
-            for (let i = 0; i < Images.values.length; i++) {
-                imageForm.append(`image[${i}].name`, Images.values[i].name);
-                imageForm.append(`image[${i}].thumbnail`, Images.values[i].thumbnail);
-                imageForm.append(`image[${i}].image`, Images.values[i].file);
-            }
-
-            fetch('/api/image', {
-                headers: Fetch.headers(),
-                method: 'POST',
-                body: imageForm
-            }).then(Fetch.processFetchStatus).then((response) => {
-                return response.json().then((images) => {
-                    // FIXME: ok message
-
-                });
-            }).catch((response) => {
-                console.log('ERRORRR, (...)');
-                console.log(response);
-            });
         },
 
         images: (images) => {
@@ -698,7 +682,7 @@ var Messages = {
     <header><div class="icon"></div></header>
     <main>
         <section>
-            <p class="plain-text"><span>Sem by někdo měl přidat první příspěvek...</span></p>
+            <p class="plain-text"><span>Bych sem asi měla přidat první příspěvek ...</span></p>
         </section>
     </main>
 </article>`;

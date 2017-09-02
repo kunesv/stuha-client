@@ -103,8 +103,7 @@ button {
 }
 
 .light.button {
-  background-color: #e6e6e6;
-  background-size: auto 80%;
+  background-color: #ececec;
   color: #777;
 
   &:hover {
@@ -147,6 +146,10 @@ form.show-errors .button, .button.error {
 
 .conversation .button {
   //background-image: url("/images/conversation-settings.svg");
+}
+
+.update .button {
+  background-image: url("/images/reload-dark.svg");
 }
 
 .reload.button {

@@ -87,8 +87,15 @@
           background-image: url("/images/image-icon.svg");
 
           input {
-            display: none;
+            visibility: hidden;
+            position: absolute;
           }
+        }
+
+        label {
+          cursor: pointer;
+          height: 100%;
+          width: 100%;
         }
       }
     }

@@ -1,31 +1,36 @@
 var Images = {
 
     upload: (event) => {
+
         let fileList = event.target.files;
+
         if (!fileList.length) {
-            // Notify user!
+            // FIXME: Notify user?
             return;
         }
 
         let thumbnails = document.querySelector('.message-dialog .thumbnails');
         thumbnails.classList.add('active');
 
-
         for (let i = 0; i < fileList.length; i++) {
+            let file = fileList[i];
+
+            Images.values.push({
+                name: file.name
+            });
 
             thumbnails.insertAdjacentHTML('beforeend', `<li id="thumb${i}" class="placeholder">
     <span class="close-button"><a class="button" data-click="Images.removeOne"></a></span>
 </li>`);
 
-            let file = fileList[i];
+
             setTimeout(() => {
-                var reader = new FileReader();
+                let reader = new FileReader();
                 reader.onload = (event) => {
-                    var img = new Image();
+                    let img = new Image();
                     img.onload = function () {
 
-
-                        let canvas = Images.resizeImage(img, 1200);
+                        // let canvas = Images.resizeImage(img, 1200);
                         let thumbnailCanvas = Images.resizeImage(img, 240);
 
                         let thumbnail = thumbnails.querySelector('.placeholder#thumb' + i);
@@ -34,21 +39,34 @@ var Images = {
 
                         // Load canvas Image
 
-                        Images.values.push({
-                            name: file.name,
-                            file: canvas.toDataURL(),
-                            thumbnail: thumbnailCanvas.toDataURL()
-                        });
-
                         Messages.message.dialog.validations.all();
-
-
                     };
                     img.src = event.target.result;
                 };
                 reader.readAsDataURL(file);
             }, 100);
         }
+
+        let imageForm = new FormData(document.querySelector('.message-dialog form#images'));
+        imageForm.append('conversationId', Conversations.lastConversation.load().id);
+
+        fetch('/api/image', {
+            headers: Fetch.headers(),
+            method: 'POST',
+            body: imageForm
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((images) => {
+                images.forEach((image) => {
+                    for (let i = 0; i < Images.values.length; i++) {
+                        if (!Images.values[i].id && Images.values[i].name === image.name) {
+                            Images.values[i].id = image.id;
+                        }
+                    }
+                });
+            });
+        }).catch((response) => {
+            // FIXME: Handle errors.
+        });
 
         Buttons.init(thumbnails.querySelectorAll('.button'));
     },
@@ -83,6 +101,7 @@ var Images = {
         while (Images.values.length) {
             Images.remove(0);
         }
+        document.querySelector('.message-dialog #uploadImage').value = '';
     },
 
     remove: (i) => {

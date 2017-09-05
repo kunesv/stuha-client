@@ -1,18 +1,6 @@
 var Messages = {
     init: () => {
-        let template = `
-
-<!--<header class="full">
-    <aside>
-        
-    </aside>
-    <section>
-        <span class="conversation-member-add"><a class="light button" data-click="Conversations.member.add">Přidat konverzující</a></span>
-        <span class="add-button"><a class="light button" data-click="Messages.message.dialog.show">Nový příspěvek</a></span>
-    </section>
-</header>-->
-
-<main>
+        let template = `<main>
     <header>
         <div>
             <span class="menu-button"><button class="secondary button" data-click="Messages.menu.toggle"></button></span>
@@ -40,7 +28,10 @@ var Messages = {
     <header>
         <span class="close-button"><a class="button" data-click="Messages.message.dialog.hide"></a></span>
     </header>
-    <form>
+    <form enctype="multipart/form-data" id="images">
+        <input type="file" id="uploadImage" name="images" multiple="multiple" accept="image/*"/>
+    </form>
+    <form id="message">
         <section>
             <ul class="icons"></ul>
             <p>
@@ -48,10 +39,12 @@ var Messages = {
             </p>           
         </section>       
         <section>           
-            <textarea class="textarea"></textarea>
+            <textarea class="textarea" name="rough"></textarea>
             <ul class="thumbnails"></ul>
             <ul class="buttons">
-                <li class="image secondary button" data-click="Messages.message.dialog.clickImageInput"><input type="file" multiple="multiple" accept="image/*"/></li>
+                <li class="image secondary button">              
+                    <label for="uploadImage"></label>                   
+                </li>
                 <!--<li class="gps button"></li>-->
             </ul>     
             <p>
@@ -107,17 +100,21 @@ var Messages = {
             return response.json().then((messages) => {
                 Messages.placeholders.removeAll();
 
-                for (let i = 0; i < messages.length; i++) {
-                    Messages.message.add(messages[i], 'beforeend');
-                }
-
                 if (!messages.length) {
                     Messages.empty.add();
+                } else {
+                    let newMessages = document.createElement('div');
+
+                    for (let i = 0; i < messages.length; i++) {
+                        let message = messages[i];
+                        message.createdOn = Datetime.arrayToDate(message.createdOn);
+                        newMessages.appendChild(Messages.message.template(message));
+                    }
+
+                    document.querySelector('.messages').appendChild(newMessages);
                 }
 
                 document.querySelector('.content').classList.remove('loading');
-
-                Messages.image.load();
             });
         });
     },
@@ -134,7 +131,10 @@ var Messages = {
     },
 
     update: () => {
-        // Ask to enable notifications when first clicked ..
+        // TODO: Ask to enable notifications when first clicked ..
+        let lastArticle = document.querySelector('.messages article');
+        let lastId = lastArticle ? lastArticle.id : null;
+        console.log(lastId)
 
         // FIXME: Make smarter
         Messages.reload();
@@ -156,9 +156,9 @@ var Messages = {
 
     message: {
         template: (message) => {
-            let template = `<article class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
+            let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
-        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.show" data-reply-to-id="${message.id}" data-reply-to-name="${message.userName}" 
+        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.show" data-reply-to-name="${message.userName}" 
             style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
     </header>
     <main>                 
@@ -182,7 +182,9 @@ var Messages = {
                     thumb.classList.add('button');
                     thumb.classList.add('thumbnail');
                     thumb.classList.add('toLoad');
-                    thumb.dataset.imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
+                    let imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
+
+                    thumb.style.backgroundImage=`url("/api/thumbnail/${imageId}")`;
 
                     thumbnails.appendChild(thumb);
                 }
@@ -279,20 +281,14 @@ var Messages = {
                 button.classList.remove('error');
                 button.classList.add('progress');
 
-                let messageForm = new FormData();
-                messageForm.append('rough', Messages.message.dialog.values.content());
+                let messageForm = new FormData(document.querySelector('.message-dialog form#message'));
                 messageForm.append('iconPath', Messages.message.dialog.values.icon());
                 for (let i = 0; i < Messages.message.dialog.values.images().length; i++) {
+                    messageForm.append(`images[${i}].id`, Messages.message.dialog.values.images()[i].id);
                     messageForm.append(`images[${i}].name`, Messages.message.dialog.values.images()[i].name);
-                    messageForm.append(`images[${i}].thumbnail`, Messages.message.dialog.values.images()[i].thumbnail);
-
-                    // FIXME: Resolve the size issues first
-                    // messageForm.append(`images[${i}].image`, Messages.message.dialog.values.images()[i].file);
-                    messageForm.append(`images[${i}].image`, '');
                 }
                 messageForm.append('conversationId', Conversations.lastConversation.load().id);
                 messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
-
 
                 fetch('/api/message', {
                     headers: Fetch.headers(),
@@ -308,11 +304,6 @@ var Messages = {
                             Messages.message.add(message);
                             document.querySelector('.messages').parentNode.scrollTop = 0;
 
-                            Images.removeAll();
-
-                            Messages.image.load();
-
-                            // check if images got loaded, if not, note the user that images are being loaded.
                         }, 200);
                     });
                 }).catch((response) => {
@@ -398,8 +389,6 @@ var Messages = {
                             setTimeout(() => {
                                 article.classList.remove('progress');
                                 replyToWrapper.classList.remove('progress');
-
-                                Messages.image.load();
                             }, 20);
                         });
                     }).catch((error) => {
@@ -445,12 +434,13 @@ var Messages = {
                 document.querySelector('.message-dialog .textarea').value = '';
                 document.querySelector('.message-dialog .submit.button').classList.remove('progress');
                 document.querySelector('.message-dialog .submit.button').classList.remove('done');
+
+                Images.removeAll();
             },
             init: () => {
                 document.querySelector('.message-dialog .icons').insertAdjacentHTML('afterBegin', Messages.message.dialog.icons());
 
                 Buttons.init(document.querySelectorAll('.message-dialog .button'));
-
                 let textarea = document.querySelector('.message-dialog .textarea');
 
                 let validationTimeout;
@@ -464,9 +454,7 @@ var Messages = {
                     validationTimeout = setTimeout(Messages.message.dialog.validations.content, 200);
                 });
 
-                let buttons = document.querySelector('.message-dialog .buttons');
-                buttons.querySelector('.image.button input').addEventListener('change', Images.upload);
-                buttons.querySelector('.image.button input').addEventListener('click', (event) => event.stopPropagation());
+                document.querySelector('.message-dialog #uploadImage').addEventListener('change', Images.upload);
 
                 // FIXME: reset or load?
                 Messages.message.dialog.messageReset();
@@ -479,9 +467,10 @@ var Messages = {
                 document.querySelector('.message-dialog').classList.add('active');
                 document.querySelector('.content').classList.add('dialog');
 
+                let replyToId = button.offsetParent.id;
                 let textarea = document.querySelector('.message-dialog .textarea');
 
-                if (button.dataset.replyToId) {
+                if (replyToId) {
                     let tag = `@${button.dataset.replyToName}`;
                     let tagWithNo = tag;
                     let text = textarea.value;
@@ -498,7 +487,7 @@ var Messages = {
                     textarea.value = `${textarea.value}${tagWithNo}`;
                     Textarea.resize(textarea);
 
-                    Messages.message.dialog.message.replyTo.push({replyToId: button.dataset.replyToId, key: tagWithNo});
+                    Messages.message.dialog.message.replyTo.push({replyToId: replyToId, key: tagWithNo});
                 }
 
                 textarea.focus();
@@ -517,7 +506,7 @@ var Messages = {
                 return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/icons/${icon.path}.png')"></li>`;
             },
             selectIcon: (li) => {
-                let active = li.parentElement.querySelector('.active');
+                let active = li.parentNode.querySelector('.active');
                 if (active) {
                     active.classList.remove('active');
                 }
@@ -525,9 +514,6 @@ var Messages = {
                     li.classList.add('active');
                 }
                 Messages.message.dialog.validations.icons();
-            },
-            clickImageInput: () => {
-                document.querySelector('.message-dialog .image.button input').click();
             },
 
             values: {
@@ -628,26 +614,6 @@ var Messages = {
                 setTimeout(() => {
                     dialog.parentElement.removeChild(dialog);
                 }, 300);
-            }
-
-        },
-        load: () => {
-            let all = document.querySelectorAll('.messages .thumbnail.toLoad');
-            for (let i = 0; i < all.length; i++) {
-                let thumb = all[i];
-
-                fetch(`/api/thumbnail/${thumb.dataset.imageId}`, {
-                    headers: Fetch.headers()
-                }).then(Fetch.processFetchStatus).then((response) => {
-                    return response.json().then((image) => {
-                        thumb.style.backgroundImage = `url(${image.thumbnail})`;
-                        thumb.classList.remove('toLoad');
-
-                        // TODO: add open-full-screen logic
-                    });
-                }).catch(() => {
-                    thumb.classList.add('error');
-                });
             }
         }
     },

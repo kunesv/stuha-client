@@ -62,7 +62,15 @@ var Messages = {
     <ul class="menu">
         <li class="button conversation-member-add" data-click="Conversations.member.add"><a></a><span>Přidat konverzující</span></li>
     </ul>
-</section>`;
+</section>
+
+<section class="image-dialog">
+    <header>
+        <span class="close-button"><a class="button" data-click="Messages.image.dialog.hide"></a></span>
+    </header>
+    <main></main>
+</section>
+`;
 
         document.body.insertAdjacentHTML('beforeEnd', dialogs);
 
@@ -79,7 +87,7 @@ var Messages = {
             if (scrollingTimeout) {
                 clearTimeout(scrollingTimeout);
             }
-            scrollingTimeout = setTimeout(Messages.image.loadSome, 300);
+            scrollingTimeout = setTimeout(Messages.image.loadSome, 100);
         });
 
         // FIXME: No more swipe, until dealt with.
@@ -166,6 +174,9 @@ var Messages = {
     },
 
     message: {
+        thumbnailTemplate: (imageId) => {
+            return `<span class="thumbnail button toLoad" data-image-id="${imageId}" data-click="Messages.image.dialog.show"></span>`;
+        },
         template: (message) => {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
@@ -190,14 +201,8 @@ var Messages = {
 
                 for (let i = 0; i < message.imageIds.length; i++) {
                     let thumb = document.createElement('span');
-                    thumb.classList.add('button');
-                    thumb.classList.add('thumbnail');
-                    thumb.classList.add('toLoad');
-                    thumb.dataset.imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
-
-                    // thumb.style.backgroundImage=`url("/api/thumbnail/${imageId}")`;
-
-                    thumbnails.appendChild(thumb);
+                    let imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
+                    thumbnails.insertAdjacentHTML('beforeend', Messages.message.thumbnailTemplate(imageId));
                 }
 
                 contentElement.parentNode.insertBefore(thumbnails, contentElement);
@@ -323,17 +328,6 @@ var Messages = {
                     button.classList.add('error');
                 });
             }
-        },
-
-        images: (images) => {
-            if (!images.length) {
-                return '';
-            }
-
-            return `<section class="image">${images.map(Messages.message.image).join('')}</section>`;
-        },
-        image: (image) => {
-            return `<span class="button thumbnail placeholder" data-click="Messages.image.dialog.add" data-id="${image.id}"></span>`;
         },
 
         separator: (createdOn) => {
@@ -595,39 +589,25 @@ var Messages = {
 
     image: {
         dialog: {
-            add: (thumbnail) => {
-                let template = `<div class="image-dialog">
-    <header>
-        <span class="close-button"><a class="button" data-click="Messages.image.dialog.remove"><span>&#43;</span></a></span>
-    </header>
-    <main></main>
-</div>`;
-
-                thumbnail.insertAdjacentHTML('afterend', template);
+            show: (thumbnail) => {
                 let imageDialog = document.querySelector('.image-dialog');
-                Buttons.init([imageDialog]);
+                imageDialog.classList.add('active');
 
-                let image = new Image();
-                image.src = thumbnail.dataset.url;
-                image.addEventListener('load', () => {
-                    imageDialog.querySelector('main').appendChild(image);
-                    imageDialog.classList.add('active');
+                fetch(`/api/image/${thumbnail.dataset.imageId}`, {headers: Fetch.headers()}).then((response) => {
+                    return response.blob();
+                }).then((myBlob) => {
+                    let url = URL.createObjectURL(myBlob);
+                    let img = new Image();
+                    imageDialog.querySelector('main').appendChild(img);
+                    img.src = url;
+                }).catch(() => {
+                    imageDialog.classList.add('error');
                 });
-
-                setTimeout(() => {
-                    thumbnail.classList.add('active');
-                    Buttons.init(document.querySelectorAll('.image-dialog .button'));
-                }, 100);
             },
-            remove: (button) => {
-                let dialog = document.querySelector('.image-dialog');
-                let image = dialog.previousSibling;
-
-                image.classList.remove('active');
-
-                setTimeout(() => {
-                    dialog.parentElement.removeChild(dialog);
-                }, 300);
+            hide: (button) => {
+                let imageDialog = document.querySelector('.image-dialog');
+                imageDialog.classList.remove('active');
+                imageDialog.querySelector('main').innerHTML = '';
             }
         },
         loadSome: () => {

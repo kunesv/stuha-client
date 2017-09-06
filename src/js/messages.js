@@ -73,6 +73,15 @@ var Messages = {
 
         Messages.loadEverything();
 
+        // TODO: Let's see if this suits the case.
+        let scrollingTimeout;
+        document.querySelector('.content > main > section').addEventListener('scroll', () => {
+            if (scrollingTimeout) {
+                clearTimeout(scrollingTimeout);
+            }
+            scrollingTimeout = setTimeout(Messages.image.loadSome, 300);
+        });
+
         // FIXME: No more swipe, until dealt with.
         // let content = document.querySelector('.content');
         // Messages.swipe = new Swipe(content);
@@ -112,6 +121,8 @@ var Messages = {
                     }
 
                     document.querySelector('.messages').appendChild(newMessages);
+
+                    Messages.image.loadSome();
                 }
 
                 document.querySelector('.content').classList.remove('loading');
@@ -172,7 +183,7 @@ var Messages = {
 
             let contentElement = article.querySelector('.formatted');
 
-            if (message.imageIds.length) {
+            if (message.imageIds && message.imageIds.length) {
                 let thumbnails = document.createElement('section');
 
                 thumbnails.classList.add('thumbnails');
@@ -182,9 +193,9 @@ var Messages = {
                     thumb.classList.add('button');
                     thumb.classList.add('thumbnail');
                     thumb.classList.add('toLoad');
-                    let imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
+                    thumb.dataset.imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
 
-                    thumb.style.backgroundImage=`url("/api/thumbnail/${imageId}")`;
+                    // thumb.style.backgroundImage=`url("/api/thumbnail/${imageId}")`;
 
                     thumbnails.appendChild(thumb);
                 }
@@ -304,6 +315,7 @@ var Messages = {
                             Messages.message.add(message);
                             document.querySelector('.messages').parentNode.scrollTop = 0;
 
+                            Messages.image.loadSome();
                         }, 200);
                     });
                 }).catch((response) => {
@@ -389,6 +401,8 @@ var Messages = {
                             setTimeout(() => {
                                 article.classList.remove('progress');
                                 replyToWrapper.classList.remove('progress');
+
+                                Messages.image.loadSome();
                             }, 20);
                         });
                     }).catch((error) => {
@@ -614,6 +628,28 @@ var Messages = {
                 setTimeout(() => {
                     dialog.parentElement.removeChild(dialog);
                 }, 300);
+            }
+        },
+        loadSome: () => {
+            let thumbnails = document.querySelectorAll('.messages .thumbnail.toLoad');
+            let messagesScroll = document.querySelector('.content > main > section').scrollTop;
+            let messagesHeight = document.querySelector('.content > main > section').clientHeight;
+            for (let i = 0; i < thumbnails.length; i++) {
+                let thumbnail = thumbnails[i];
+                if (Math.abs(messagesScroll - thumbnail.offsetTop - thumbnail.offsetParent.offsetTop) > messagesHeight) {
+                    continue;
+                }
+
+                thumbnail.classList.remove('toLoad');
+
+                fetch(`/api/thumbnail/${thumbnail.dataset.imageId}`, {headers: Fetch.headers()}).then((response) => {
+                    return response.blob();
+                }).then((myBlob) => {
+                    let url = URL.createObjectURL(myBlob);
+                    thumbnail.style.backgroundImage = `url(${url})`;
+                }).catch(() => {
+                    thumbnail.classList.add('error');
+                });
             }
         }
     },

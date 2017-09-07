@@ -65,10 +65,10 @@ var Messages = {
 </section>
 
 <section class="image-dialog">
-    <header>
+    <main>
         <span class="close-button"><a class="button" data-click="Messages.image.dialog.hide"></a></span>
-    </header>
-    <main></main>
+        <section></section>
+    </main>
 </section>
 `;
 
@@ -372,7 +372,7 @@ var Messages = {
 
                             let replyToWrapper = document.createElement('div');
 
-                            if (replyToArticle.parentNode.classList.contains('messages')) {
+                            if (replyToArticle.parentNode.parentNode.classList.contains('messages')) {
 
                                 replyToWrapper.classList.add('progress');
                                 replyToWrapper.classList.add('replyToWrapper');
@@ -396,7 +396,7 @@ var Messages = {
                                 article.classList.remove('progress');
                                 replyToWrapper.classList.remove('progress');
 
-                                Messages.image.loadSome();
+                                Messages.image.loadSome(true);
                             }, 20);
                         });
                     }).catch((error) => {
@@ -600,7 +600,7 @@ var Messages = {
                 }).then((myBlob) => {
                     let url = URL.createObjectURL(myBlob);
                     let img = new Image();
-                    imageDialog.querySelector('main').appendChild(img);
+                    imageDialog.querySelector('main > section').appendChild(img);
                     img.src = url;
                 }).catch(() => {
                     imageDialog.classList.add('error');
@@ -609,16 +609,16 @@ var Messages = {
             hide: (button) => {
                 let imageDialog = document.querySelector('.image-dialog');
                 imageDialog.classList.remove('active');
-                imageDialog.querySelector('main').innerHTML = '';
+                imageDialog.querySelector('main > section').innerHTML = '';
             }
         },
-        loadSome: () => {
+        loadSome: (loadAtOnce = false) => {
             let thumbnails = document.querySelectorAll('.messages .thumbnail.toLoad');
             let messagesScroll = document.querySelector('.content > main > section').scrollTop;
             let messagesHeight = document.querySelector('.content > main > section').clientHeight;
             for (let i = 0; i < thumbnails.length; i++) {
                 let thumbnail = thumbnails[i];
-                if (Math.abs(messagesScroll - thumbnail.offsetTop - thumbnail.offsetParent.offsetTop) > messagesHeight) {
+                if (!loadAtOnce && Math.abs(messagesScroll - thumbnail.offsetTop - thumbnail.offsetParent.offsetTop) > messagesHeight) {
                     continue;
                 }
 

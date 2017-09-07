@@ -25,7 +25,11 @@
   }
 
   .close-button {
+    position: absolute;
     visibility: hidden;
+
+    right: 0;
+    top: 0;
   }
 
   &.active {

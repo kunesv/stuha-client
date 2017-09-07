@@ -238,7 +238,7 @@ article {
         margin-left: -3 * $module;
       }
     }
-    margin-bottom: 0.125 * $module;
+    margin-bottom: $module-quarter;
 
     &.progress {
       transform: scale3d(0, 0, 1);

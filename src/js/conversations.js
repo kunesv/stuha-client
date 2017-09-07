@@ -2,7 +2,7 @@ var Conversations = {
     lastConversation: {
         conversation: {},
         load: () => {
-            if (!Conversations.lastConversation.conversation) {
+            if (!Conversations.lastConversation.conversation.id) {
                 Conversations.lastConversation.conversation = {
                     'id': localStorage.getItem('conversationId'),
                     'title': localStorage.getItem('conversationTitle')
@@ -25,9 +25,21 @@ var Conversations = {
     save: (conversations) => {
         Conversations.currentConversations = conversations;
 
-        if (!Conversations.lastConversation.load().id) {
+        if (!Conversations.lastConversation.load().id || !Conversations.conversationExists(Conversations.lastConversation.load(), conversations)) {
             Conversations.lastConversation.save(conversations[0]);
         }
+    },
+    conversationExists: (conversation, conversations) => {
+        if (!conversation || !conversation.id) {
+            return false;
+        }
+
+        for (let i = 0; i < conversations.length; i++) {
+            if (conversations[i].id === conversation.id) {
+                return true;
+            }
+        }
+        return false;
     },
     load: () => {
         return fetch('/api/userConversations', {

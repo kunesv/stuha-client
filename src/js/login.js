@@ -126,7 +126,8 @@ var Login = {
                     Users.saveToken(token);
 
                     Content.clean();
-                    Messages.init();
+
+                    Users.init();
                 });
             }).catch((error) => {
                 let errorMessage = 'Se mi nepodařilo se přihlásit. Tak to zkusím ještě jednou.';
@@ -171,7 +172,7 @@ var Login = {
                 return;
             }
 
-            let dialog = document.createElement('div');
+            let dialog = document.createElement('section');
             dialog.classList.add('login-dialog');
             dialog.appendChild(Login.template());
 
@@ -195,7 +196,6 @@ var Login = {
     },
     logoff: () => {
         Content.clean();
-        Messages.menu.hide();
 
         Users.clean();
 
@@ -254,19 +254,17 @@ var Login = {
 let Content = {
     clean: () => {
         let content = document.querySelector('.content');
+        content.classList.remove('dialog');
+        content.innerHTML = '';
 
-        while (content.hasChildNodes()) {
-            content.removeChild(content.lastChild);
-        }
-
-        let dialogs = document.querySelectorAll('[class*=dialog]');
+        let dialogs = document.querySelectorAll('body > section');
 
         for (let i = 0; i < dialogs.length; i++) {
             dialogs[i].classList.remove('active');
-            dialogs[i].style.zIndex = 10000;
-            setTimeout(() => {
-                document.body.removeChild(dialogs[i]);
-            }, 300);
+            // dialogs[i].style.zIndex = 10000;
+            // setTimeout(() => {
+            document.body.removeChild(dialogs[i]);
+            // }, 300);
         }
     }
 };

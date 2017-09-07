@@ -593,7 +593,9 @@ var Messages = {
                 let imageDialog = document.querySelector('.image-dialog');
                 imageDialog.classList.add('active');
 
-                fetch(`/api/image/${thumbnail.dataset.imageId}`, {headers: Fetch.headers()}).then((response) => {
+                fetch(`/api/image/${thumbnail.dataset.imageId}`, {
+                    headers: Fetch.headers()
+                }).then(Fetch.processFetchStatus).then((response) => {
                     return response.blob();
                 }).then((myBlob) => {
                     let url = URL.createObjectURL(myBlob);
@@ -622,7 +624,9 @@ var Messages = {
 
                 thumbnail.classList.remove('toLoad');
 
-                fetch(`/api/thumbnail/${thumbnail.dataset.imageId}`, {headers: Fetch.headers()}).then((response) => {
+                fetch(`/api/thumbnail/${thumbnail.dataset.imageId}`, {
+                    headers: Fetch.headers()
+                }).then(Fetch.processFetchStatus).then((response) => {
                     return response.blob();
                 }).then((myBlob) => {
                     let url = URL.createObjectURL(myBlob);

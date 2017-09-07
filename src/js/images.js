@@ -1,5 +1,7 @@
 var Images = {
 
+    count: 0,
+
     upload: (event) => {
 
         let fileList = event.target.files;
@@ -12,32 +14,28 @@ var Images = {
         let thumbnails = document.querySelector('.message-dialog .thumbnails');
         thumbnails.classList.add('active');
 
-        for (let i = 0; i < fileList.length; i++) {
+        for (let c = Images.count, i = 0; i < fileList.length; i++, c++, Images.count++) {
             let file = fileList[i];
 
             Images.values.push({
-                name: file.name
+                'i': c,
+                'name': file.name
             });
 
-            thumbnails.insertAdjacentHTML('beforeend', `<li id="thumb${i}" class="placeholder">
-    <span class="close-button"><a class="button" data-click="Images.removeOne"></a></span>
+            thumbnails.insertAdjacentHTML('beforeend', `<li id="thumb${c}" class="placeholder">
+    <span class="close-button"><a class="button" data-click="Images.removeOne" data-i="${c}"></a></span>
 </li>`);
-
 
             setTimeout(() => {
                 let reader = new FileReader();
                 reader.onload = (event) => {
                     let img = new Image();
                     img.onload = function () {
-
-                        // let canvas = Images.resizeImage(img, 1200);
                         let thumbnailCanvas = Images.resizeImage(img, 240);
 
-                        let thumbnail = thumbnails.querySelector('.placeholder#thumb' + i);
+                        let thumbnail = thumbnails.querySelector('.placeholder#thumb' + c);
                         thumbnail.style.backgroundImage = `url(${thumbnailCanvas.toDataURL()})`;
                         thumbnail.classList.remove('placeholder');
-
-                        // Load canvas Image
 
                         Messages.message.dialog.validations.all();
                     };
@@ -105,6 +103,7 @@ var Images = {
     },
 
     remove: (i) => {
+        console.log('remove')
         let thumbnail = document.querySelectorAll('.message-dialog .thumbnails li')[i];
         thumbnail.parentNode.removeChild(thumbnail);
 
@@ -112,7 +111,18 @@ var Images = {
     },
 
     removeOne: (button) => {
-        console.log(button)
+        console.log(button.dataset.i)
+
+        for (let j = 0; j < Images.values.length; j++) {
+            console.log(Images.values[j])
+            console.log(Images.values[j].i)
+            console.log(Images.values[j].i === button.dataset.i)
+            console.log(Images.values[j].i == button.dataset.i)
+            if (Images.values[j].i == button.dataset.i) {
+                console.log('----------------remove')
+                Images.remove(j);
+            }
+        }
     },
 
     values: []

@@ -130,6 +130,7 @@
         background-repeat: no-repeat;
 
         margin: $module-half;
+        position: relative;
 
         width: 8 * $module;
         height: 6 * $module;
@@ -141,6 +142,16 @@
           max-height: 240px;
           max-width: 240px;
           display: inline;
+        }
+
+        .close-button {
+          position: absolute;
+          right: 0;
+
+          .button {
+            height: 2 * $module;
+            width: 2 * $module;
+          }
         }
 
         @media (max-width: 640px) {

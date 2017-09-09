@@ -26,7 +26,7 @@ var Messages = {
 
         let dialogs = `<section class="message-dialog">
     <header>
-        <span class="close-button"><a class="button" data-click="Messages.message.dialog.hide"></a></span>
+        <span class="close-button"><a class="secondary button" data-click="Messages.message.dialog.hide"></a></span>
     </header>
     <form enctype="multipart/form-data" id="images">
         <input type="file" id="uploadImage" name="images" multiple="multiple" accept="image/*"/>
@@ -57,7 +57,7 @@ var Messages = {
 
 <section class="conversation-menu">
     <header>
-        <span class="close-button"><a class="button" data-click="Messages.menuConversation.hide"></a></span>
+        <span class="close-button"><a class="secondary button" data-click="Messages.menuConversation.hide"></a></span>
     </header>
     <ul class="menu">
         <li class="button conversation-member-add" data-click="Conversations.member.add"><a></a><span>Přidat konverzující</span></li>
@@ -66,7 +66,9 @@ var Messages = {
 
 <section class="image-dialog">
     <main>
-        <span class="close-button"><a class="button" data-click="Messages.image.dialog.hide"></a></span>
+        <span class="close-button"><a class="translucent button" data-click="Messages.image.dialog.hide"></a></span>
+        <span class="previous-button"><a class="translucent button" data-click="Messages.image.dialog.previous"></a></span>
+        <span class="next-button"><a class="translucent button" data-click="Messages.image.dialog.next"></a></span>
         <section></section>
     </main>
 </section>
@@ -381,7 +383,7 @@ var Messages = {
                                 replyTo.parentNode.insertBefore(replyToWrapper, replyTo.nextSibling);
 
                                 let closeTemplate = `<span class="close-button">
-    <a class="button" data-click="Messages.message.replyTo.close"></a>
+    <a class="secondary button" data-click="Messages.message.replyTo.close"></a>
 </span>`;
 
                                 let close = document.createRange().createContextualFragment(closeTemplate);
@@ -396,7 +398,7 @@ var Messages = {
                                 article.classList.remove('progress');
                                 replyToWrapper.classList.remove('progress');
 
-                                Messages.image.loadSome(true);
+                                Messages.image.loadSome(article);
                             }, 20);
                         });
                     }).catch((error) => {
@@ -593,7 +595,15 @@ var Messages = {
                 let imageDialog = document.querySelector('.image-dialog');
                 imageDialog.classList.add('active');
 
-                fetch(`/api/image/${thumbnail.dataset.imageId}`, {
+                window.addEventListener('keydown', Messages.image.dialog.keydown);
+
+                Messages.image.dialog.load(thumbnail);
+            },
+            load: (thumbnail) => {
+                let imageDialog = document.querySelector('.image-dialog');
+                thumbnail.classList.add('active');
+
+                return fetch(`/api/image/${thumbnail.dataset.imageId}`, {
                     headers: Fetch.headers()
                 }).then(Fetch.processFetchStatus).then((response) => {
                     return response.blob();
@@ -606,19 +616,66 @@ var Messages = {
                     imageDialog.classList.add('error');
                 });
             },
-            hide: (button) => {
+            hide: () => {
                 let imageDialog = document.querySelector('.image-dialog');
                 imageDialog.classList.remove('active');
                 imageDialog.querySelector('main > section').innerHTML = '';
+
+                document.querySelector('.thumbnail.active').classList.remove('active');
+
+                window.removeEventListener('keydown', Messages.image.dialog.keydown);
+            },
+            previous: () => {
+                Messages.image.dialog.changeImage(-1);
+            },
+            next: () => {
+                Messages.image.dialog.changeImage(1);
+            },
+            changeImage: (delta) => {
+                let thumbnails = document.querySelectorAll('.thumbnail');
+                for (let i = 0; i < thumbnails.length; i++) {
+                    if (thumbnails[i].classList.contains('active')) {
+
+                        if (i + delta < 0 || i + delta === thumbnails.length) {
+                            return;
+                        }
+
+                        thumbnails[i].classList.remove('active');
+
+                        let img = document.querySelector('.image-dialog main > section img');
+                        if (img) {
+                            img.classList.add(delta > 0 ? 'progress-next' : 'progress-previous');
+                            setTimeout(() => {
+                                let img = document.querySelector('.image-dialog main > section img');
+                                img.parentNode.removeChild(img);
+                            }, 300);
+                        }
+                        Messages.image.dialog.load(thumbnails[i + delta]);
+                        break;
+                    }
+                }
+            },
+            keydown: (e) => {
+                switch (e.keyCode) {
+                    case 37:
+                        Messages.image.dialog.previous();
+                        break;
+                    case 39:
+                        Messages.image.dialog.next();
+                        break;
+                    case 27:
+                        Messages.image.dialog.hide();
+                        break;
+                }
             }
         },
-        loadSome: (loadAtOnce = false) => {
-            let thumbnails = document.querySelectorAll('.messages .thumbnail.toLoad');
+        loadSome: (article) => {
+            let thumbnails = article ? article.querySelectorAll('.thumbnail.toLoad') : document.querySelectorAll('.messages .thumbnail.toLoad');
             let messagesScroll = document.querySelector('.content > main > section').scrollTop;
             let messagesHeight = document.querySelector('.content > main > section').clientHeight;
             for (let i = 0; i < thumbnails.length; i++) {
                 let thumbnail = thumbnails[i];
-                if (!loadAtOnce && Math.abs(messagesScroll - thumbnail.offsetTop - thumbnail.offsetParent.offsetTop) > messagesHeight) {
+                if (!article && Math.abs(messagesScroll - thumbnail.offsetTop - thumbnail.offsetParent.offsetTop) > messagesHeight) {
                     continue;
                 }
 

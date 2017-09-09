@@ -23,7 +23,7 @@ var Images = {
             });
 
             thumbnails.insertAdjacentHTML('beforeend', `<li id="thumb${c}" class="placeholder">
-    <span class="close-button"><a class="button" data-click="Images.removeOne" data-i="${c}"></a></span>
+    <span class="close-button"><a class="translucent button" data-click="Images.removeOne" data-i="${c}"></a></span>
 </li>`);
 
             setTimeout(() => {
@@ -103,7 +103,6 @@ var Images = {
     },
 
     remove: (i) => {
-        console.log('remove')
         let thumbnail = document.querySelectorAll('.message-dialog .thumbnails li')[i];
         thumbnail.parentNode.removeChild(thumbnail);
 
@@ -111,15 +110,8 @@ var Images = {
     },
 
     removeOne: (button) => {
-        console.log(button.dataset.i)
-
         for (let j = 0; j < Images.values.length; j++) {
-            console.log(Images.values[j])
-            console.log(Images.values[j].i)
-            console.log(Images.values[j].i === button.dataset.i)
-            console.log(Images.values[j].i == button.dataset.i)
             if (Images.values[j].i == button.dataset.i) {
-                console.log('----------------remove')
                 Images.remove(j);
             }
         }

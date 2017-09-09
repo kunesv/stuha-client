@@ -77,10 +77,6 @@ button {
   > .button {
     height: 2.5 * $module;
     width: 2.5 * $module;
-
-    &:hover {
-      background-color: $color-background-button-secondary-active;
-    }
   }
 }
 
@@ -111,6 +107,14 @@ button {
   }
 }
 
+.translucent.button {
+  background-color: rgba(#666, 0.5);
+
+  &:hover {
+    background-color: rgba(#555, 0.75);
+  }
+}
+
 .menu-button .button {
   //background-image: url("/images/conversation.svg");
 }
@@ -135,7 +139,6 @@ form.show-errors .button, .button.error {
 }
 
 .close-button .button {
-  background-color: $color-background-button-secondary;
   background-image: url("/images/ex.svg");
 }
 
@@ -157,6 +160,13 @@ form.show-errors .button, .button.error {
   border-radius: 50%;
   height: 2.5 * $module;
   width: 2.5 * $module;
+}
+
+.previous-button .button {
+
+}
+.next-button .button {
+
 }
 
 ul.menu li.button {

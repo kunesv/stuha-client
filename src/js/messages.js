@@ -48,7 +48,7 @@ var Messages = {
                 <!--<li class="gps button"></li>-->
             </ul>     
             <p>
-                <span class="error">A nějaký obsah ...</span>
+                <span class="error">A co nějaký obsah?</span>
             </p>      
         </section>              
         <p class="button-row"><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>

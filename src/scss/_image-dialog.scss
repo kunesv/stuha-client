@@ -24,6 +24,7 @@
 
   img {
     max-width: 100vw;
+    height: auto;
     opacity: 0;
     transition: opacity 200ms, transform 300ms $animation-curve;
 

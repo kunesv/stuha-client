@@ -183,7 +183,7 @@ var Messages = {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
         <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.show" data-reply-to-name="${message.userName}" 
-            style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}.png')"></div>
+            style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}')"></div>
     </header>
     <main>                 
        
@@ -273,7 +273,9 @@ var Messages = {
                     messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').dataset.date));
                 }
 
-                messages.insertBefore(Messages.message.template(message), messages.firstChild);
+                let newMessage = document.createElement('div');
+                newMessage.appendChild(Messages.message.template(message));
+                messages.insertBefore(newMessage, messages.firstChild);
             }
             if (direction === 'beforeend') {
                 if (messages.querySelector('article:last-child')
@@ -282,7 +284,9 @@ var Messages = {
                     messages.insertAdjacentHTML('beforeend', Messages.message.separator(Datetime.formatDate(message.createdOn)));
                 }
 
-                messages.appendChild(Messages.message.template(message));
+                let newMessage = document.createElement('div');
+                newMessage.appendChild(Messages.message.template(message));
+                messages.appendChild(newMessage);
             }
         },
 
@@ -342,7 +346,7 @@ var Messages = {
                 let iconPath = Messages.message.validations.icon(node.iconPath) || '';
 
                 let template = `<a class="button" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
-    <span class="replyToIcon" style="background-image: url('/images/icons/${iconPath}.png')"></span><span class="caption"></span>
+    <span class="replyToIcon" style="background-image: url('/images/icons/${iconPath}')"></span><span class="caption"></span>
 </a>`;
 
                 let replyTo = document.createRange().createContextualFragment(template);
@@ -513,7 +517,7 @@ var Messages = {
                 return Users.currentUser.icons.map(Messages.message.dialog.icon).join('');
             },
             icon: (icon) => {
-                return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/icons/${icon.path}.png')"></li>`;
+                return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/icons/${icon.path}')"></li>`;
             },
             selectIcon: (li) => {
                 let active = li.parentNode.querySelector('.active');
@@ -584,7 +588,7 @@ var Messages = {
                 return uuid && uuid.match(/^[\da-f-]+$/i) ? uuid : '';
             },
             icon: (iconPath) => {
-                return iconPath && iconPath.match(/^\d+_\d+$/) ? iconPath : '';
+                return iconPath && iconPath.match(/^\d+_\d+\.\w{3}$/) ? iconPath : '';
             }
         }
     },
@@ -597,7 +601,10 @@ var Messages = {
 
                 window.addEventListener('keydown', Messages.image.dialog.keydown);
 
-                Messages.image.dialog.load(thumbnail);
+                imageDialog.classList.add('progress');
+                Messages.image.dialog.load(thumbnail).then(() => {
+                    imageDialog.classList.remove('progress');
+                });
             },
             load: (thumbnail) => {
                 let imageDialog = document.querySelector('.image-dialog');
@@ -632,6 +639,11 @@ var Messages = {
                 Messages.image.dialog.changeImage(1);
             },
             changeImage: (delta) => {
+                let imageDialog = document.querySelector('.image-dialog');
+                if (imageDialog.classList.contains('progress')) {
+                    return;
+                }
+
                 let thumbnails = document.querySelectorAll('.thumbnail');
                 for (let i = 0; i < thumbnails.length; i++) {
                     if (thumbnails[i].classList.contains('active')) {
@@ -643,14 +655,16 @@ var Messages = {
                         thumbnails[i].classList.remove('active');
 
                         let img = document.querySelector('.image-dialog main > section img');
-                        if (img) {
-                            img.classList.add(delta > 0 ? 'progress-next' : 'progress-previous');
-                            setTimeout(() => {
-                                let img = document.querySelector('.image-dialog main > section img');
-                                img.parentNode.removeChild(img);
-                            }, 300);
-                        }
-                        Messages.image.dialog.load(thumbnails[i + delta]);
+                        img.classList.add(delta > 0 ? 'progress-next' : 'progress-previous');
+                        setTimeout(() => {
+                            let img = document.querySelector('.image-dialog main > section img');
+                            img.parentNode.removeChild(img);
+                        }, 300);
+
+                        imageDialog.classList.add('progress');
+                        Messages.image.dialog.load(thumbnails[i + delta]).then(() => {
+                            imageDialog.classList.remove('progress');
+                        });
                         break;
                     }
                 }

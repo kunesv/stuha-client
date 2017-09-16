@@ -61,6 +61,12 @@
     }
   }
 
+  &.progress {
+    .previous-button .button, .next-button .button {
+      @extend .disabled.button;
+    }
+  }
+
   &.active {
     background-color: #ccc;
     transform: scale3d(1, 1, 1);
@@ -72,7 +78,6 @@
 
     img + img {
       display: none;
-      opacity: 0;
     }
   }
 }

@@ -115,6 +115,17 @@ button {
   }
 }
 
+.disabled.button {
+  background-color: rgba(#666, 0.1);
+
+  &:hover {
+    background-color: rgba(#666, 0.1);
+  }
+  &.clicked {
+    box-shadow: none;
+  }
+}
+
 .menu-button .button {
   //background-image: url("/images/conversation.svg");
 }

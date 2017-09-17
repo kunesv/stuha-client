@@ -5,7 +5,7 @@ var Messages = {
         <div>
             <span class="menu-button"><button class="secondary button" data-click="Messages.menu.toggle"></button></span>
             <span class="conversation"><button class="secondary button" data-click="Messages.menuConversation.show"></button></span>
-            <span class="update"><button class="light button" data-click="Messages.update"></button></span>
+            <span class="update"><button class="light button" data-click="Messages.loadRecent"></button></span>
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
         </div>
         <div>
@@ -18,7 +18,7 @@ var Messages = {
     </aside>
     <section>
         <div class="messages"></div>
-        <div class="load-more">Load more</div>
+        <div class="load-more"><a class="secondary button" data-click="Messages.loadMore"></a></div>
     </section>
 </main>`;
 
@@ -83,7 +83,6 @@ var Messages = {
 
         Messages.loadEverything();
 
-        // TODO: Let's see if this suits the case.
         let scrollingTimeout;
         document.querySelector('.content > main > section').addEventListener('scroll', () => {
             if (scrollingTimeout) {
@@ -92,7 +91,7 @@ var Messages = {
             scrollingTimeout = setTimeout(Messages.image.loadSome, 100);
         });
 
-        // FIXME: No more swipe, until dealt with.
+        // FIXME: No more swipe, until dealt with weird behaviour.
         // let content = document.querySelector('.content');
         // Messages.swipe = new Swipe(content);
     },
@@ -108,35 +107,55 @@ var Messages = {
         }).catch(Messages.error);
     },
 
-    load: (pageNo = 1) => {
+    load: () => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.conversation.title;
 
         Messages.menu.active();
 
-        return fetch(`/api/messages?conversationId=${Conversations.lastConversation.conversation.id}&pageNo=${pageNo}`, {
+        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/load`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
                 Messages.placeholders.removeAll();
 
-                if (!messages.length) {
+                console.log(messages.unreadCount)
+
+                if (!messages.messages.length) {
                     Messages.empty.add();
                 } else {
-                    let newMessages = document.createElement('div');
-
-                    for (let i = 0; i < messages.length; i++) {
-                        let message = messages[i];
-                        message.createdOn = Datetime.arrayToDate(message.createdOn);
-                        newMessages.appendChild(Messages.message.template(message));
-                    }
-
-                    document.querySelector('.messages').appendChild(newMessages);
-
-                    Messages.image.loadSome();
+                    Messages.message.add(messages.messages);
                 }
 
                 document.querySelector('.content').classList.remove('loading');
             });
+        });
+    },
+
+    loadRecent: () => {
+        // FIXME: Ask to enable notifications when first clicked .., then show auto-update icon, ask to switch off when
+
+        let lastArticle = document.querySelector('.messages > div:first-child > article:first-child');
+
+        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadRecent/${lastArticle.id}`, {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then(Messages.message.add);
+        }).catch((error) => {
+            // FIXME: And what about some serious error handling ?
+            console.log('Load-recent failed', error);
+        });
+    },
+
+    loadMore: () => {
+        let firstArticle = document.querySelector('.messages > div:last-child > article:last-child');
+
+        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadMore/${firstArticle.id}`, {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((messages) => Messages.message.add(messages, false));
+        }).catch((error) => {
+            // FIXME: And what about some serious error handling here?
+            console.log('Load-more failed', error);
         });
     },
 
@@ -149,16 +168,6 @@ var Messages = {
         } else {
             return Messages.load();
         }
-    },
-
-    update: () => {
-        // TODO: Ask to enable notifications when first clicked ..
-        let lastArticle = document.querySelector('.messages article');
-        let lastId = lastArticle ? lastArticle.id : null;
-        console.log(lastId)
-
-        // FIXME: Make smarter
-        Messages.reload();
     },
 
     error: (error) => {
@@ -261,33 +270,46 @@ var Messages = {
 
             return article;
         },
-        add: (message, direction = 'afterbegin') => {
-            message.createdOn = Datetime.arrayToDate(message.createdOn);
+        add: (messages, placeOnTop = true) => {
+            if (!messages.length) {
+                return;
+            }
+            let newMessages = document.createElement('div');
+            newMessages.classList.add('loading');
 
-            let messages = document.querySelector('.messages');
+            for (let i = 0; i < messages.length; i++) {
+                let message = messages[i];
+                message.createdOn = Datetime.arrayToDate(message.createdOn);
 
-            if (direction === 'afterbegin') {
-                if (messages.querySelector('article:first-child')
-                    && messages.querySelector('article:first-child').hasAttribute('data-date')
-                    && messages.querySelector('article:first-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
-                    messages.insertAdjacentHTML('afterbegin', Messages.message.separator(messages.querySelector('article:first-child').dataset.date));
+                if (i > 0 && Datetime.formatDate(messages[i - 1].createdOn) !== Datetime.formatDate(message.createdOn)) {
+                    newMessages.appendChild(Messages.message.separator(Datetime.formatDate(message.createdOn)));
                 }
 
-                let newMessage = document.createElement('div');
-                newMessage.appendChild(Messages.message.template(message));
-                messages.insertBefore(newMessage, messages.firstChild);
+                newMessages.appendChild(Messages.message.template(message));
             }
-            if (direction === 'beforeend') {
-                if (messages.querySelector('article:last-child')
-                    && messages.querySelector('article:last-child').hasAttribute('data-date')
-                    && messages.querySelector('article:last-child').dataset.date !== Datetime.formatDate(message.createdOn)) {
-                    messages.insertAdjacentHTML('beforeend', Messages.message.separator(Datetime.formatDate(message.createdOn)));
-                }
 
-                let newMessage = document.createElement('div');
-                newMessage.appendChild(Messages.message.template(message));
-                messages.appendChild(newMessage);
+            if (placeOnTop) {
+                let newestAlreadyDisplayed = document.querySelector('.messages div:first-child article:first-child');
+                if (newestAlreadyDisplayed && newestAlreadyDisplayed.dataset.date && newestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[messages.length - 1].createdOn)) {
+                    newMessages.appendChild(Messages.message.separator(newestAlreadyDisplayed.dataset.date));
+                }
+                document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
+            } else {
+                let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
+                if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {
+                    newMessages.insertBefore(Messages.message.separator(Datetime.formatDate(messages[0].createdOn)), newMessages.firstChild);
+                }
+                document.querySelector('.messages').appendChild(newMessages);
             }
+
+            setTimeout(() => {
+                newMessages.classList.remove('loading');
+                if (messages.length === 10) {
+                    Messages.message.loadMore.show();
+                }
+            }, 100);
+
+            Messages.image.loadSome();
         },
 
         submitForm: (form) => {
@@ -323,10 +345,10 @@ var Messages = {
                         setTimeout(() => {
                             Messages.message.dialog.hide();
                             Messages.message.dialog.messageReset();
-                            Messages.message.add(message);
-                            document.querySelector('.messages').parentNode.scrollTop = 0;
 
-                            Messages.image.loadSome();
+                            Messages.message.add([message]);
+
+                            document.querySelector('.messages').parentNode.scrollTop = 0;
                         }, 200);
                     });
                 }).catch((response) => {
@@ -337,7 +359,7 @@ var Messages = {
         },
 
         separator: (createdOn) => {
-            return `<div class="seperator"><span>${createdOn}</span></div>`;
+            return document.createRange().createContextualFragment(`<div class="seperator"><span>${createdOn}</span></div>`);
         },
 
         replyTo: {
@@ -430,7 +452,17 @@ var Messages = {
             }
         },
 
+        loadMore: {
+            show: () => {
+                document.querySelector('.messages + .load-more').classList.add('active');
+            },
+            hide: () => {
+                document.querySelector('.messages + .load-more').classList.remove('active');
+            }
+        },
+
         removeAll: () => {
+            Messages.message.loadMore.hide();
             document.querySelector('.messages').innerHTML = '';
             document.querySelector('.content').classList.add('loading');
         },
@@ -710,8 +742,7 @@ var Messages = {
     },
 
     placeholders: {
-        add: () => [1, 2, 3, 4].map(Messages.placeholders.addOne),
-        addOne: () => {
+        template: () => {
             let template =
                 `<article class="placeholder">
                     <header><div class="icon"></div></header>
@@ -721,13 +752,21 @@ var Messages = {
                     </main>
                 </article>`;
 
-            document.querySelector('.messages').insertAdjacentHTML('beforeend', template);
+            return document.createRange().createContextualFragment(template);
+        },
+        add: () => {
+            let placeholders = document.createElement('div');
+            placeholders.classList.add('placeholders');
+
+            for (let i = 0; i < 4; i++) {
+                placeholders.appendChild(Messages.placeholders.template());
+            }
+            document.querySelector('.messages').appendChild(placeholders);
         },
         removeAll: () => {
-            let placeholders = document.querySelectorAll('.messages .placeholder');
-            for (let i = placeholders.length; i--;) {
-                let placeholder = placeholders[i];
-                document.querySelector('.messages').removeChild(placeholder);
+            let placeholders = document.querySelector('.messages .placeholders');
+            if (placeholders) {
+                document.querySelector('.messages').removeChild(placeholders);
             }
         }
     },
@@ -735,14 +774,16 @@ var Messages = {
     empty: {
         add: () => {
             let template =
-                `<article class="bot">
-    <header><div class="icon"></div></header>
-    <main>
-        <section>
-            <p class="plain-text"><span>Bych sem asi měla přidat první příspěvek ...</span></p>
-        </section>
-    </main>
-</article>`;
+                `<div class="hide-when-second">
+    <article class="bot">
+        <header><div class="icon"></div></header>
+        <main>
+            <section>
+                <p class="plain-text"><span>Bych sem asi měla přidat první příspěvek ...</span></p>
+            </section>
+        </main>
+    </article>
+</div>`;
 
             document.querySelector('.messages').insertAdjacentHTML('beforeend', template);
         }

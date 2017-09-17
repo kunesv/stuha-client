@@ -1,10 +1,30 @@
-.messages > * {
+.messages > div {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $small-screen-threshold;
+
+  transition: opacity 600ms;
+
+  &.loading {
+    opacity: 0;
+  }
+
   &:first-child {
     margin-top: 2 * $module;
 
     @media (max-width: $small-screen-threshold) {
       margin-top: 0.75 * $module;
     }
+  }
+
+  & + .hide-when-second {
+    transition: opacity 2s ease-out;
+    opacity: 0;
+  }
+
+  > article, > div {
+    margin-left: 0.5 * $module;
+    margin-right: 0.5 * $module;
   }
 }
 
@@ -278,11 +298,6 @@ article {
     }
   }
 
-  & + .bot {
-    transition: opacity 2s ease-out;
-    opacity: 0;
-  }
-
   &.placeholder {
     p {
       height: $module;
@@ -349,10 +364,10 @@ article.my > main > section > article.replyTo {
     margin-right: 0;
 
     > section > p:not(.replyTo) {
-      box-shadow: 0 0  $module-quarter / 2 $color-background;
+      box-shadow: 0 0 $module-quarter / 2 $color-background;
     }
     > section > p.replyTo a {
-      box-shadow: 0 0  $module-quarter / 2 $color-background;
+      box-shadow: 0 0 $module-quarter / 2 $color-background;
     }
 
   }
@@ -386,7 +401,13 @@ article.my {
 }
 
 .load-more {
-  display: none;
+  transition: opacity 300ms;
+  opacity: 0;
+  padding: $module 0 4 * $module;
+
+  &.active {
+    opacity: 1;
+  }
 }
 
 .thumbnails + .formatted {

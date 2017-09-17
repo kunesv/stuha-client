@@ -180,6 +180,10 @@ form.show-errors .button, .button.error {
 
 }
 
+.load-more .button {
+  background-image: url("/images/load-more.svg");
+}
+
 ul.menu li.button {
   flex-direction: column;
   align-items: center;

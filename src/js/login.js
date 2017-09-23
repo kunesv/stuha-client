@@ -67,7 +67,7 @@ var Login = {
             
             <p>
                 <label>
-                    <input type="checkbox" name="remember" /> 
+                    <input type="checkbox" name="remember"/> 
                     <span class="check-box"><span></span></span>
                     <span>Zapamatovat přihlášení</span>
                 </label>
@@ -78,19 +78,18 @@ var Login = {
     </section>
 </main>`;
 
-        let loginForm = document.createRange().createContextualFragment(template);
-
-        let boxes = loginForm.querySelectorAll('#login input[type=checkbox]');
-        for (let i = 0; i < boxes.length; i++) {
-            let checkbox = boxes[i];
-            checkbox.parentNode.querySelector('.check-box').classList.toggle('active', checkbox.checked);
-            checkbox.addEventListener('change', (event) => event.target.parentNode.querySelector('.check-box').classList.toggle('active', event.target.checked));
-        }
-
-        return loginForm;
+        return document.createRange().createContextualFragment(template);
     },
     init: () => {
         document.querySelector('.content').appendChild(Login.template());
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let checkbox = document.querySelector('#login input[type=checkbox]');
+            if (checkbox.checked) {
+                checkbox.parentNode.querySelector('.check-box').classList.add('active');
+            }
+            checkbox.addEventListener('change', (event) => event.target.parentNode.querySelector('.check-box').classList.toggle('active'));
+        });
 
         let username = document.querySelector('input[name=username]');
         username.addEventListener('blur', Login.validations.username);

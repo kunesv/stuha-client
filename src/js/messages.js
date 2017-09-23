@@ -13,7 +13,9 @@ var Messages = {
         </div>
     </header>
     <aside> 
-        <header></header>
+        <header>
+            
+        </header>
         <section></section>
     </aside>
     <section>
@@ -304,8 +306,14 @@ var Messages = {
 
             setTimeout(() => {
                 newMessages.classList.remove('loading');
+
+                // FIXME: This should be little bit more clever.
                 if (messages.length === 10) {
                     Messages.message.loadMore.show();
+                } else {
+                    if (!placeOnTop) {
+                        Messages.message.loadMore.hide();
+                    }
                 }
             }, 100);
 
@@ -790,18 +798,19 @@ var Messages = {
     },
     failed: {
         add: (errorMessage) => {
-            let template =
-                `<article class="bot">
-    <header><div class="icon"></div></header>
-    <main>
-        <section>
-            <p class="plain-text">${errorMessage}</p>
-            <p class="button-row">
-                <button class="secondary reload button" data-click="Messages.reload"></button>
-            </p>
-        </section>
-    </main>
-</article>`;
+            let template = `<div>
+    <article class="bot">
+        <header><div class="icon"></div></header>
+        <main>
+            <section>
+                <p class="plain-text">${errorMessage}</p>
+                <p class="button-row">
+                    <button class="secondary reload button" data-click="Messages.reload"></button>
+                </p>
+            </section>
+        </main>
+    </article>
+</div>`;
 
             document.querySelector('.messages').insertAdjacentHTML('afterbegin', template);
             Buttons.init(document.querySelectorAll('.messages article:first-child .button'));

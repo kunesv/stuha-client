@@ -102,41 +102,10 @@ small {
       }
     }
 
-    &.full {
-      display: none;
-      //aside {
-      //  flex: 0 0 25%;
-      //
-      //  background-color: #e6e6e6;
-      //  border-right: 1px solid #e0e0e0;
-      //
-      //  z-index: 11;
-      //}
-      //section {
-      //  background-color: #e6e6e6;
-      //  border-bottom: 1px solid #e0e0e0;
-      //
-      //  display: flex;
-      //  flex: 0 0 75%;
-      //
-      //  //justify-content: space-between;
-      //
-      //  span .button {
-      //    padding-left: 2 * $module;
-      //    padding-right: $module-half;
-      //    background-position: left center;
-      //    line-height: .75 * $module;
-      //    white-space: nowrap;
-      //  }
-      //}
-      //@media (max-width: $small-screen-threshold) {
-      //  display: none;
-      //}
-    }
   }
 
-  &.loading > header .button {
-    opacity: 0;
+  &.loading > main > header .button {
+    visibility: hidden;
   }
 
   > main > aside {

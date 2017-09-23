@@ -115,7 +115,7 @@ label {
   font-size: 12px;
 
   > input[type=checkbox] {
-    opacity: 0;
+    visibility: hidden;
     position: absolute;
   }
 
@@ -143,10 +143,8 @@ label {
       &.active {
         background-color: $color-background-button-secondary-active;
 
-
         > span {
           transform: translate(16px, 0);
-
 
         }
       }

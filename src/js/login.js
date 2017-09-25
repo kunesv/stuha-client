@@ -83,10 +83,6 @@ var Login = {
     init: () => {
         document.querySelector('.content').appendChild(Login.template());
 
-        document.addEventListener('DOMContentLoaded', () => {
-            Form.checkbox.initOne(document.querySelector('#login input[type=checkbox]'));
-        });
-
         let username = document.querySelector('input[name=username]');
         username.addEventListener('blur', Login.validations.username);
         username.addEventListener('input', Login.validations.username);
@@ -172,8 +168,6 @@ var Login = {
             dialog.appendChild(Login.template());
 
             document.body.appendChild(dialog);
-
-            Form.checkbox.initOne(document.querySelector('#login input[type=checkbox]'));
 
             setTimeout(() => {
                 let dialogs = document.body.querySelectorAll('.login-dialog');

@@ -89,7 +89,7 @@
 .thumbnail.button {
   @extend .scale-button;
 
-  background: $color-background-message none center;
+  background: $color-background-message none center no-repeat;
   cursor: zoom-in;
   display: inline-block;
   margin: $module-quarter;

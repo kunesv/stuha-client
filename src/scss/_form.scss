@@ -115,8 +115,17 @@ label {
   font-size: 12px;
 
   > input[type=checkbox] {
-    visibility: hidden;
+    opacity: 0;
     position: absolute;
+    cursor: pointer;
+
+    &:checked + .check-box {
+      background-color: $color-background-button-secondary-active;
+
+      > span {
+        transform: translate(16px, 0);
+      }
+    }
   }
 
   > span {
@@ -139,15 +148,6 @@ label {
       width: 36px;
 
       transition: background-color 200ms;
-
-      &.active {
-        background-color: $color-background-button-secondary-active;
-
-        > span {
-          transform: translate(16px, 0);
-
-        }
-      }
 
       > span {
         display: inline-block;

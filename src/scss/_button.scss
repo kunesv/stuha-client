@@ -99,7 +99,7 @@ button {
 }
 
 .light.button {
-  background-color: #ececec;
+  background-color: transparent;
   color: #777;
 
   &:hover {
@@ -159,7 +159,7 @@ form.show-errors .button, .button.error {
 }
 
 .conversation .button {
-  //background-image: url("/images/conversation-settings.svg");
+  background-image: url("/images/conversation-settings.svg");
 }
 
 .update .button {
@@ -173,9 +173,14 @@ form.show-errors .button, .button.error {
   width: 2.5 * $module;
 }
 
+.user-settings.button {
+  background-image: url("/images/user-settings.svg");
+}
+
 .previous-button .button {
 
 }
+
 .next-button .button {
 
 }
@@ -184,31 +189,61 @@ form.show-errors .button, .button.error {
   background-image: url("/images/load-more.svg");
 }
 
-ul.menu li.button {
-  flex-direction: column;
-  align-items: center;
+ul.menu {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 
-  flex: 1 0 4 * $module;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
 
-  padding: $module-half;
+  li.button {
+    flex-direction: column;
+    align-items: center;
 
-  background: transparent;
+    flex: 1 0 4 * $module;
 
-  > a {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    height: 2.5 * $module;
-    width: 2.5 * $module;
-  }
+    height: auto;
+    transition: box-shadow 100ms, background-color 400ms;
 
-  > span {
-    color: #777;
-    font-size: 12px;
-    text-align: center;
-  }
+    padding: 3 * $module-quarter $module-half $module-quarter;
 
-  &:hover {
-    background: rgba(#000, 0.02);
+    background: transparent;
+
+    > a {
+      flex: 0 0 2.5 * $module;
+
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 100%;
+
+      width: 2.5 * $module;
+    }
+
+    > span {
+      flex: 1 0 1.5 * $module;
+
+      display: flex;
+      align-items: center;
+
+      line-height: 3 * $module-quarter;
+
+      color: #777;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    &:hover {
+      background: rgba(#000, 0.02);
+    }
+
+    &.active {
+      background-color: #dcdcdc;
+
+      > span {
+        color: #333;
+      }
+    }
   }
 }

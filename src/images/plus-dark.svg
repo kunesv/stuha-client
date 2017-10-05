@@ -26,7 +26,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.5"
-     inkscape:cx="-256.09449"
+     inkscape:cx="-581.09449"
      inkscape:cy="249.42191"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -59,14 +59,20 @@
      id="layer1"
      transform="translate(0,-197)">
     <path
-       style="fill:none;stroke:#808080;stroke-width:2.64583302;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 50,229.73097 v 34.53807"
+       style="fill:none;stroke:#808080;stroke-width:2.11666656;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 50,235.02263 v 23.95474"
        id="path4492"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#808080;stroke-width:2.64583302;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 67.269035,247.00001 H 32.730965"
+       style="fill:none;stroke:#808080;stroke-width:2.11666656;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 61.977369,247.00001 H 38.022631"
        id="path4492-6"
        inkscape:connector-curvature="0" />
+    <circle
+       style="fill:none;fill-opacity:1;stroke:#808080;stroke-width:2.11666656;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path5044"
+       cx="50"
+       cy="247"
+       r="24.077084" />
   </g>
 </svg>

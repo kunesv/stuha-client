@@ -52,64 +52,17 @@ small {
   }
 
   &.dialog {
-
     @media (min-width: $small-screen-threshold + 1px) {
-      transform: translate3d(-25%, 0, 0);
+      transform: translate3d(calc(-25% - #{3 * $module}), 0, 0);
 
       & > header .button {
         opacity: 0;
       }
     }
-
-  }
-
-  > main {
-    @media (max-width: $small-screen-threshold) {
-      flex-direction: column;
-    }
-  }
-
-  > main > header {
-    display: none;
-    flex-direction: column;
-    flex: 0 0 3.5 * $module;
-
-    @media (max-width: $small-screen-threshold) {
-      display: flex;
-    }
-
-    div {
-      display: flex;
-      justify-content: space-between;
-
-      span {
-        display: flex;
-        flex: 0 0 2.5 * $module;
-
-        color: #999;
-        font-size: 12px;
-        text-align: center;
-
-        &.conversation-name {
-          flex: 1 1 100%;
-          min-height: $module;
-          justify-content: center;
-        }
-
-        > .button {
-          width: 100%;
-        }
-      }
-    }
-
   }
 
   &.loading > main > header .button {
     visibility: hidden;
-  }
-
-  > main > aside {
-    transform: translate3d(0, 0, 0);
   }
 
   &.moved {
@@ -127,7 +80,66 @@ small {
     height: 100%;
 
     @media (max-width: $small-screen-threshold) {
+      flex-direction: column;
       box-shadow: 0 0 0.25 * $module rgba(black, 0.1);
+    }
+
+    > header {
+      display: flex;
+      flex-direction: column;
+      flex: 0 0 3.5 * $module;
+
+      background-color: #f0f0f0;
+
+      @media (min-width: $small-screen-threshold + 1) {
+        flex: 0 0 2.5 * $module;
+      }
+
+      div {
+        display: flex;
+        justify-content: space-between;
+
+        @media (min-width: $small-screen-threshold + 1) {
+          flex-direction: column;
+
+          &.conversation-name {
+            display: none;
+          }
+          span.conversation {
+            order: 3
+          }
+          span.update {
+            order: 1;
+          }
+          span.add-button {
+            order: 2;
+          }
+        }
+
+        span {
+          display: flex;
+          flex: 0 0 2.5 * $module;
+
+          color: #999;
+          font-size: 12px;
+          text-align: center;
+
+          &.conversation-name {
+            flex: 1 1 100%;
+            min-height: $module;
+            justify-content: center;
+          }
+
+          &.hide-for-large {
+            @extend .hide-for-large;
+          }
+
+          > .button {
+            width: 100%;
+          }
+
+        }
+      }
     }
 
     > aside {
@@ -137,14 +149,14 @@ small {
       flex-direction: column;
 
       background-color: #e6e6e6;
-      border-right: 1px solid #e0e0e0;
+
+      transform: translate3d(0, 0, 0);
 
       z-index: 11;
 
       @media (max-width: $small-screen-threshold) {
-        border-right: 0 none;
-
         position: absolute;
+        height: 100%;
         margin-left: -75%;
         width: 75%;
       }
@@ -153,8 +165,6 @@ small {
         flex: 0 0 2.5 * $module;
 
         display: flex;
-
-        border-bottom: 1px solid $color-line;
 
         @media (max-width: $small-screen-threshold) {
           display: none;
@@ -171,6 +181,17 @@ small {
         height: 100%;
 
         box-shadow: 0 0 rgba(black, 0);
+      }
+
+      > footer {
+        flex: 0 0 2.5 * $module;
+
+        display: flex;
+        justify-content: flex-end;
+
+        a {
+          width: 2.5 * $module;
+        }
       }
     }
 

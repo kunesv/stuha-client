@@ -48,3 +48,9 @@ aside, header, main, section {
 @import "conversation";
 
 @import "login";
+
+.hide-for-large {
+  @media (min-width: $small-screen-threshold + 1) {
+    display: none;
+  }
+}

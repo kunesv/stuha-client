@@ -186,6 +186,8 @@ var Login = {
         }
     },
     logoff: () => {
+        document.querySelector('.content').classList.remove('moved');
+
         Content.clean();
 
         Users.clean();

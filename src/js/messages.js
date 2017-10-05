@@ -1,30 +1,34 @@
 var Messages = {
-    init: () => {
+    template: () => {
         let template = `<main>
+    <aside>  
+        <header></header>
+        <section></section>
+        <footer>
+            <a class="user-settings secondary button" data-click=""></a>
+            <a class="logout secondary button" data-click="Login.logout">Logout</a>
+        </footer>
+    </aside>
     <header>
         <div>
-            <span class="menu-button"><button class="secondary button" data-click="Messages.menu.toggle"></button></span>
-            <span class="conversation"><button class="secondary button" data-click="Messages.menuConversation.show"></button></span>
+            <span class="menu-button hide-for-large"><button class="secondary button" data-click="Messages.menu.toggle"></button></span>
+            <span class="conversation"><button class="light button" data-click="Messages.conversation.menu.show"></button></span>
             <span class="update"><button class="light button" data-click="Messages.loadRecent"></button></span>
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
         </div>
-        <div>
+        <div class="conversation-name">
             <span class="conversation-name " data-content="currentConversation"></span>
         </div>
     </header>
-    <aside> 
-        <header>
-            
-        </header>
-        <section></section>
-    </aside>
     <section>
         <div class="messages"></div>
         <div class="load-more"><a class="secondary button" data-click="Messages.loadMore"></a></div>
     </section>
 </main>`;
-
-        document.querySelector('.content').insertAdjacentHTML('afterBegin', template);
+        return document.createRange().createContextualFragment(template);
+    },
+    init: () => {
+        document.querySelector('.content').appendChild(Messages.template());
 
         let dialogs = `<section class="message-dialog">
     <header>
@@ -59,10 +63,13 @@ var Messages = {
 
 <section class="conversation-menu">
     <header>
-        <span class="close-button"><a class="secondary button" data-click="Messages.menuConversation.hide"></a></span>
+        <span class="close-button"><a class="secondary button" data-click="Messages.conversation.menu.hide"></a></span>
     </header>
     <ul class="menu">
-        <li class="button conversation-member-add" data-click="Conversations.member.add"><a></a><span>Přidat konverzující</span></li>
+        <li class="conversation-member-add button" data-click="Conversations.member.add">
+            <a></a>
+            <span>Přidat konverzující</span>
+        </li>
     </ul>
 </section>
 
@@ -187,8 +194,10 @@ var Messages = {
     },
 
     message: {
-        thumbnailTemplate: (imageId) => {
-            return `<span class="thumbnail button toLoad" data-image-id="${imageId}" data-click="Messages.image.dialog.show"></span>`;
+        thumbnailTemplate: (picture) => {
+            let imageId = picture.id.match(/^[a-zA-Z0-9-]{36}$/) ? picture.id : '';
+
+            return `<span class="thumbnail button toLoad" data-image-id="${imageId}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;
         },
         template: (message) => {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
@@ -207,15 +216,14 @@ var Messages = {
 
             let contentElement = article.querySelector('.formatted');
 
-            if (message.imageIds && message.imageIds.length) {
+            if (message.pictures && message.pictures.length) {
                 let thumbnails = document.createElement('section');
 
                 thumbnails.classList.add('thumbnails');
 
-                for (let i = 0; i < message.imageIds.length; i++) {
+                for (let i = 0; i < message.pictures.length; i++) {
                     let thumb = document.createElement('span');
-                    let imageId = message.imageIds[i].match(/^[a-zA-Z0-9-]{36}$/) ? message.imageIds[i] : '';
-                    thumbnails.insertAdjacentHTML('beforeend', Messages.message.thumbnailTemplate(imageId));
+                    thumbnails.insertAdjacentHTML('beforeend', Messages.message.thumbnailTemplate(message.pictures[i]));
                 }
 
                 contentElement.parentNode.insertBefore(thumbnails, contentElement);
@@ -650,15 +658,18 @@ var Messages = {
                 let imageDialog = document.querySelector('.image-dialog');
                 thumbnail.classList.add('active');
 
+                let img = new Image();
+                img.src = thumbnail.style.backgroundImage.slice(5, -2);
+                img.height = thumbnail.dataset.imageHeight;
+                img.width = thumbnail.dataset.imageWidth;
+                imageDialog.querySelector('main > section').appendChild(img);
+
                 return fetch(`/api/image/${thumbnail.dataset.imageId}`, {
                     headers: Fetch.headers()
                 }).then(Fetch.processFetchStatus).then((response) => {
                     return response.blob();
                 }).then((myBlob) => {
-                    let url = URL.createObjectURL(myBlob);
-                    let img = new Image();
-                    imageDialog.querySelector('main > section').appendChild(img);
-                    img.src = url;
+                    img.src = URL.createObjectURL(myBlob);
                 }).catch(() => {
                     imageDialog.classList.add('error');
                 });
@@ -842,15 +853,12 @@ var Messages = {
 <ul class="conversations menu">
     <li class="button">
         <a class="add"></a>
-        <span class="conversation-name">Začít novou</span>
+        <span>Začít novou konverzaci</span>
     </li>
-</ul>
-<!-- Not HERE. <ul>    
-     <li><a class="button" data-click="Login.logout"><span>Logout</span></a></li>
-</ul>-->`;
+</ul>`;
             let conversationTemplate = `<li class="button" data-click="Conversations.select">
     <a></a>
-    <span class="conversation-name"></span>
+    <span></span>
 </li>`;
 
 
@@ -861,7 +869,7 @@ var Messages = {
             Conversations.currentConversations.forEach((conversation) => {
                 let c = document.createRange().createContextualFragment(conversationTemplate);
                 c.querySelector('.button').setAttribute('data-conversation-id', conversation.id);
-                c.querySelector('.conversation-name').textContent = conversation.title;
+                c.querySelector('span').textContent = conversation.title;
 
 
                 conversations.appendChild(c);
@@ -892,14 +900,16 @@ var Messages = {
             conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).classList.add('active');
         }
     },
-    menuConversation: {
-        show: () => {
-            document.querySelector('.content').classList.add('dialog');
-            document.querySelector('.conversation-menu').classList.add('active');
-        },
-        hide: () => {
-            document.querySelector('.content').classList.remove('dialog');
-            document.querySelector('.conversation-menu').classList.remove('active');
+    conversation: {
+        menu: {
+            show: () => {
+                document.querySelector('.content').classList.add('dialog');
+                document.querySelector('.conversation-menu').classList.add('active');
+            },
+            hide: () => {
+                document.querySelector('.content').classList.remove('dialog');
+                document.querySelector('.conversation-menu').classList.remove('active');
+            }
         }
     }
 };

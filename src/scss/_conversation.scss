@@ -1,49 +1,11 @@
 .conversations.menu {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-
   li.button {
-    height: auto;
-    transition: background-color 300ms;
-
     > a {
       border-radius: 50%;
-      transition: box-shadow 100ms;
-
       background-image: url("/images/conversation.svg");
 
       &.add {
         background-image: url("/images/plus-dark.svg"), url("/images/conversation.svg");
-      }
-    }
-
-    &.clicked {
-      box-shadow: none;
-
-      > a {
-        box-shadow: 0 0 0 0.5 * $module rgba(black, 0.5) inset;
-        background-image: url("/images/conversation-active.svg"), url("/images/conversation.svg");
-
-        &.add {
-          background-image: url("/images/plus-dark.svg"), url("/images/conversation-active.svg"), url("/images/conversation.svg");
-        }
-      }
-    }
-
-    &.active {
-      //background-color: #f6f6f6;
-
-      > a {
-        background-image: url("/images/conversation-active.svg"), url("/images/conversation.svg");
-
-        &.add {
-          background-image: url("/images/plus-dark.svg"), url("/images/conversation-active.svg"), url("/images/conversation.svg");
-        }
       }
     }
   }
@@ -54,7 +16,9 @@
 
   background-color: #e0e0e0;
 
-  display: block;
+  display: flex;
+  flex-direction: column;
+
   transform: scale3d(0, 0, 1);
   transform-origin: top center;
 
@@ -63,20 +27,5 @@
   &.active {
     background-color: #e6e6e6;
     transform: scale3d(1, 1, 1);
-  }
-
-  ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    justify-content: flex-start;
-    flex-wrap: wrap;
-
-    li {
-      padding: $module-half;
-      width: 2.5 * $module;
-    }
   }
 }

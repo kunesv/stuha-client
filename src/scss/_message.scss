@@ -393,11 +393,11 @@ article.my {
 }
 
 .load-more {
-  opacity: 0;
-  padding: $module 0 4 * $module;
+  visibility: hidden;
+  padding: $module 0 0;
 
   &.active {
-    opacity: 1;
+    visibility: visible;
   }
 }
 

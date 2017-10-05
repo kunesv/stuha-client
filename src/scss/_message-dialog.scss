@@ -5,7 +5,7 @@
   transform: translate3d(100%, 0, 0);
 
   opacity: 0;
-  width: 30%;
+  width: calc(25% + #{4 * $module});
 
   z-index: 500;
 
@@ -71,7 +71,7 @@
         }
 
         &.active {
-          box-shadow: 0 0 0 0.5 * $module rgba(black, 0.2) inset;
+          box-shadow: 0 0 0 $module-half rgba(black, 0.2) inset;
         }
 
         &.hidden {

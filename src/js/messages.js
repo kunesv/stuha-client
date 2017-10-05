@@ -5,7 +5,7 @@ var Messages = {
         <header></header>
         <section></section>
         <footer>
-            <a class="user-settings secondary button" data-click=""></a>
+            <a class="user-settings light button" data-click=""></a>
             <a class="logout secondary button" data-click="Login.logout">Logout</a>
         </footer>
     </aside>

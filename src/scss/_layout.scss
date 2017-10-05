@@ -87,7 +87,7 @@ small {
     > header {
       display: flex;
       flex-direction: column;
-      flex: 0 0 3.5 * $module;
+      flex: 0 0 4 * $module;
 
       background-color: #f0f0f0;
 
@@ -124,10 +124,16 @@ small {
           font-size: 12px;
           text-align: center;
 
+          &.update {
+            display: none;
+          }
+
           &.conversation-name {
-            flex: 1 1 100%;
-            min-height: $module;
+            flex: 0 1 100%;
+            height: auto;
+            min-height: 1.5 * $module;
             justify-content: center;
+            align-items: center;
           }
 
           &.hide-for-large {

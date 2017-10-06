@@ -1,5 +1,8 @@
 var Users = {
     currentUser: {},
+    notifications: {
+        poll: true
+    },
     init: () => {
         let signedIn = Users.loadFromStorage();
         if (signedIn === 'TRUE') {

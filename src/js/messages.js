@@ -2,7 +2,6 @@ var Messages = {
     template: () => {
         let template = `<main>
     <aside>  
-        <header></header>
         <section></section>
         <footer>
             <a class="user-settings light button" data-click=""></a>
@@ -90,7 +89,16 @@ var Messages = {
 
         Messages.placeholders.add();
 
-        Messages.loadEverything();
+        Messages.loadEverything().then(() => {
+            Messages.intervalLoadNew = setInterval(() => {
+                Conversations.status().then(() => {
+                    console.log('COOL')
+                }).catch(() => {
+                    console.log('CLEAR! Signalize to user, e.g. some disabled refresh icon.')
+                    clearInterval(Messages.intervalLoadNew);
+                });
+            }, 300000);
+        });
 
         let scrollingTimeout;
         document.querySelector('.content > main > section').addEventListener('scroll', () => {
@@ -106,9 +114,8 @@ var Messages = {
     },
 
     loadEverything: () => {
-        Users.loadUserDetails().then(() => {
+        return Users.loadUserDetails().then(() => {
             Messages.message.dialog.init();
-
             return Conversations.load();
         }).then(() => {
             Messages.menu.load();
@@ -143,9 +150,9 @@ var Messages = {
     loadRecent: () => {
         // FIXME: Ask to enable notifications when first clicked .., then show auto-update icon, ask to switch off when
 
-        let lastArticle = document.querySelector('.messages > div:first-child > article:first-child');
+        let lastMessage = document.querySelector('.messages > div:first-child > article:first-child');
 
-        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadRecent/${lastArticle.id}`, {
+        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadRecent/${lastMessage.id}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then(Messages.message.add);
@@ -349,20 +356,22 @@ var Messages = {
                 }
                 messageForm.append('conversationId', Conversations.lastConversation.load().id);
                 messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
+                let lastMessage = document.querySelector('.messages > div:first-child > article:first-child');
+                messageForm.append('lastMessageId', lastMessage.id);
 
                 fetch('/api/message', {
                     headers: Fetch.headers(),
                     method: 'POST',
                     body: messageForm
                 }).then(Fetch.processFetchStatus).then((response) => {
-                    return response.json().then((message) => {
+                    return response.json().then((messages) => {
                         button.classList.add('done');
 
                         setTimeout(() => {
                             Messages.message.dialog.hide();
                             Messages.message.dialog.messageReset();
 
-                            Messages.message.add([message]);
+                            Messages.message.add(messages);
 
                             document.querySelector('.messages').parentNode.scrollTop = 0;
                         }, 200);

@@ -123,7 +123,7 @@ article {
 
             transition: background-color 300ms, box-shadow 100ms;
 
-            max-width: calc(100% - #{1.7501 * $module});
+            //max-width: calc(100% - #{1.7501 * $module});
 
             &:hover {
               background-color: #d0d0d0;
@@ -151,17 +151,17 @@ article {
 
               vertical-align: middle;
 
-              overflow: hidden;
-              white-space: pre;
-              text-overflow: ellipsis;
+              //overflow: hidden;
+              //white-space: pre;
+              //text-overflow: ellipsis;
+              //
+              //max-width: calc(100% - #{1.7501 * $module});
+              //
+              //transition: border-color 300ms;
 
-              max-width: calc(100% - #{1.7501 * $module});
-
-              transition: border-color 300ms;
-
-              &:hover {
-                border-bottom-color: $color-text;
-              }
+              //&:hover {
+              //  border-bottom-color: $color-text;
+              //}
             }
           }
         }

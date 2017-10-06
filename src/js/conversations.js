@@ -42,7 +42,7 @@ var Conversations = {
         return false;
     },
     load: () => {
-        return fetch('/api/userConversations', {
+        return fetch('/api/conversations', {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((conversation) => {
@@ -63,5 +63,14 @@ var Conversations = {
         Messages.reload();
 
         Messages.menu.hide();
+    },
+    status: () => {
+        return fetch(`/api/conversations/status`, {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((status) => {
+                console.log(status)
+            });
+        });
     }
 };

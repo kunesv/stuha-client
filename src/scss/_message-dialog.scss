@@ -2,14 +2,14 @@
   @extend .overlay;
 
   transition: transform 300ms $animation-curve, opacity 300ms, background-color 300ms ease-out;
-  transform: translate3d(100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
 
   opacity: 0;
-  width: calc(25% + #{4 * $module});
+  width: calc(25vw + #{2.5 * $module});
 
   z-index: 500;
 
-  border-left: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
 
   @media (max-width: $small-screen-threshold) {
     background-color: #e0e0e0;

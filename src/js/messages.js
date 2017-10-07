@@ -10,8 +10,8 @@ var Messages = {
     </aside>
     <header>
         <div>
-            <span class="menu-button hide-for-large"><button class="secondary button" data-click="Messages.menu.toggle"></button></span>
-            <span class="conversation"><button class="light button" data-click="Messages.conversation.menu.show"></button></span>
+            <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
+            <span class="conversation"><button class="light button" data-click="Conversations.conversation.menu.show"></button></span>
             <span class="update"><button class="light button" data-click="Messages.loadRecent"></button></span>
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
         </div>
@@ -62,12 +62,18 @@ var Messages = {
 
 <section class="conversation-menu">
     <header>
-        <span class="close-button"><a class="secondary button" data-click="Messages.conversation.menu.hide"></a></span>
+        <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.menu.hide"></a></span>
     </header>
     <ul class="menu">
-        <li class="conversation-member-add button" data-click="Conversations.member.add">
-            <a></a>
-            <span>Přidat konverzující</span>
+        <li>
+            <a class="conversation-member-add button" data-click="Conversations.conversation.member.add">
+                <span></span>
+                <span>Přidat konverzující</span>        
+            </a>
+            <form>           
+                <p class="step1"><input type="text" name="title"/></p>            
+                <a class="submit button" data-click="Conversations.conversation.member.submit"></a>
+            </form>          
         </li>
     </ul>
 </section>
@@ -118,7 +124,6 @@ var Messages = {
             Messages.message.dialog.init();
             return Conversations.load();
         }).then(() => {
-            Messages.menu.load();
             return Messages.load();
         }).catch(Messages.error);
     },
@@ -126,7 +131,7 @@ var Messages = {
     load: () => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.conversation.title;
 
-        Messages.menu.active();
+        Conversations.menu.active();
 
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/load`, {
             headers: Fetch.headers()
@@ -842,7 +847,7 @@ var Messages = {
                 document.body.removeChild(overlay);
             }
         }
-    },
+    }
 
     // FIXME: for many messages, introduce some dynamic hide/show.
     // inView: (message) => {
@@ -852,73 +857,6 @@ var Messages = {
     //     return (elemTop > -200) && (elemBottom < window.innerHeight + 200);
     // },
 
-    menu: {
-        load: () => {
-            if (document.querySelector('aside .conversations')) {
-                return;
-            }
-
-            let template = `
-<ul class="conversations menu">
-    <li class="button">
-        <a class="add"></a>
-        <span>Začít novou konverzaci</span>
-    </li>
-</ul>`;
-            let conversationTemplate = `<li class="button" data-click="Conversations.select">
-    <a></a>
-    <span></span>
-</li>`;
 
 
-            document.querySelector('aside section').insertAdjacentHTML('afterBegin', template);
-
-            let conversations = document.querySelector('aside .conversations');
-
-            Conversations.currentConversations.forEach((conversation) => {
-                let c = document.createRange().createContextualFragment(conversationTemplate);
-                c.querySelector('.button').setAttribute('data-conversation-id', conversation.id);
-                c.querySelector('span').textContent = conversation.title;
-
-
-                conversations.appendChild(c);
-            });
-
-            Buttons.init(conversations.querySelectorAll('.button'));
-        },
-        show: () => {
-            document.querySelector('.content').classList.remove('moved-down');
-            document.querySelector('.content').classList.add('moved');
-        },
-        hide: () => {
-            document.querySelector('.content').classList.remove('moved');
-        },
-        toggle: () => {
-            if (document.querySelector('.content').classList.contains('moved')) {
-                Messages.menu.hide();
-            } else {
-                Messages.menu.show();
-            }
-        },
-        active: () => {
-            let conversations = document.querySelector('aside .conversations');
-            let active = conversations.querySelector('.active');
-            if (active) {
-                active.classList.remove('active');
-            }
-            conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).classList.add('active');
-        }
-    },
-    conversation: {
-        menu: {
-            show: () => {
-                document.querySelector('.content').classList.add('dialog');
-                document.querySelector('.conversation-menu').classList.add('active');
-            },
-            hide: () => {
-                document.querySelector('.content').classList.remove('dialog');
-                document.querySelector('.conversation-menu').classList.remove('active');
-            }
-        }
-    }
 };

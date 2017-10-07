@@ -141,7 +141,7 @@ form.show-errors .button, .button.error {
   }
 }
 
-.conversation-member-add a {
+.conversation-member-add span:first-child {
   background-image: url("/images/conversation-member-add.svg");
 
   &.light {
@@ -156,6 +156,11 @@ form.show-errors .button, .button.error {
 .submit.button, button[type=submit] {
   background-image: url("/images/submit.svg");
   background-size: auto 100%;
+
+  &.error {
+    @extend .button.error;
+    background-color: $color-background-error;
+  }
 }
 
 .conversation .button {
@@ -198,51 +203,117 @@ ul.menu {
   align-items: flex-start;
   flex-wrap: wrap;
 
-  li.button {
-    flex-direction: column;
-    align-items: center;
-
-    flex: 1 0 4 * $module;
-
-    height: auto;
-    transition: box-shadow 100ms, background-color 400ms;
-
-    padding: 3 * $module-quarter $module-half $module-quarter;
-
-    background: transparent;
+  li {
+    flex: 1 0 4.5 * $module;
+    transition: box-shadow 100ms, background-color 400ms, flex 300ms $animation-curve;
 
     > a {
-      flex: 0 0 2.5 * $module;
-
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: 100%;
-
-      width: 2.5 * $module;
-    }
-
-    > span {
-      flex: 1 0 1.5 * $module;
+      height: auto;
 
       display: flex;
-      align-items: center;
+      flex-direction: column;
 
-      line-height: 3 * $module-quarter;
+      background: transparent;
 
-      color: #777;
-      font-size: 12px;
-      text-align: center;
+      padding: 3 * $module-quarter $module-half $module-quarter;
+
+      &:hover {
+        background: rgba(#000, 0.02);
+      }
+
+      &.active {
+        background-color: #dcdcdc;
+
+        > span {
+          color: #333;
+        }
+      }
+
+      > span:first-child {
+        flex: 0 0 2.5 * $module;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 100%;
+        width: 2.5 * $module;
+      }
+      > span:last-child {
+        flex: 1 0 1.5 * $module;
+
+        display: flex;
+        align-items: center;
+
+        line-height: 3 * $module-quarter;
+
+        color: #777;
+        font-size: 12px;
+        text-align: center;
+      }
     }
 
-    &:hover {
-      background: rgba(#000, 0.02);
+    > form {
+      display: flex;
+      justify-content: center;
+
+      position: absolute;
+      width: calc(100% - #{$module});
+
+      padding: $module-half;
+
+      background-color: #e3e3e3;
+
+      transform: scale3d(0, 0, 1);
+      opacity: 0;
+      transform-origin: top left;
+      transition: transform 200ms $animation-curve, opacity 200ms;
+
+      > p {
+        display: flex;
+
+        flex: 1 0 %75;
+        //height: 1.75 * $module;
+        margin: 0;
+
+        background-color: white;
+
+        input {
+          width: calc(100% - #{$module});
+        }
+      }
+      > a.submit {
+        flex: 0 0 2 * $module;
+        height: 2 * $module;
+      }
     }
 
-    &.active {
-      background-color: #dcdcdc;
+    &.form {
+      //flex: 1 1 100%;
+      background-color: rgba(#000, 0.02);
+      //
+      //a span:first-child {
+      //  background-size: 50%;
+      //  background-position: top;
+      //}
 
-      > span {
-        color: #333;
+      > form {
+        opacity: 1;
+        transform: scale3d(1, 1, 1);
+      }
+    }
+  }
+
+  &.conversations {
+    li {
+      > a > span:first-child {
+        border-radius: 50%;
+        background-image: url("/images/conversation.svg");
+
+        &.add {
+          background-image: url("/images/plus-dark.svg"), url("/images/conversation.svg");
+        }
+      }
+
+      &.form > a > span:first-child.add {
+        background-image: url("/images/ex-dark.svg"), url("/images/conversation.svg");
       }
     }
   }

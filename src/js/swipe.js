@@ -30,7 +30,7 @@ function Swipe(element) {
         element.classList.remove('swiping');
 
         if (current - start > 100) {
-            Messages.menu.toggle(document.querySelector('.menu-button .button'));
+            Conversations.menu.toggle(document.querySelector('.menu-button .button'));
 
             event.preventDefault();
         }

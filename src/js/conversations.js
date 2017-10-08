@@ -57,7 +57,7 @@ var Conversations = {
                 Buttons.init(conversationsMenu.querySelectorAll('.button'));
                 Buttons.initForms(conversationsMenu.querySelectorAll('form'));
 
-                if (!Conversations.lastConversation.load()) {
+                if (!Conversations.lastConversation.load().id) {
                     Conversations.lastConversation.save(conversations[0]);
                 }
             });

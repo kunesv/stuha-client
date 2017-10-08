@@ -3,9 +3,9 @@ var Messages = {
         let template = `<main>
     <aside>  
         <section></section>
-        <footer>
-            <a class="user-settings light button" data-click=""></a>
+        <footer>           
             <a class="logout secondary button" data-click="Login.logout">Logout</a>
+            <a class="user-settings light button" data-click=""></a>
         </footer>
     </aside>
     <header>
@@ -207,9 +207,7 @@ var Messages = {
 
     message: {
         thumbnailTemplate: (picture) => {
-            let imageId = picture.id.match(/^[a-zA-Z0-9-]{36}$/) ? picture.id : '';
-
-            return `<span class="thumbnail button toLoad" data-image-id="${imageId}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;
+            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;
         },
         template: (message) => {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
@@ -234,7 +232,6 @@ var Messages = {
                 thumbnails.classList.add('thumbnails');
 
                 for (let i = 0; i < message.pictures.length; i++) {
-                    let thumb = document.createElement('span');
                     thumbnails.insertAdjacentHTML('beforeend', Messages.message.thumbnailTemplate(message.pictures[i]));
                 }
 
@@ -507,7 +504,9 @@ var Messages = {
                 if (activeIcon) {
                     activeIcon.classList.remove('active');
                 }
-                document.querySelector('.message-dialog .textarea').value = '';
+                let textarea = document.querySelector('.message-dialog .textarea');
+                textarea.value = '';
+                Textarea.resize(textarea);
                 document.querySelector('.message-dialog .submit.button').classList.remove('progress');
                 document.querySelector('.message-dialog .submit.button').classList.remove('done');
 

@@ -53,10 +53,10 @@ small {
 
   &.dialog {
     @media (min-width: $small-screen-threshold + 1px) {
-      transform: translate3d($module, 0, 0);
+      //transform: translate3d($module, 0, 0);
 
       > main > header {
-        visibility: hidden;
+        flex-basis: 25vw;
       }
     }
   }
@@ -89,7 +89,7 @@ small {
       flex-direction: column;
       flex: 0 0 4 * $module;
 
-      //background-color: #f0f0f0;
+      transition: flex 300ms $animation-curve;
 
       @media (min-width: $small-screen-threshold + 1) {
         flex: 0 0 2.5 * $module;
@@ -195,7 +195,7 @@ small {
         flex: 0 0 2.5 * $module;
 
         display: flex;
-        justify-content: flex-start;
+        justify-content: flex-end;
 
         a {
           width: 2.5 * $module;
@@ -209,7 +209,7 @@ small {
       position: relative;
 
       @media (min-width: $small-screen-threshold + 1px) {
-        flex: 0 0 calc(75vw - #{2.5 * $module});
+        flex: 0 1 calc(75vw - #{2.5 * $module});
       }
     }
   }

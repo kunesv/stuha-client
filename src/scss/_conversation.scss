@@ -2,17 +2,32 @@
   @extend .overlay;
 
   background-color: #e0e0e0;
+  left: 25vw;
 
   display: flex;
   flex-direction: column;
 
+  transition: transform 300ms $animation-curve, background-color 300ms ease-out, opacity 300ms;
   transform: scale3d(0, 0, 1);
-  transform-origin: top center;
+  transform-origin: top left;
+  opacity: 0;
 
-  transition: transform 300ms $animation-curve, background-color 300ms ease-out;
+  width: 25vw;
+
+  @media (max-width: $small-screen-threshold) {
+    width: 100%;
+    transform: scale3d(0, 0, 1);
+    transform-origin: top center;
+  }
 
   &.active {
     background-color: #e6e6e6;
+
     transform: scale3d(1, 1, 1);
+    opacity: 1;
+
+    @media (max-width: $small-screen-threshold) {
+      transform: scale3d(1, 1, 1);
+    }
   }
 }

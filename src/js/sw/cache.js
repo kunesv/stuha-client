@@ -8,7 +8,7 @@ self.addEventListener('fetch', function (event) {
     }
 
     event.respondWith(
-        caches.open('v0016').then(function (cache) {
+        caches.open('v0017').then(function (cache) {
 
             return cache.match(event.request).then(function (response) {
                 return response || fetch(event.request).then(function (fetchedResponse) {

@@ -117,6 +117,7 @@ button {
 
 .disabled.button {
   background-color: rgba(#666, 0.1);
+  cursor: default;
 
   &:hover {
     background-color: rgba(#666, 0.1);
@@ -141,12 +142,16 @@ form.show-errors .button, .button.error {
   }
 }
 
-.conversation-member-add span:first-child {
+.conversation-member-add .button span:first-child {
   background-image: url("/images/conversation-member-add.svg");
 
   &.light {
     background-image: url("/images/conversation-member-add-dark.svg");
   }
+}
+
+.conversation-member-add.form .button span:first-child {
+  background-image: url("/images/ex-dark.svg");
 }
 
 .close-button .button {

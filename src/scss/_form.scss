@@ -14,7 +14,7 @@ form {
   > p {
     margin: $module-half;
 
-    position: relative;
+    //position: relative;
 
     @media (max-width: $small-screen-threshold) {
       margin: 0.5 * $module;
@@ -165,5 +165,34 @@ label {
   }
 }
 
+ul.autocomplete {
+  position: absolute;
+  list-style: none;
+  left: $module-half;
+  top: 2.5 * $module;
 
+  margin: 0;
+  padding: 0;
 
+  width: calc(100% - #{3 * $module});
+
+  background-color: white;
+
+  opacity: 0;
+  transition: opacity 300ms;
+
+  &.active {
+    opacity: 1;
+  }
+
+  li {
+    cursor: pointer;
+    padding: $module-half;
+
+    border-top: 1px dashed #e0e0e0;
+
+    &:hover {
+      background-color: #f6f6f6;
+    }
+  }
+}

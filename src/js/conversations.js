@@ -3,7 +3,7 @@ var Conversations = {
         let template = `
 <ul class="conversations menu">
     <li class="add">
-        <a class="button" data-click="Conversations.conversation.new.step1">       
+        <a class="button" data-click="Conversations.conversation.new.add">       
             <span class="add"></span>
             <span>Začít novou konverzaci</span>
         </a>
@@ -128,7 +128,7 @@ var Conversations = {
             return li;
         },
         new: {
-            step1: (button) => {
+            add: (button) => {
                 button.parentNode.classList.toggle('form');
                 if (button.parentNode.classList.contains('form')) {
                     button.parentNode.querySelector('input[name=title]').focus();
@@ -180,14 +180,118 @@ var Conversations = {
                 }
             }
         },
+        member: {
+            add: (button) => {
+                if (!button.parentNode.classList.contains('form')) {
+                    Conversations.conversation.member.show();
+                } else {
+                    Conversations.conversation.member.hide();
+                }
+            },
+            show: () => {
+                document.querySelector('li.conversation-member-add .submit.button').classList.add('disabled');
+                let searchField = document.querySelector('li.conversation-member-add input[name=userSearch]');
+                searchField.offsetParent.parentNode.classList.add('form');
+                searchField.addEventListener('input', Conversations.conversation.member.input);
+                searchField.focus();
+            },
+            hide: () => {
+                let searchField = document.querySelector('li.conversation-member-add input[name=userSearch]');
+                searchField.removeEventListener('input', Conversations.conversation.member.input);
+                searchField.value = '';
+
+                searchField.offsetParent.parentNode.classList.remove('form');
+            },
+            timeout: null,
+            input: (event) => {
+                if (Conversations.conversation.member.timeout) {
+                    clearTimeout(Conversations.conversation.member.timeout);
+                }
+                Conversations.conversation.member.timeout = setTimeout((function (ev) {
+                    let autocomplete = ev.target.parentNode.parentNode.querySelector('.autocomplete');
+                    autocomplete.innerHTML = '';
+                    autocomplete.classList.add('active');
+                    autocomplete.classList.add('loading');
+
+                    return fetch(`/api/relatedUsers/${ev.target.value}`, {
+                        headers: Fetch.headers()
+                    }).then(Fetch.processFetchStatus).then((response) => {
+                        return response.json().then((users) => {
+                            for (let i = 0; i < users.length; i++) {
+                                let user = users[i];
+                                let li = document.createElement('li');
+                                li.id = user.id;
+                                li.textContent = user.name;
+                                li.dataset.click = 'Conversations.conversation.member.set';
+                                autocomplete.appendChild(li);
+                            }
+                            autocomplete.classList.remove('loading');
+                            Buttons.init(autocomplete.querySelectorAll('li'));
+                        });
+                    });
+                }), 300, event);
+            },
+            set: (button) => {
+                document.querySelector('li.conversation-member-add input[name=memberId]').value = button.id;
+                document.querySelector('li.conversation-member-add input[name=userSearch]').value = button.textContent;
+                document.querySelector('li.conversation-member-add .autocomplete').innerHTML = '';
+                document.querySelector('li.conversation-member-add .submit.button').classList.remove('disabled');
+            },
+            submitForm: (form) => {
+                let button = form.querySelector('.submit.button');
+                Conversations.conversation.member.submit(button);
+            },
+            submit: (button) => {
+                if (button.classList.contains('disabled')) {
+                    document.querySelector('li.conversation-member-add input[name=userSearch]').focus();
+                }
+                if (!button.classList.contains('progress') && !button.classList.contains('disabled')) {
+                    button.classList.remove('error');
+                    button.classList.add('progress');
+
+                    let memberForm = new FormData(document.querySelector('.conversation-member-add form'));
+                    memberForm.append('conversationId', Conversations.lastConversation.load().id);
+
+                    fetch('/api/conversation/member', {
+                        headers: Fetch.headers(),
+                        method: 'POST',
+                        body: memberForm
+                    }).then(Fetch.processFetchStatus).then((response) => {
+                        return response.json().then((conversation) => {
+                            button.classList.add('done');
+
+                            setTimeout(() => {
+                                Conversations.conversation.member.hide();
+                                button.classList.remove('progress');
+                            }, 200);
+                        });
+                    }).catch((response) => {
+                        if (response.status === 409) {
+                            console.log('--!--', 'Error')
+                        }
+                        button.classList.remove('progress');
+                        button.classList.add('error');
+                    });
+                }
+            }
+        },
         menu: {
             show: () => {
                 document.querySelector('.content').classList.add('dialog');
                 document.querySelector('.conversation-menu').classList.add('active');
             },
             hide: () => {
-                document.querySelector('.content').classList.remove('dialog');
-                document.querySelector('.conversation-menu').classList.remove('active');
+                console.log(document.querySelectorAll('.conversation-menu .form'))
+                if (document.querySelectorAll('.conversation-menu .form').length > 0) {
+                    Conversations.conversation.member.hide();
+                    setTimeout(() => {
+                        document.querySelector('.content').classList.remove('dialog');
+                        document.querySelector('.conversation-menu').classList.remove('active');
+                    }, 50);
+                } else {
+                    document.querySelector('.content').classList.remove('dialog');
+                    document.querySelector('.conversation-menu').classList.remove('active');
+                }
             }
         }
     }

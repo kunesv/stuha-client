@@ -65,14 +65,15 @@ var Messages = {
         <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.menu.hide"></a></span>
     </header>
     <ul class="menu">
-        <li>
-            <a class="conversation-member-add button" data-click="Conversations.conversation.member.add">
+        <li class="conversation-member-add">
+            <a class="button" data-click="Conversations.conversation.member.add">
                 <span></span>
-                <span>Přidat konverzující</span>        
+                <span>Přidám konverzující</span>        
             </a>
-            <form>           
-                <p class="step1"><input type="text" name="title"/></p>            
+            <form data-click="Conversations.conversation.member.submitForm">                       
+                <p class="step1"><input type="hidden" name="memberId"/><input type="text" name="userSearch"/></p>            
                 <a class="submit button" data-click="Conversations.conversation.member.submit"></a>
+                <ul class="autocomplete"></ul>
             </form>          
         </li>
     </ul>
@@ -90,8 +91,8 @@ var Messages = {
 
         document.body.insertAdjacentHTML('beforeEnd', dialogs);
 
-        let buttons = document.querySelectorAll('.button');
-        Buttons.init(buttons);
+        Buttons.init(document.querySelectorAll('.button'));
+        Buttons.initForms(document.querySelectorAll('form'));
 
         Messages.placeholders.add();
 
@@ -145,6 +146,9 @@ var Messages = {
                     Messages.empty.add();
                 } else {
                     Messages.message.add(messages.messages);
+                    if (messages.messages.length === 10) {
+                        Messages.message.loadMore.show();
+                    }
                 }
 
                 document.querySelector('.content').classList.remove('loading');
@@ -173,7 +177,13 @@ var Messages = {
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadMore/${firstArticle.id}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((messages) => Messages.message.add(messages, false));
+            return response.json().then((messages) => {
+                if (messages.length < 10) {
+                    Messages.message.loadMore.hide();
+                }
+
+                Messages.message.add(messages, false)
+            });
         }).catch((error) => {
             // FIXME: And what about some serious error handling here?
             console.log('Load-more failed', error);
@@ -323,15 +333,6 @@ var Messages = {
 
             setTimeout(() => {
                 newMessages.classList.remove('loading');
-
-                // FIXME: This should be little bit more clever.
-                if (messages.length === 10) {
-                    Messages.message.loadMore.show();
-                } else {
-                    if (!placeOnTop) {
-                        Messages.message.loadMore.hide();
-                    }
-                }
             }, 100);
 
             Messages.image.loadSome();
@@ -855,7 +856,6 @@ var Messages = {
     //
     //     return (elemTop > -200) && (elemBottom < window.innerHeight + 200);
     // },
-
 
 
 };

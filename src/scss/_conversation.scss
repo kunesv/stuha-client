@@ -2,7 +2,7 @@
   @extend .overlay;
 
   background-color: #e0e0e0;
-  left: 25vw;
+  width: 25vw;
 
   display: flex;
   flex-direction: column;
@@ -13,7 +13,9 @@
   opacity: 0;
   overflow: hidden;
 
-  width: 25vw;
+  @media (min-width: $small-screen-threshold + 1) {
+    left: 25vw;
+  }
 
   @media (max-width: $small-screen-threshold) {
     width: 100%;

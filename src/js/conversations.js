@@ -36,6 +36,18 @@ var Conversations = {
             Conversations.lastConversation.conversation = {};
             localStorage.removeItem('conversationId');
             localStorage.removeItem('conversationTitle');
+        },
+        conversationExists: (conversationId, conversations) => {
+            if (!conversationId) {
+                return false;
+            }
+
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].id === conversationId) {
+                    return true;
+                }
+            }
+            return false;
         }
     },
     load: () => {
@@ -57,7 +69,9 @@ var Conversations = {
                 Buttons.init(conversationsMenu.querySelectorAll('.button'));
                 Buttons.initForms(conversationsMenu.querySelectorAll('form'));
 
-                if (!Conversations.lastConversation.load().id) {
+                let lastConversationId = Conversations.lastConversation.load().id;
+
+                if (!lastConversationId || !Conversations.lastConversation.conversationExists(lastConversationId, conversations)) {
                     Conversations.lastConversation.save(conversations[0]);
                 }
             });
@@ -73,7 +87,10 @@ var Conversations = {
         let conversationId = button.dataset.conversationId;
         let conversationTitle = button.querySelector('span:last-child').textContent;
 
-        Conversations.lastConversation.save({id: conversationId, title: conversationTitle});
+        Conversations.selectConversation({id: conversationId, title: conversationTitle});
+    },
+    selectConversation: (conversation) => {
+        Conversations.lastConversation.save({id: conversation.id, title: conversation.title});
 
         Conversations.conversation.new.reset();
 
@@ -166,8 +183,8 @@ var Conversations = {
                             button.classList.add('done');
 
                             setTimeout(() => {
-                                Conversations.conversation.new.reset();
                                 Conversations.one(conversation);
+                                Conversations.selectConversation(conversation);
                             }, 200);
                         });
                     }).catch((response) => {
@@ -213,7 +230,7 @@ var Conversations = {
                     autocomplete.classList.add('active');
                     autocomplete.classList.add('loading');
 
-                    return fetch(`/api/relatedUsers/${ev.target.value}`, {
+                    return fetch(`/api/conversation/${Conversations.lastConversation.load().id}/addMember/${ev.target.value}`, {
                         headers: Fetch.headers()
                     }).then(Fetch.processFetchStatus).then((response) => {
                         return response.json().then((users) => {

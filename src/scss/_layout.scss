@@ -167,18 +167,10 @@ small {
         width: 75%;
       }
 
-      > header {
-        flex: 0 0 2.5 * $module;
-
-        display: flex;
-
-        @media (max-width: $small-screen-threshold) {
-          display: none;
-        }
-      }
-
       > section {
         @extend .overflow-auto;
+
+        flex-shrink: 1;
 
         display: flex;
         flex-direction: column;

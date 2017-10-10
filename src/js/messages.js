@@ -12,7 +12,7 @@ var Messages = {
         <div>
             <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
             <span class="conversation"><button class="light button" data-click="Conversations.conversation.menu.show"></button></span>
-            <span class="update"><button class="light button" data-click="Messages.loadRecent"></button></span>
+            <span class="update disabled"><button class="light button" data-click="Messages.loadRecent"></button></span>
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
         </div>
         <div class="conversation-name">
@@ -98,7 +98,6 @@ var Messages = {
 
         Messages.loadEverything().then(() => {
             if (Users.notifications.poll) {
-                Conversations.unreadCounts();
                 Messages.intervalLoadNew = setInterval(Conversations.unreadCounts, 20 * 1000);
             }
         });
@@ -319,6 +318,8 @@ var Messages = {
                     newMessages.appendChild(Messages.message.separator(newestAlreadyDisplayed.dataset.date));
                 }
                 document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
+
+                Conversations.unreadCounts();
             } else {
                 let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
                 if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {

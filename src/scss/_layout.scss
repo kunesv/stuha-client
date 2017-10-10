@@ -124,8 +124,16 @@ small {
           font-size: 12px;
           text-align: center;
 
-          &.update:not(.active) {
-            display: none;
+          transition: transform 300ms $animation-curve;
+
+          &.update {
+            transform: scale3d(0, 0, 1);
+            &.disabled {
+              display: none;
+            }
+            &.active {
+              transform: scale3d(1, 1, 1);
+            }
           }
 
           &.conversation-name {

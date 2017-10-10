@@ -94,9 +94,7 @@ var Conversations = {
 
         Conversations.conversation.new.reset();
 
-        Messages.reload().then(() => {
-            Conversations.unreadCounts();
-        });
+        Messages.reload();
 
         Conversations.menu.hide();
     },
@@ -118,10 +116,13 @@ var Conversations = {
     },
     refreshCurrentConversationUnreadCount: () => {
         let unread = document.querySelector(`.conversations.menu a[data-conversation-id='${Conversations.lastConversation.load().id}'] .unread`);
+        let updateButton = document.querySelector('main > header .update');
         if (unread.textContent === '') {
-            document.querySelector('main > header .update').classList.remove('active');
+            updateButton.classList.remove('active');
+            setTimeout(() => updateButton.classList.add('disabled'), 300);
         } else {
-            document.querySelector('main > header .update').classList.add('active');
+            updateButton.classList.remove('disabled');
+            setTimeout(() => updateButton.classList.add('active'), 10);
         }
     },
     menu: {

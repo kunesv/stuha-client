@@ -85,7 +85,7 @@ var Conversations = {
     },
     select: (button) => {
         let conversationId = button.dataset.conversationId;
-        let conversationTitle = button.querySelector('span:last-child').textContent;
+        let conversationTitle = button.parentNode.querySelector('a > span:last-child').textContent;
 
         Conversations.selectConversation({id: conversationId, title: conversationTitle});
     },

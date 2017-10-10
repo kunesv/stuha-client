@@ -125,7 +125,7 @@ var Messages = {
     },
 
     load: () => {
-        document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.conversation.title;
+        document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.load().title;
 
         Conversations.menu.active();
 

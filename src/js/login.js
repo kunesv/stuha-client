@@ -84,6 +84,9 @@ var Login = {
         return document.createRange().createContextualFragment(template);
     },
     init: () => {
+        // FIXME: Eventually refactor to separate method.
+        clearInterval(Messages.intervalLoadNew);
+
         document.querySelector('.content').appendChild(Login.template());
 
         let username = document.querySelector('input[name=username]');

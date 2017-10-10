@@ -106,7 +106,7 @@ var Conversations = {
                 let conversations = document.querySelectorAll('.conversations.menu a[data-click="Conversations.select"]');
                 for (let i = 0; i < conversations.length; i++) {
                     let conversation = conversations[i];
-                    let unreadCount = unreadCounts[conversation.dataset.conversationId];
+                    let unreadCount = unreadCounts[conversation.dataset.conversationId] || '';
                     conversation.querySelector('.unread').textContent = unreadCount > 10 ? '10+' : unreadCount;
                 }
                 Conversations.refreshCurrentConversationUnreadCount();

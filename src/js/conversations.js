@@ -104,7 +104,6 @@ var Conversations = {
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((unreadCounts) => {
                 let conversations = document.querySelectorAll('.conversations.menu a[data-click="Conversations.select"]');
-                console.log(conversations);
                 for (let i = 0; i < conversations.length; i++) {
                     let conversation = conversations[i];
                     let unreadCount = unreadCounts[conversation.dataset.conversationId];

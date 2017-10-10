@@ -124,7 +124,7 @@ small {
           font-size: 12px;
           text-align: center;
 
-          &.update {
+          &.update:not(.active) {
             display: none;
           }
 

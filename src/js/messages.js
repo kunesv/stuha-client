@@ -97,14 +97,10 @@ var Messages = {
         Messages.placeholders.add();
 
         Messages.loadEverything().then(() => {
-            Messages.intervalLoadNew = setInterval(() => {
-                Conversations.status().then(() => {
-                    console.log('COOL')
-                }).catch(() => {
-                    console.log('CLEAR! Signalize to user, e.g. some disabled refresh icon.')
-                    clearInterval(Messages.intervalLoadNew);
-                });
-            }, 300000);
+            if (Users.notifications.poll) {
+                Conversations.unreadCounts();
+                Messages.intervalLoadNew = setInterval(Conversations.unreadCounts, 20 * 1000);
+            }
         });
 
         let scrollingTimeout;

@@ -94,18 +94,35 @@ var Conversations = {
 
         Conversations.conversation.new.reset();
 
-        Messages.reload();
+        Messages.reload().then(() => {
+            Conversations.unreadCounts();
+        });
 
         Conversations.menu.hide();
     },
-    status: () => {
-        return fetch(`/api/conversations/status`, {
+    unreadCounts: () => {
+        return fetch(`/api/conversations/unreadCounts`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((status) => {
-                console.log(status)
+            return response.json().then((unreadCounts) => {
+                let conversations = document.querySelectorAll('.conversations.menu a[data-click="Conversations.select"]');
+                console.log(conversations);
+                for (let i = 0; i < conversations.length; i++) {
+                    let conversation = conversations[i];
+                    let unreadCount = unreadCounts[conversation.dataset.conversationId];
+                    conversation.querySelector('.unread').textContent = unreadCount > 10 ? '10+' : unreadCount;
+                }
+                Conversations.refreshCurrentConversationUnreadCount();
             });
         });
+    },
+    refreshCurrentConversationUnreadCount: () => {
+        let unread = document.querySelector(`.conversations.menu a[data-conversation-id='${Conversations.lastConversation.load().id}'] .unread`);
+        if (unread.textContent === '') {
+            document.querySelector('main > header .update').classList.remove('active');
+        } else {
+            document.querySelector('main > header .update').classList.add('active');
+        }
     },
     menu: {
         show: () => {
@@ -135,12 +152,14 @@ var Conversations = {
         template: (conversation) => {
             let template = `<li>
     <a class="button" data-click="Conversations.select" data-conversation-id="${conversation.id}">
-        <span></span>
+        <span>
+            <span class="unread"></span>
+        </span>
         <span></span>
     </a>
 </li>`;
             let li = document.createRange().createContextualFragment(template);
-            li.querySelector('span:last-child').textContent = conversation.title;
+            li.querySelector('a > span:last-child').textContent = conversation.title;
 
             return li;
         },

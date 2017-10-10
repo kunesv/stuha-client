@@ -15,7 +15,7 @@
 
   transition: background-color 400ms, box-shadow 100ms;
 
-  outline: 0 none;
+  outline: 0;
   -webkit-tap-highlight-color: rgba(black, 0);
 
   text-decoration: none;
@@ -311,6 +311,7 @@ ul.menu {
       > a > span:first-child {
         border-radius: 50%;
         background-image: url("/images/conversation.svg");
+        position: relative;
 
         &.add {
           background-image: url("/images/plus-dark.svg"), url("/images/conversation.svg");

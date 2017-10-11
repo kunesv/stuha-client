@@ -108,9 +108,6 @@ small {
           span.conversation {
             order: 3
           }
-          span.update {
-            order: 1;
-          }
           span.add-button {
             order: 2;
           }
@@ -125,16 +122,6 @@ small {
           text-align: center;
 
           transition: transform 300ms $animation-curve;
-
-          &.update {
-            transform: scale3d(0, 0, 1);
-            &.disabled {
-              display: none;
-            }
-            &.active {
-              transform: scale3d(1, 1, 1);
-            }
-          }
 
           &.conversation-name {
             flex: 0 1 100%;

@@ -12,7 +12,6 @@ var Messages = {
         <div>
             <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
             <span class="conversation"><button class="light button" data-click="Conversations.conversation.menu.show"></button></span>
-            <span class="update disabled"><button class="light button" data-click="Messages.loadRecent"></button></span>
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
         </div>
         <div class="conversation-name">
@@ -98,7 +97,7 @@ var Messages = {
 
         Messages.loadEverything().then(() => {
             if (Users.notifications.poll) {
-                Messages.intervalLoadNew = setInterval(Conversations.unreadCounts, 20 * 1000);
+                Messages.intervalLoadNew = setInterval(Conversations.unreadCounts, 10 * 1000);
             }
         });
 
@@ -107,12 +106,22 @@ var Messages = {
             if (scrollingTimeout) {
                 clearTimeout(scrollingTimeout);
             }
-            scrollingTimeout = setTimeout(Messages.image.loadSome, 100);
+            scrollingTimeout = setTimeout(() => {
+                Messages.image.loadSome();
+                Messages.markNewAsRead();
+            }, 100);
         });
 
         // FIXME: No more swipe, until dealt with weird behaviour.
         // let content = document.querySelector('.content');
         // Messages.swipe = new Swipe(content);
+    },
+
+    markNewAsRead: () => {
+        let newMessages = document.querySelectorAll('.messages .icon.new');
+        for (let i = 0; i < newMessages.length; i++) {
+            newMessages[i].classList.remove('new');
+        }
     },
 
     loadEverything: () => {
@@ -146,6 +155,8 @@ var Messages = {
                     }
                 }
 
+                Conversations.unreadCounts();
+
                 document.querySelector('.content').classList.remove('loading');
             });
         });
@@ -159,7 +170,7 @@ var Messages = {
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadRecent/${lastMessage.id}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then(Messages.message.add);
+            return response.json().then((messages) => Messages.message.add(messages, true, true));
         }).catch((error) => {
             // FIXME: And what about some serious error handling ?
             console.log('Load-recent failed', error);
@@ -178,6 +189,8 @@ var Messages = {
                 }
 
                 Messages.message.add(messages, false)
+
+                Conversations.unreadCounts();
             });
         }).catch((error) => {
             // FIXME: And what about some serious error handling here?
@@ -217,7 +230,7 @@ var Messages = {
         template: (message) => {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
-        <div class="icon ${!message.robo ? 'button' : ''}" data-click="Messages.message.dialog.show" data-reply-to-name="${message.userName}" 
+        <div class="icon ${!message.robo ? 'button' : ''} ${message.isNew ? 'new' : ''}" data-click="Messages.message.dialog.show" data-reply-to-name="${message.userName}" 
             style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}')"></div>
     </header>
     <main>                 
@@ -294,7 +307,7 @@ var Messages = {
 
             return article;
         },
-        add: (messages, placeOnTop = true) => {
+        add: (messages, placeOnTop = true, allNew = false) => {
             if (!messages.length) {
                 return;
             }
@@ -309,6 +322,8 @@ var Messages = {
                     newMessages.appendChild(Messages.message.separator(Datetime.formatDate(message.createdOn)));
                 }
 
+                message.isNew = allNew;
+
                 newMessages.appendChild(Messages.message.template(message));
             }
 
@@ -318,8 +333,6 @@ var Messages = {
                     newMessages.appendChild(Messages.message.separator(newestAlreadyDisplayed.dataset.date));
                 }
                 document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
-
-                Conversations.unreadCounts();
             } else {
                 let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
                 if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {
@@ -374,6 +387,7 @@ var Messages = {
                             Messages.message.add(messages);
 
                             document.querySelector('.messages').parentNode.scrollTop = 0;
+                            Messages.markNewAsRead();
                         }, 200);
                     });
                 }).catch((response) => {

@@ -106,8 +106,20 @@ var Conversations = {
                 let conversations = document.querySelectorAll('.conversations.menu a[data-click="Conversations.select"]');
                 for (let i = 0; i < conversations.length; i++) {
                     let conversation = conversations[i];
-                    let unreadCount = unreadCounts[conversation.dataset.conversationId] || '';
-                    conversation.querySelector('.unread').textContent = unreadCount > 99 ? '99+' : unreadCount;
+                    let unreadCount = unreadCounts[conversation.dataset.conversationId];
+                    let unread = conversation.querySelector('.unread');
+                    if (unreadCount === undefined) {
+                        unread.classList.add('new');
+                    } else {
+                        if (unreadCount) {
+                            unread.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                        } else {
+                            unread.textContent = '';
+                        }
+                        if (unread.classList.contains('new')) {
+                            unread.classList.remove('new');
+                        }
+                    }
                 }
                 Conversations.refreshCurrentConversationUnreadCount();
             });
@@ -115,13 +127,8 @@ var Conversations = {
     },
     refreshCurrentConversationUnreadCount: () => {
         let unread = document.querySelector(`.conversations.menu a[data-conversation-id='${Conversations.lastConversation.load().id}'] .unread`);
-        let updateButton = document.querySelector('main > header .update');
-        if (unread.textContent === '') {
-            updateButton.classList.remove('active');
-            setTimeout(() => updateButton.classList.add('disabled'), 300);
-        } else {
-            updateButton.classList.remove('disabled');
-            setTimeout(() => updateButton.classList.add('active'), 10);
+        if (unread.textContent !== '') {
+            Messages.loadRecent();
         }
     },
     menu: {

@@ -76,6 +76,27 @@ article {
       &.active {
         box-shadow: 0 0 0 0.5 * $module rgba(black, 0.2) inset;
       }
+
+      &.new:after {
+        opacity: 1;
+      }
+
+      &:after {
+        opacity: 0;
+        transition: opacity 5s 2s;
+
+        display: flex;
+        content: "";
+        height: $module;
+        width: $module;
+
+        margin: -1.75 * $module -1.75 * $module 0 0;
+
+        background: #6c6 url("/images/new.svg") center no-repeat;
+        background-size: 100%;
+
+        border-radius: 50%;
+      }
     }
   }
 

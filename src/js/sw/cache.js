@@ -3,6 +3,9 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', function (event) {
+    // FIXME: Temporarily turn this off. (And then verify this works in all browsers.)
+    return;
+
     if (event.request.url.indexOf('/api/') !== -1) {
         return;
     }

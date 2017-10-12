@@ -50,7 +50,7 @@ var Users = {
     },
     menu: {
         show: () => {
-            alert('Tak tohle ještě asi taky není hotový.')
+            alert('Tohle ještě není zcela hotové, zdá se. No nevadí, vyzkouším zatím ostatní knoflíky.')
         }
     }
 };
@@ -84,7 +84,7 @@ var Login = {
             <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>     
             
             <footer>
-                <span>Tohle je testovací verze!<br/>Měla bych zamhouřit jedno oko.</span>
+                <span>Tohle je ta testovací verze?<br/>Měla bych zamhouřit jedno oko.</span>
             </footer>      
         </form>
         

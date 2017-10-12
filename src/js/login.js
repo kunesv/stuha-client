@@ -57,11 +57,11 @@ var Users = {
 
 var Login = {
     template: () => {
-        let template = `<header>
-</header>
+        let template = `
 <main>   
     <section id="login">   
-         <form data-click="Login.submit">                       
+        <header></header>
+        <form data-click="Login.submit">                       
             <p>
                 <label>Přihlašovací jméno</label>
                 <span><input name="username" type="text" autocomplete="off" autofocus/></span>
@@ -81,8 +81,13 @@ var Login = {
                 </label>
             </p>
             
-            <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>           
-         </form>
+            <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>     
+            
+            <footer>
+                <span>Tohle je testovací verze!<br/>Měla bych zamhouřit jedno oko.</span>
+            </footer>      
+        </form>
+        
     </section>
 </main>`;
 
@@ -111,7 +116,9 @@ var Login = {
         Login.errorMessage.removeAll();
 
         if (!button.classList.contains('progress')) {
+            console.log("A")
             if (!Login.validations.all()) {
+                console.log("B")
                 return;
             }
 

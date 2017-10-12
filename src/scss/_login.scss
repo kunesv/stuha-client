@@ -1,22 +1,48 @@
 #login {
+  flex: 0 0 100%;
 
   display: flex;
-  justify-content: center;
-  //align-items: center;
+  flex-direction: column;
+  //justify-content: center;
+  align-items: center;
 
   //min-height: 14 * $module;
+
+  > header {
+    background: url("/images/stuha-logo.svg") no-repeat center;
+    background-size: auto 100%;
+
+    flex: 0 0 100px;
+    width: 100%;
+
+    //@media (max-width: $small-screen-threshold) {
+    //  flex-basis: 4 * $module;
+    //}
+  }
 
   > form {
     //margin-left: auto;
     //margin-right: auto;
-    flex: 0 1 14 * $module;
+    flex: 1 0 14 * $module;
     margin-top: auto;
     margin-bottom: auto;
     padding-bottom: 6 * $module;
 
+    width: 100%;
+    max-width: 14 * $module;
+
+    position: relative;
+
     @media (max-width: $small-screen-threshold) {
       padding-bottom: 2 * $module;
+    }
 
+    p {
+      position: relative;
+
+      span.error {
+        margin-top: $module-quarter;
+      }
     }
 
     input {
@@ -26,6 +52,29 @@
         vertical-align: bottom;
         width: auto;
       }
+    }
+  }
+
+  footer {
+    height: 4 * $module;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    background: url("/images/under-construction.svg") no-repeat left -13px;
+    background-size: 100px 100px;
+
+    margin: 1.5 * $module $module-half;
+
+
+    padding: 0 3 * $module-quarter;
+    background-color: #e0e0e0;
+    border-radius: $module 0 $module $module;
+
+    span {
+      font-size: 12px;
+      color: #666;
     }
   }
 

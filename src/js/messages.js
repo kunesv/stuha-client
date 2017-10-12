@@ -5,7 +5,7 @@ var Messages = {
         <section></section>
         <footer>           
             <a class="logout secondary button" data-click="Login.logout">Logout</a>
-            <a class="user-settings light button" data-click=""></a>
+            <a class="user-settings light button" data-click="Users.menu.show"></a>
         </footer>
     </aside>
     <header>
@@ -149,7 +149,7 @@ var Messages = {
                 if (!messages.messages.length) {
                     Messages.empty.add();
                 } else {
-                    Messages.message.add(messages.messages);
+                    Messages.message.add(messages.messages, true, false, messages.unreadCount);
                     if (messages.messages.length === 10) {
                         Messages.message.loadMore.show();
                     }
@@ -307,7 +307,7 @@ var Messages = {
 
             return article;
         },
-        add: (messages, placeOnTop = true, allNew = false) => {
+        add: (messages, placeOnTop = true, allNew = false, unreadCount = 0) => {
             if (!messages.length) {
                 return;
             }
@@ -322,7 +322,7 @@ var Messages = {
                     newMessages.appendChild(Messages.message.separator(Datetime.formatDate(message.createdOn)));
                 }
 
-                message.isNew = allNew;
+                message.isNew = allNew || i < unreadCount;
 
                 newMessages.appendChild(Messages.message.template(message));
             }

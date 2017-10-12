@@ -83,7 +83,7 @@ article {
 
       &:after {
         opacity: 0;
-        transition: opacity 5s 2s;
+        transition: opacity 2s 500ms;
 
         display: flex;
         content: "";
@@ -417,10 +417,20 @@ article.my {
 
 .load-more {
   visibility: hidden;
+
+  display: flex;
+  justify-content: center;
   padding: $module 0 0;
 
   &.active {
     visibility: visible;
+  }
+
+  .button {
+    flex: 0 0 100%;
+    @media (min-width: $small-screen-threshold + 1) {
+      flex: 0 0 2.5 * $module;
+    }
   }
 }
 

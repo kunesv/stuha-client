@@ -47,6 +47,11 @@ var Users = {
                 Users.currentUser.icons = user.icons;
             });
         });
+    },
+    menu: {
+        show: () => {
+            alert('Tak tohle ještě asi taky není hotový.')
+        }
     }
 };
 

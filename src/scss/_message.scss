@@ -23,8 +23,13 @@
   }
 
   > article, > div {
-    margin-left: 0.5 * $module;
-    margin-right: 0.5 * $module;
+    margin-left: $module;
+    margin-right: $module;
+
+    @media (max-width: $small-screen-threshold) {
+      margin-left: $module-half;
+      margin-right: $module-half;
+    }
   }
 }
 

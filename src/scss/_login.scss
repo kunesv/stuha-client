@@ -15,9 +15,11 @@
     flex: 0 0 100px;
     width: 100%;
 
-    //@media (max-width: $small-screen-threshold) {
-    //  flex-basis: 4 * $module;
-    //}
+    margin-top: $module;
+
+    @media (max-width: $small-screen-threshold) {
+      margin-top: $module-quarter;
+    }
   }
 
   > form {

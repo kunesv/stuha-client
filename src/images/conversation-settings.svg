@@ -25,15 +25,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="-9.3379805"
-     inkscape:cy="45.58777"
+     inkscape:zoom="22.627417"
+     inkscape:cx="37.667772"
+     inkscape:cy="60.269684"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1600"
      inkscape:window-height="837"
-     inkscape:window-x="1432"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-global="false"
@@ -56,9 +56,11 @@
      id="layer1"
      transform="translate(0,-270.54167)">
     <path
-       style="fill:none;fill-opacity:1;stroke:#808080;stroke-width:0.52916664;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 11.812479,279.43754 -1.286211,0.33857 1.150462,1.15048 -0.274012,1.02253 -1.022417,0.27393 -1.1409756,-1.14101 -0.3386418,1.24156 1.6662104,1.68116 0.97425,-0.25643 4.013521,4.01358 a 1.1743479,1.1743655 0 0 0 1.66078,0 1.1743479,1.1743655 0 0 0 0,-1.6608 l -4.003629,-4.00368 0.266876,-0.97873 z"
+       style="fill:none;fill-opacity:1;stroke:#808080;stroke-width:1.99999988;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 40.037109,30.179688 c -1.178605,0.0025 -2.347538,0.212754 -3.453125,0.621093 l 5.293851,5.386146 c -0.820535,4.486077 -1.945224,4.690023 -6,6.003906 l -5.270413,-5.360755 c -0.39151,1.082357 -0.593683,2.224039 -0.597656,3.375 -8.9e-5,5.537041 4.489413,10.025668 10.027343,10.025391 0.726049,-0.0024 1.449694,-0.08357 2.158203,-0.242188 L 59.11523,66.978519 c 2.106813,2.101433 5.522094,2.101433 7.628907,0 L 70.55859,63.173831 49.787104,42.48438 c 0.178794,-0.746716 0.271198,-1.511497 0.275396,-2.279302 8.8e-5,-5.536278 -4.488223,-10.024589 -10.025391,-10.02539 z"
+       transform="matrix(0.26458333,0,0,0.26458333,0,270.54167)"
        id="path5012"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccccc" />
   </g>
 </svg>

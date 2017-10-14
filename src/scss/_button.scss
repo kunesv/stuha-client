@@ -28,19 +28,6 @@
   &.clicked {
     box-shadow: 0 0 0 0.5 * $module rgba(black, 0.5) inset;
   }
-
-  &.progress {
-    background: $color-background-message url("/images/progress.svg") no-repeat left center;
-    cursor: inherit;
-
-    &:hover {
-      background-color: $color-background-message;
-    }
-
-    span {
-      visibility: hidden;
-    }
-  }
 }
 
 form .button {
@@ -144,10 +131,6 @@ form.show-errors .button, .button.error {
 
 .conversation-member-add .button span:first-child {
   background-image: url("/images/conversation-member-add.svg");
-
-  &.light {
-    background-image: url("/images/conversation-member-add-dark.svg");
-  }
 }
 
 .conversation-member-add.form .button span:first-child {
@@ -193,6 +176,19 @@ form.show-errors .button, .button.error {
 
 .load-more .button {
   background-image: url("/images/load-more.svg");
+}
+
+.button.progress {
+  background: $color-background-message url("/images/progress.svg") no-repeat center;
+  cursor: inherit;
+
+  &:hover {
+    background-color: $color-background-message;
+  }
+
+  span {
+    visibility: hidden;
+  }
 }
 
 ul.menu {

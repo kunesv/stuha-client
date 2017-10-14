@@ -177,7 +177,12 @@ var Messages = {
         });
     },
 
-    loadMore: () => {
+    loadMore: (button) => {
+        if (button.classList.contains('progress')) {
+            return;
+        }
+
+        button.classList.add('progress');
         let firstArticle = document.querySelector('.messages > div:last-child > article:last-child');
 
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadMore/${firstArticle.id}`, {
@@ -188,7 +193,9 @@ var Messages = {
                     Messages.message.loadMore.hide();
                 }
 
-                Messages.message.add(messages, false)
+                Messages.message.add(messages, false);
+
+                button.classList.remove('progress');
 
                 Conversations.unreadCounts();
             });

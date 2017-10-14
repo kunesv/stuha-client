@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="99.161311"
-     inkscape:cy="109.13305"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="82.266917"
+     inkscape:cy="97.315176"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -72,22 +72,15 @@
        cy="1014.8622"
        r="0" />
     <path
-       style="fill:#666666;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 70 80 L 70 82 L 73.359375 80.560547 L 70 80 z M 123.75977 88.960938 L 73.359375 110.56055 L 130 120 L 130 90 L 123.75977 88.960938 z "
-       transform="translate(0,856.36216)"
-       id="rect5671" />
+       style="fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:1.99999988;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 82.524406,971.65336 a 15.446423,15.446423 0 0 1 -21.844651,-1.4e-4 15.446423,15.446423 0 0 1 6.5e-5,-21.84451 l 43.68909,-43.68906 10.92228,-10.92226 10.92219,10.9222 a 15.446423,15.446423 0 0 1 1.3e-4,21.84466 z"
+       id="rect4493"
+       inkscape:connector-curvature="0" />
     <path
-       style="fill:#cccccc;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 70,932.36212 70,-30 v 30 L 70,962.3622 Z"
-       id="rect4498"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
-    <path
-       style="fill:#666666;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 60,982.3622 28,-12 42,-18 v 30 l -70,30 z"
-       id="rect4498-9"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc" />
+       id="path5065"
+       d="m 117.47567,941.07099 a 15.446423,15.446423 0 0 1 21.84467,1.4e-4 15.446423,15.446423 0 0 1 -1.1e-4,21.84436 l -43.689096,43.68911 -10.922271,10.9223 -10.922162,-10.9222 a 15.446423,15.446423 0 0 1 -1.09e-4,-21.84457 z"
+       style="fill:#666666;fill-opacity:1;stroke:none;stroke-width:1.99999988;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
   <g
      inkscape:groupmode="layer"

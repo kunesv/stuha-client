@@ -84,7 +84,7 @@ var Login = {
             <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>     
             
             <footer>
-                <span>Tohle je ta testovací verze?<br/>Měla bych zamhouřit jedno oko.</span>
+                <span>Tohle je ta testovací verze?<br/>Raději zamhouřím jedno oko.</span>
             </footer>      
         </form>
         
@@ -116,9 +116,7 @@ var Login = {
         Login.errorMessage.removeAll();
 
         if (!button.classList.contains('progress')) {
-            console.log("A")
             if (!Login.validations.all()) {
-                console.log("B")
                 return;
             }
 

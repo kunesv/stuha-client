@@ -166,6 +166,17 @@ form.show-errors .button, .button.error {
   background-image: url("/images/user-settings.svg");
 }
 
+.notification {
+
+  &.disabled {
+    display: none;
+  }
+
+  .button span:first-child {
+    background-image: url("/images/notifications.svg");
+  }
+}
+
 .previous-button .button {
 
 }
@@ -259,6 +270,7 @@ ul.menu {
       justify-content: center;
 
       position: absolute;
+      left: 0;
       width: calc(100% - #{$module});
 
       padding: $module-half;
@@ -304,7 +316,6 @@ ul.menu {
       > form {
         opacity: 1;
         transform: scale3d(1, 1, 1);
-
 
       }
     }

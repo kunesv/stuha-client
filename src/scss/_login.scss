@@ -28,16 +28,12 @@
     flex: 1 0 14 * $module;
     margin-top: auto;
     margin-bottom: auto;
-    padding-bottom: 6 * $module;
+    padding-bottom: $module;
 
     width: 100%;
     max-width: 14 * $module;
 
     position: relative;
-
-    @media (max-width: $small-screen-threshold) {
-      padding-bottom: 2 * $module;
-    }
 
     p {
       position: relative;

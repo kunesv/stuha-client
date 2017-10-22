@@ -74,6 +74,8 @@ var Conversations = {
                 if (!lastConversationId || !Conversations.lastConversation.conversationExists(lastConversationId, conversations)) {
                     Conversations.lastConversation.save(conversations[0]);
                 }
+
+                Notifications.init();
             });
         });
     },
@@ -324,7 +326,6 @@ var Conversations = {
                 document.querySelector('.conversation-menu').classList.add('active');
             },
             hide: () => {
-                console.log(document.querySelectorAll('.conversation-menu .form'))
                 if (document.querySelectorAll('.conversation-menu .form').length > 0) {
                     Conversations.conversation.member.hide();
                     setTimeout(() => {
@@ -335,6 +336,24 @@ var Conversations = {
                     document.querySelector('.content').classList.remove('dialog');
                     document.querySelector('.conversation-menu').classList.remove('active');
                 }
+            }
+        },
+        notifications: {
+            toggle: (button) => {
+                let conversationId = Conversations.lastConversation.load().id;
+
+                Notifications.subscribe(conversationId);
+
+                let sendNotifications = Conversations.conversation.notifications.load();
+                if (!sendNotifications) {
+
+                }
+            },
+            save: (sendNotifications) => {
+                return localStorage.setItem(`Notification-${Conversations.lastConversation.load().id}`, sendNotifications);
+            },
+            load: () => {
+                return localStorage.getItem(`Notification-${Conversations.lastConversation.load().id}`) || false;
             }
         }
     }

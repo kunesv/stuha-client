@@ -64,6 +64,12 @@ var Messages = {
         <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.menu.hide"></a></span>
     </header>
     <ul class="menu">
+        <li class="notification disabled">
+            <a class="button" data-click="Conversations.conversation.notifications.toggle">
+                <span></span>
+                <span>Posílat notifikace</span>
+            </a>
+        </li>
         <li class="conversation-member-add">
             <a class="button" data-click="Conversations.conversation.member.add">
                 <span></span>
@@ -143,8 +149,6 @@ var Messages = {
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
                 Messages.placeholders.removeAll();
-
-                console.log(messages.unreadCount)
 
                 if (!messages.messages.length) {
                     Messages.empty.add();

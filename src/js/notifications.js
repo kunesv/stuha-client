@@ -1,25 +1,63 @@
 var Notifications = {
 
     subscriptions: {
-        all: () => {
-            return JSON.parse(localStorage.getItem('subscriptions')) || [];
-        },
-        add: (conversationId) => {
-            let subscriptions = Notifications.subscriptions.all();
-            subscriptions.push(conversationId);
-
-            localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
+        load: () => {
+            return Notifications.getSubscription().then(function (subscription) {
+                if (subscription) {
+                    return fetch(`/api/subscriptions?endpoint=${subscription.endpoint}`, {
+                        headers: Fetch.headers()
+                    }).then(Fetch.processFetchStatus).then((response) => {
+                        return response.json().then((subscriptions) => {
+                            return subscriptions;
+                        });
+                    });
+                } else {
+                    return [];
+                }
+            });
         }
     },
 
     init: () => {
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
             document.querySelector('.conversation-menu .notification').classList.remove('disabled');
 
-            let subscriptions = Notifications.subscriptions.all();
-            for (let i = 0; i < subscriptions.length; i++) {
-                document.querySelector(`.conversations.menu .button[data-conversation-id='${subscriptions[i]}']`).dataset.subscription = 'subscription';
-            }
+            Notifications.subscriptions.load().then((subscriptions) => {
+                for (let i = 0; i < subscriptions.length; i++) {
+                    document.querySelector(`.conversations.menu .button[data-conversation-id='${subscriptions[i].conversationId}']`).classList.add('subscribed');
+                }
+
+                Notifications.active();
+            });
+        }
+    },
+
+    reload: () => {
+        document.querySelector('.conversation-menu .notification').classList.remove('active');
+        let subscriptions = document.querySelectorAll('.conversations.menu .button.subscribed');
+        for (let i = 0; i < subscriptions.length; i++) {
+            subscriptions[i].classList.remove('subscribed');
+        }
+
+        Notifications.init();
+    },
+
+    active: () => {
+        let conversationId = Conversations.lastConversation.load().id;
+        if (conversationId && document.querySelector(`.conversations.menu .button[data-conversation-id='${conversationId}']`).classList.contains('subscribed')) {
+            document.querySelector('.conversation-menu .notification > a').classList.add('active');
+        } else {
+            document.querySelector('.conversation-menu .notification > a').classList.remove('active');
+        }
+    },
+
+    toggle: (button) => {
+        let conversationId = Conversations.lastConversation.load().id;
+
+        if (button.classList.contains('active')) {
+            Notifications.unsubscribe(conversationId);
+        } else {
+            Notifications.subscribe(conversationId);
         }
     },
 
@@ -49,7 +87,7 @@ var Notifications = {
                 method: 'POST',
                 body: form
             }).then(Fetch.processFetchStatus).then(() => {
-                Notifications.subscriptions.add(conversationId);
+                Notifications.reload();
             });
 
         });
@@ -57,19 +95,20 @@ var Notifications = {
 
     unsubscribe: () => {
         Notifications.getSubscription().then(function (subscription) {
-            return subscription.unsubscribe().then(function () {
-
-                let form = new FormData();
-                form.append('endpoint', subscription.endpoint);
-
-                return fetch('/api/notification/unsubscribe', {
-                    headers: Fetch.headers(),
-                    method: 'POST',
-                    body: form
-                }).then(Fetch.processFetchStatus).then(() => {
-                    Notifications.subscribed.save(false);
-                });
-            });
+            console.log('TODO unsubscribe')
+            // return subscription.unsubscribe().then(function () {
+            //
+            //     let form = new FormData();
+            //     form.append('endpoint', subscription.endpoint);
+            //
+            //     return fetch('/api/notification/unsubscribe', {
+            //         headers: Fetch.headers(),
+            //         method: 'POST',
+            //         body: form
+            //     }).then(Fetch.processFetchStatus).then(() => {
+            //         Notifications.subscribed.save(false);
+            //     });
+            // });
         });
     }
 };

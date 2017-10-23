@@ -65,7 +65,7 @@ var Messages = {
     </header>
     <ul class="menu">
         <li class="notification disabled">
-            <a class="button" data-click="Conversations.conversation.notifications.toggle">
+            <a class="button" data-click="Notifications.toggle">
                 <span></span>
                 <span>Posílat notifikace</span>
             </a>

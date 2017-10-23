@@ -155,6 +155,8 @@ var Conversations = {
                 active.classList.remove('active');
             }
             conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).classList.add('active');
+
+            Notifications.active();
         }
     },
     conversation: {
@@ -336,24 +338,6 @@ var Conversations = {
                     document.querySelector('.content').classList.remove('dialog');
                     document.querySelector('.conversation-menu').classList.remove('active');
                 }
-            }
-        },
-        notifications: {
-            toggle: (button) => {
-                let conversationId = Conversations.lastConversation.load().id;
-
-                Notifications.subscribe(conversationId);
-
-                let sendNotifications = Conversations.conversation.notifications.load();
-                if (!sendNotifications) {
-
-                }
-            },
-            save: (sendNotifications) => {
-                return localStorage.setItem(`Notification-${Conversations.lastConversation.load().id}`, sendNotifications);
-            },
-            load: () => {
-                return localStorage.getItem(`Notification-${Conversations.lastConversation.load().id}`) || false;
             }
         }
     }

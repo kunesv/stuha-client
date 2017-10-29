@@ -7,28 +7,21 @@ self.addEventListener('activate', function (event) {
 });
 
 self.addEventListener('push', function (event) {
-    event.waitUntil(
-        self.clients.matchAll().then(function (clientList) {
-            var focused = clientList.some(function (client) {
-                return client.focused;
-            });
+    let message = event.data.json() || {};
 
-            var notificationMessage;
-            if (focused) {
-                notificationMessage = 'You\'re still here, thanks!';
-            } else if (clientList.length > 0) {
-                notificationMessage = 'You haven\'t closed the page, ' +
-                    'click here to focus it!';
-            } else {
-                notificationMessage = 'You have closed the page, ' +
-                    'click here to re-open it!';
-            }
+    let notificationMessage = '';
 
-            return self.registration.showNotification('Stuha Konverzace', {
-                body: notificationMessage,
-            });
-        })
-    );
+    for (let i = 0; i < message.formatted.textNodes.length; i++) {
+        let node = message.formatted.textNodes[i];
+        if (node.type === 'PLAIN_TEXT') {
+            notificationMessage += node.text;
+        }
+    }
+
+    self.registration.showNotification(`${message.userName} @ Stuha`, {
+        body: notificationMessage,
+        icon: `images/icons/${message.iconPath}`
+    });
 });
 
 self.addEventListener('notificationclick', function (event) {

@@ -64,7 +64,7 @@ var Login = {
         <form data-click="Login.submit">                       
             <p>
                 <label>Přihlašovací jméno</label>
-                <span><input name="username" type="text" autocomplete="off" autofocus/></span>
+                <span><input name="username" type="text" autocomplete="off" autocapitalize="none" autofocus="autofocus"/></span>
                 <span class="error">Sem dám přihlašovací jméno.</span>
             </p>
             <p>

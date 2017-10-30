@@ -18,7 +18,7 @@ self.addEventListener('push', function (event) {
         }
     }
 
-    self.registration.showNotification(`${message.userName} @ Stuha`, {
+    self.registration.showNotification(`${message.userName}`, {
         body: notificationMessage,
         icon: `images/icons/${message.iconPath}`
     });

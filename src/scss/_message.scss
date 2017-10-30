@@ -133,6 +133,8 @@ article {
           transition: transform 300ms $animation-curve, max-height 300ms 300ms;
           transform: scale3d(1, 1, 1);
 
+          position: relative;
+
           &.opened {
             transform: scale3d(0, 0, 1);
             max-height: 0;

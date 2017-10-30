@@ -1,6 +1,6 @@
 var Messages = {
     template: () => {
-        let template = `<main>
+        return `<main>
     <aside>  
         <section></section>
         <footer>           
@@ -23,10 +23,9 @@ var Messages = {
         <div class="load-more"><a class="secondary button" data-click="Messages.loadMore"></a></div>
     </section>
 </main>`;
-        return document.createRange().createContextualFragment(template);
     },
     init: () => {
-        document.querySelector('.content').appendChild(Messages.template());
+        document.querySelector('.content').insertAdjacentHTML('beforeEnd', Messages.template());
 
         let dialogs = `<section class="message-dialog">
     <header>
@@ -39,7 +38,7 @@ var Messages = {
         <section>
             <ul class="icons"></ul>
             <p>
-                <span class="error">Měla bych vybrat ikonku.</span>
+                <span class="error">Ještě vyberu ikonku.</span>
             </p>           
         </section>       
         <section>           
@@ -238,7 +237,7 @@ var Messages = {
         thumbnailTemplate: (picture) => {
             return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;
         },
-        template: (message) => {
+        template: (parent, message) => {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
         <div class="icon ${!message.robo ? 'button' : ''} ${message.isNew ? 'new' : ''}" data-click="Messages.message.dialog.show" data-reply-to-name="${message.userName}" 
@@ -251,7 +250,9 @@ var Messages = {
         <footer>${Datetime.formatDate(new Date()) !== Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
     </main>
 </article>`;
-            let article = document.createRange().createContextualFragment(template);
+
+            parent.insertAdjacentHTML('beforeEnd', template);
+            let article = parent.querySelector('article:last-child');
 
             let contentElement = article.querySelector('.formatted');
 
@@ -330,24 +331,24 @@ var Messages = {
                 message.createdOn = Datetime.arrayToDate(message.createdOn);
 
                 if (i > 0 && Datetime.formatDate(messages[i - 1].createdOn) !== Datetime.formatDate(message.createdOn)) {
-                    newMessages.appendChild(Messages.message.separator(Datetime.formatDate(message.createdOn)));
+                    newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(Datetime.formatDate(message.createdOn)));
                 }
 
                 message.isNew = allNew || i < unreadCount;
 
-                newMessages.appendChild(Messages.message.template(message));
+                Messages.message.template(newMessages, message);
             }
 
             if (placeOnTop) {
                 let newestAlreadyDisplayed = document.querySelector('.messages div:first-child article:first-child');
                 if (newestAlreadyDisplayed && newestAlreadyDisplayed.dataset.date && newestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[messages.length - 1].createdOn)) {
-                    newMessages.appendChild(Messages.message.separator(newestAlreadyDisplayed.dataset.date));
+                    newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(newestAlreadyDisplayed.dataset.date));
                 }
                 document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
             } else {
                 let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
                 if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {
-                    newMessages.insertBefore(Messages.message.separator(Datetime.formatDate(messages[0].createdOn)), newMessages.firstChild);
+                    newMessages.insertAdjacentHTML('afterBegin', Messages.message.separator(Datetime.formatDate(messages[0].createdOn)));
                 }
                 document.querySelector('.messages').appendChild(newMessages);
             }
@@ -409,7 +410,7 @@ var Messages = {
         },
 
         separator: (createdOn) => {
-            return document.createRange().createContextualFragment(`<div class="seperator"><span>${createdOn}</span></div>`);
+            return `<div class="seperator"><span>${createdOn}</span></div>`;
         },
 
         replyTo: {
@@ -421,10 +422,8 @@ var Messages = {
     <span class="replyToIcon" style="background-image: url('/images/icons/${iconPath}')"></span><span class="caption"></span>
 </a>`;
 
-                let replyTo = document.createRange().createContextualFragment(template);
-                replyTo.querySelector('.caption').textContent = node.caption || '[ ... ]';
-
-                currentParagraph.appendChild(replyTo);
+                currentParagraph.insertAdjacentHTML('beforeEnd', template);
+                currentParagraph.querySelector('a:last-child .caption').textContent = node.caption || '[ ... ]';
             },
             show: (button) => {
                 let replyToArticle = button.offsetParent.offsetParent;
@@ -445,30 +444,34 @@ var Messages = {
                             replyTo.classList.add('opened');
                             replyToArticle.classList.add('openedReplyTo');
 
-                            let article = Messages.message.template(message).querySelector('article');
-                            article.classList.add('replyTo');
-
                             let replyToWrapper = document.createElement('div');
+                            // TODO: This might be thought out little nicer ...
+                            let article;
 
                             if (replyToArticle.parentNode.parentNode.classList.contains('messages')) {
 
                                 replyToWrapper.classList.add('progress');
                                 replyToWrapper.classList.add('replyToWrapper');
 
-                                replyToWrapper.appendChild(article);
+                                Messages.message.template(replyToWrapper, message);
+                                article = replyToWrapper.querySelector('article:last-child');
+
                                 replyTo.parentNode.insertBefore(replyToWrapper, replyTo.nextSibling);
 
                                 let closeTemplate = `<span class="close-button">
     <a class="secondary button" data-click="Messages.message.replyTo.close"></a>
 </span>`;
 
-                                let close = document.createRange().createContextualFragment(closeTemplate);
-                                replyToWrapper.insertBefore(close, replyToWrapper.firstChild);
+                                replyToWrapper.insertAdjacentHTML('afterBegin', closeTemplate);
                                 Buttons.init(replyToWrapper.querySelectorAll('.close-button .button'));
                             } else {
+                                let div = document.createElement('div');
+                                Messages.message.template(div, message);
+                                article = div.querySelector('article');
                                 article.classList.add('progress');
                                 replyTo.parentNode.insertBefore(article, replyTo.nextSibling);
                             }
+                            article.classList.add('replyTo');
 
                             setTimeout(() => {
                                 article.classList.remove('progress');
@@ -798,23 +801,20 @@ var Messages = {
 
     placeholders: {
         template: () => {
-            let template =
-                `<article class="placeholder">
+            return `<article class="placeholder">
                     <header><div class="icon"></div></header>
                     <main>          
                         <section><p class="plain-text"></p></section>
                         <footer></footer>
                     </main>
                 </article>`;
-
-            return document.createRange().createContextualFragment(template);
         },
         add: () => {
             let placeholders = document.createElement('div');
             placeholders.classList.add('placeholders');
 
             for (let i = 0; i < 4; i++) {
-                placeholders.appendChild(Messages.placeholders.template());
+                placeholders.insertAdjacentHTML('beforeEnd', Messages.placeholders.template());
             }
             document.querySelector('.messages').appendChild(placeholders);
         },
@@ -834,7 +834,7 @@ var Messages = {
         <header><div class="icon"></div></header>
         <main>
             <section>
-                <p class="plain-text"><span>Bych sem asi měla přidat první příspěvek ...</span></p>
+                <p class="plain-text"><span>Sem asi přidám první příspěvek ...</span></p>
             </section>
         </main>
     </article>

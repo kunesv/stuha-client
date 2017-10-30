@@ -57,7 +57,7 @@ var Users = {
 
 var Login = {
     template: () => {
-        let template = `
+        return `
 <main>   
     <section id="login">   
         <header></header>
@@ -90,14 +90,12 @@ var Login = {
         
     </section>
 </main>`;
-
-        return document.createRange().createContextualFragment(template);
     },
     init: () => {
         // FIXME: Eventually refactor to separate method.
         clearInterval(Messages.intervalLoadNew);
 
-        document.querySelector('.content').appendChild(Login.template());
+        document.querySelector('.content').insertAdjacentHTML('beforeEnd', Login.template());
 
         let username = document.querySelector('input[name=username]');
         username.addEventListener('blur', Login.validations.username);
@@ -181,9 +179,9 @@ var Login = {
 
             let dialog = document.createElement('section');
             dialog.classList.add('login-dialog');
-            dialog.appendChild(Login.template());
-
             document.body.appendChild(dialog);
+
+            dialog.insertAdjacentHTML('beforeEnd', Login.template());
 
             setTimeout(() => {
                 let dialogs = document.body.querySelectorAll('.login-dialog');

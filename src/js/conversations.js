@@ -1,6 +1,6 @@
 var Conversations = {
     template: () => {
-        let template = `
+        return `
 <ul class="conversations menu">
     <li class="add">
         <a class="button" data-click="Conversations.conversation.new.add">       
@@ -13,7 +13,6 @@ var Conversations = {
         </form>       
     </li>
 </ul>`;
-        return document.createRange().createContextualFragment(template);
     },
 
     lastConversation: {
@@ -59,12 +58,13 @@ var Conversations = {
                     document.querySelector('aside section').innerHTML = '';
                 }
 
-                document.querySelector('aside section').appendChild(Conversations.template());
+                document.querySelector('aside section').insertAdjacentHTML('beforeEnd', Conversations.template());
 
                 let conversationsMenu = document.querySelector('aside .conversations');
-                conversations.forEach((conversation) => {
-                    conversationsMenu.appendChild(Conversations.conversation.template(conversation));
-                });
+                for (let i = 0; i < conversations.length; i++) {
+                    conversationsMenu.insertAdjacentHTML('beforeEnd', Conversations.conversation.template(conversations[i]));
+                    document.querySelector('aside .conversations li:last-child a > span:last-child').textContent = conversations[i].title;
+                }
 
                 Buttons.init(conversationsMenu.querySelectorAll('.button'));
                 Buttons.initForms(conversationsMenu.querySelectorAll('form'));
@@ -80,10 +80,10 @@ var Conversations = {
         });
     },
     one: (conversation) => {
-        let li = Conversations.conversation.template(conversation);
-        Buttons.init(li.querySelectorAll('.button'));
-
-        document.querySelector('aside .conversations').appendChild(li);
+        document.querySelector('aside .conversations').insertAdjacentHTML('beforeEnd', Conversations.conversation.template(conversation));
+        let c = document.querySelector('aside .conversations li:last-child');
+        c.querySelector('a > span:last-child').textContent = conversation.title;
+        Buttons.init(c.querySelectorAll('.button'));
     },
     select: (button) => {
         let conversationId = button.dataset.conversationId;
@@ -161,7 +161,7 @@ var Conversations = {
     },
     conversation: {
         template: (conversation) => {
-            let template = `<li>
+            return `<li>
     <a class="button" data-click="Conversations.select" data-conversation-id="${conversation.id}">
         <span>
             <span class="unread"></span>
@@ -169,10 +169,6 @@ var Conversations = {
         <span></span>
     </a>
 </li>`;
-            let li = document.createRange().createContextualFragment(template);
-            li.querySelector('a > span:last-child').textContent = conversation.title;
-
-            return li;
         },
         new: {
             add: (button) => {

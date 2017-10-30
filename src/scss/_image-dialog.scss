@@ -28,6 +28,10 @@
     opacity: 0;
     transition: opacity 200ms, transform 300ms $animation-curve;
 
+    &.swiping {
+      transition: opacity 200ms;
+    }
+
     &.progress-next {
       transform: translate3d(-100vw, 0, 0);
     }

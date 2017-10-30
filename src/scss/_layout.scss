@@ -47,10 +47,6 @@ small {
 
   transition: transform 300ms $animation-curve;
 
-  &.swiping {
-    transition: initial;
-  }
-
   &.dialog {
     @media (min-width: $small-screen-threshold + 1px) {
       //transform: translate3d($module, 0, 0);

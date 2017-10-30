@@ -116,10 +116,6 @@ var Messages = {
                 Messages.markNewAsRead();
             }, 100);
         });
-
-        // FIXME: No more swipe, until dealt with weird behaviour.
-        // let content = document.querySelector('.content');
-        // Messages.swipe = new Swipe(content);
     },
 
     markNewAsRead: () => {
@@ -709,6 +705,9 @@ var Messages = {
                     return response.blob();
                 }).then((myBlob) => {
                     img.src = URL.createObjectURL(myBlob);
+                    // FIXME: No more swipe, until dealt with weird behaviour.
+                    // let content = document.querySelector('.content');
+                    Messages.swipe = new Swipe(img, Messages.image.dialog.previous, Messages.image.dialog.next);
                 }).catch(() => {
                     imageDialog.classList.add('error');
                 });

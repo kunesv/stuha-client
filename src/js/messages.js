@@ -72,12 +72,17 @@ var Messages = {
         <li class="conversation-member-add">
             <a class="button" data-click="Conversations.conversation.member.add">
                 <span></span>
-                <span>Přidám konverzující</span>        
+                <span>Přidat konverzující</span>        
             </a>
             <form data-click="Conversations.conversation.member.submitForm">                       
-                <p class="step1"><input type="hidden" name="memberId"/><input type="text" name="userSearch"/></p>            
-                <a class="submit button" data-click="Conversations.conversation.member.submit"></a>
-                <ul class="autocomplete"></ul>
+                <div>
+                    <label for="memberId">Jméno</label>
+                </div>
+                <div>
+                    <p class="step1"><input id="memberId" type="hidden" name="memberId"/><input type="text" name="userSearch"/></p>            
+                    <a class="submit button" data-click="Conversations.conversation.member.submit"></a>
+                    <ul class="autocomplete"></ul>
+                </div>               
             </form>          
         </li>
     </ul>
@@ -528,7 +533,7 @@ var Messages = {
                 }
                 let textarea = document.querySelector('.message-dialog .textarea');
                 textarea.value = '';
-                Textarea.resize(textarea);
+                Textarea.reset(textarea);
                 document.querySelector('.message-dialog .submit.button').classList.remove('progress');
                 document.querySelector('.message-dialog .submit.button').classList.remove('done');
 
@@ -541,7 +546,7 @@ var Messages = {
                 let textarea = document.querySelector('.message-dialog .textarea');
 
                 let validationTimeout;
-                Textarea.resize(textarea);
+                Textarea.reset(textarea);
                 textarea.addEventListener('input', () => {
                     Textarea.resize(textarea);
 
@@ -582,7 +587,7 @@ var Messages = {
                     }
 
                     textarea.value = `${textarea.value}${tagWithNo}`;
-                    Textarea.resize(textarea);
+                    Textarea.reset(textarea);
 
                     Messages.message.dialog.message.replyTo.push({replyToId: replyToId, key: tagWithNo});
                 }

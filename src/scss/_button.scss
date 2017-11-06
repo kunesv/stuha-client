@@ -267,6 +267,7 @@ ul.menu {
 
     > form {
       display: flex;
+      flex-direction: column;
       justify-content: center;
 
       position: absolute;
@@ -285,22 +286,30 @@ ul.menu {
 
       z-index: 1;
 
-      > p {
+      > div {
         display: flex;
 
-        flex: 1 0 %75;
-        //height: 1.75 * $module;
-        margin: 0;
-
-        background-color: white;
-
-        input {
-          width: calc(100% - #{$module});
+        > label {
+          color: #666;
         }
-      }
-      > a.submit {
-        flex: 0 0 2 * $module;
-        height: 2 * $module;
+
+        > p {
+          display: flex;
+
+          flex: 1 0 %75;
+          //height: 1.75 * $module;
+          margin: 0;
+
+          background-color: white;
+
+          input {
+            width: calc(100% - #{$module});
+          }
+        }
+        > a.submit {
+          flex: 0 0 2 * $module;
+          height: 2 * $module;
+        }
       }
     }
 

@@ -15,9 +15,7 @@
   > main {
     flex: 1 1 1rem;
 
-    @media (max-width: $small-screen-threshold) {
-      padding: 0;
-    }
+    padding: 0;
 
     text-align: center;
   }

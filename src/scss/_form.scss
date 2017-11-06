@@ -21,7 +21,7 @@ form {
     }
   }
 
-  p {
+  p, div {
     span {
       display: flex;
 
@@ -31,6 +31,12 @@ form {
         background-color: $color-background-message;
         border-radius: $module 0 $module $module;
         padding: $module-half 3 * $module-quarter;
+
+        margin-top: $module-quarter;
+      }
+
+      &.active {
+        display: flex;
       }
     }
   }
@@ -94,10 +100,14 @@ textarea {
 
   line-height: 1.4rem;
 
+  height: 50px;
+
   transition: height 200ms;
 
   overflow-x: auto;
   overflow-y: hidden;
+
+  box-sizing: border-box;
 
   resize: none;
 }
@@ -168,7 +178,7 @@ ul.autocomplete {
   position: absolute;
   list-style: none;
   left: $module-half;
-  top: 2.5 * $module;
+  top: 3.5 * $module;
 
   margin: 0;
   padding: 0;

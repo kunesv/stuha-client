@@ -7,9 +7,16 @@ var Conversations = {
             <span class="add"></span>
             <span>Začít novou konverzaci</span>
         </a>
-        <form data-click="Conversations.conversation.new.submitForm">           
-            <p class="step1"><input type="text" name="title"/></p>            
-            <a class="submit button" data-click="Conversations.conversation.new.submit"></a>
+        <form data-click="Conversations.conversation.new.submitForm">         
+            <div><label for="conversationTitle">Název</label></div>
+            <div>  
+                <p class="step1"><input id="conversationTitle" type="text" name="title"/></p>            
+                <a class="submit button" data-click="Conversations.conversation.new.submit"></a>
+            </div>
+            <div>
+                <span class="error ConversationExists">Konverzace už existuje.</span>
+                <span class="error Default">Zkuste to prosím ještě jednou.</span>
+            </div>
         </form>       
     </li>
 </ul>`;
@@ -214,9 +221,14 @@ var Conversations = {
                             }, 200);
                         });
                     }).catch((response) => {
-                        if (response.status === 409) {
-                            console.log('--!--', 'Error')
+                        switch (response.status) {
+                            case 409:
+                                document.querySelector('.conversations.menu .error.ConversationExists').classList.add('active');
+                                break;
+                            default:
+                                document.querySelector('.conversations.menu .error.Default').classList.add('active');
                         }
+
                         button.classList.remove('progress');
                         button.classList.add('error');
                     });
@@ -242,6 +254,7 @@ var Conversations = {
                 let searchField = document.querySelector('li.conversation-member-add input[name=userSearch]');
                 searchField.removeEventListener('input', Conversations.conversation.member.input);
                 searchField.value = '';
+                document.querySelector('li.conversation-member-add .autocomplete').innerHTML = '';
 
                 searchField.offsetParent.parentNode.classList.remove('form');
             },

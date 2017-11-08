@@ -102,10 +102,16 @@ small {
             display: none;
           }
           span.conversation {
-            order: 3
+            order: 4;
           }
           span.add-button {
-            order: 2;
+            order: 1;
+          }
+          span.notification {
+            order: 5;
+          }
+          span.members {
+            order: 3;
           }
         }
 
@@ -161,8 +167,7 @@ small {
       > section {
         @extend .overflow-auto;
 
-        flex-grow: 1;
-        flex-shrink: 1;
+        flex: 1 1 2.5 * $module;
 
         display: flex;
         flex-direction: column;

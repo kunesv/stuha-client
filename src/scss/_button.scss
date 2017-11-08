@@ -152,7 +152,11 @@ form.show-errors .button, .button.error {
 }
 
 .conversation .button {
-  background-image: url("/images/conversation-settings.svg");
+  background-image: url("/images/conversation-content.svg");
+}
+
+.members .button {
+  background-image: url("/images/conversation-member.svg");
 }
 
 .reload.button {

@@ -49,6 +49,8 @@ aside, header, main, section {
 
 @import "login";
 
+@import "user-dialog";
+
 .hide-for-large {
   @media (min-width: $small-screen-threshold + 1) {
     display: none;

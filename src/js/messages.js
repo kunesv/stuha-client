@@ -10,9 +10,10 @@ var Messages = {
     </aside>
     <header>
         <div>
-            <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>           
+            <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
+            <span class="notification disabled"><button class="light button" data-click="Notifications.toggle"></button></span>
+            <span class="conversation"><button class="light button" data-click="Conversations.conversation.menu.show"></button></span>           
             <span class="members"><button class="light button"></button></span>
-            <span class="conversation"><button class="light button" data-click="Conversations.conversation.menu.show"></button></span>           Z           
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
         </div>
         <div class="conversation-name">
@@ -63,13 +64,7 @@ var Messages = {
     <header>
         <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.menu.hide"></a></span>
     </header>
-    <ul class="menu">
-        <li class="notification disabled">
-            <a class="button" data-click="Notifications.toggle">
-                <span></span>
-                <span>Posílat notifikace</span>
-            </a>
-        </li>
+    <ul class="menu">       
         <li class="conversation-member-add">
             <a class="button" data-click="Conversations.conversation.member.add">
                 <span></span>
@@ -87,9 +82,8 @@ var Messages = {
             </form>          
         </li>
     </ul>
-</section>`;
+</section>
 
-dialogs += `
 <section class="conversation-members-menu">
     <header>
         <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.members.hide"></a></span>

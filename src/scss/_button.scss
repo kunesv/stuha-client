@@ -176,8 +176,13 @@ form.show-errors .button, .button.error {
     display: none;
   }
 
-  .button span:first-child {
+  .button {
     background-image: url("/images/notifications.svg");
+
+    &.active {
+      background-color: #dcdcdc;
+      //background-image: url("/images/notifications-white.svg");
+    }
   }
 }
 

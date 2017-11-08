@@ -20,7 +20,7 @@ var Notifications = {
 
     init: () => {
         if ('serviceWorker' in navigator && 'PushManager' in window) {
-            document.querySelector('.conversation-menu .notification').classList.remove('disabled');
+            document.querySelector('main > header .notification').classList.remove('disabled');
 
             Notifications.subscriptions.load().then((subscriptions) => {
                 for (let i = 0; i < subscriptions.length; i++) {
@@ -33,7 +33,7 @@ var Notifications = {
     },
 
     reload: () => {
-        document.querySelector('.conversation-menu .notification').classList.remove('active');
+        document.querySelector('main > header .notification').classList.remove('active');
         let subscriptions = document.querySelectorAll('.conversations.menu .button.subscribed');
         for (let i = 0; i < subscriptions.length; i++) {
             subscriptions[i].classList.remove('subscribed');
@@ -45,9 +45,9 @@ var Notifications = {
     active: () => {
         let conversationId = Conversations.lastConversation.load().id;
         if (conversationId && document.querySelector(`.conversations.menu .button[data-conversation-id='${conversationId}']`).classList.contains('subscribed')) {
-            document.querySelector('.conversation-menu .notification > a').classList.add('active');
+            document.querySelector('main > header .notification > .button').classList.add('active');
         } else {
-            document.querySelector('.conversation-menu .notification > a').classList.remove('active');
+            document.querySelector('main > header .notification > .button').classList.remove('active');
         }
     },
 

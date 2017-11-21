@@ -1,8 +1,7 @@
 // FIXME: Remove after testing
-window.onerror = function(msg, url, linenumber) {
+window.addEventListener('error', (msg, url, linenumber) => {
     alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
-    return true;
-};
+});
 
 
 if ('serviceWorker' in navigator) {

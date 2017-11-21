@@ -13,7 +13,7 @@ var Messages = {
             <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
             <span class="notification disabled"><button class="light button" data-click="Notifications.toggle"></button></span>
             <span class="conversation"><button class="light button" data-click="Conversations.conversation.menu.show"></button></span>           
-            <span class="members"><button class="light button"></button></span>
+            <span class="members"><button class="light button" data-click="Conversations.members.menu.show"></button></span>
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
         </div>
         <div class="conversation-name">
@@ -64,12 +64,20 @@ var Messages = {
     <header>
         <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.menu.hide"></a></span>
     </header>
-    <ul class="menu">       
+    <main>
+        <form>
+            <label>Search</label>
+        </form>
+    </main>
+</section>
+
+<section class="conversation-members-menu">
+    <header>
+        <span class="close-button"><a class="secondary button" data-click="Conversations.members.menu.hide"></a></span>
+    </header>
+    <ul class="compact menu">       
         <li class="conversation-member-add">
-            <a class="button" data-click="Conversations.conversation.member.add">
-                <span></span>
-                <span>Přidat konverzující</span>        
-            </a>
+            <button class="light button" data-click="Conversations.conversation.member.add"></button>
             <form data-click="Conversations.conversation.member.submitForm">                       
                 <div>
                     <label for="memberId">Jméno</label>
@@ -82,29 +90,8 @@ var Messages = {
             </form>          
         </li>
     </ul>
-</section>
-
-<section class="conversation-members-menu">
-    <header>
-        <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.members.hide"></a></span>
-    </header>
-    <ul class="menu">       
-        <li class="conversation-member-add">
-            <a class="button" data-click="Conversations.conversation.member.add">
-                <span></span>
-                <span>Přidat konverzující</span>        
-            </a>
-            <form data-click="Conversations.conversation.member.submitForm">                       
-                <div>
-                    <label for="memberId">Jméno</label>
-                </div>
-                <div>
-                    <p class="step1"><input id="memberId" type="hidden" name="memberId"/><input type="text" name="userSearch"/></p>            
-                    <a class="submit button" data-click="Conversations.conversation.member.submit"></a>
-                    <ul class="autocomplete"></ul>
-                </div>               
-            </form>          
-        </li>
+    <ul class="members">       
+       
     </ul>
 </section>
 

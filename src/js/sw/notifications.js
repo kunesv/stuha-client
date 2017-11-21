@@ -17,7 +17,7 @@ self.addEventListener('push', function (event) {
             notificationMessage += node.text;
         }
     }
-
+// FIXME: Maybe some additional permission check for Android Chrome ..?
     self.registration.showNotification(`${message.userName}`, {
         body: notificationMessage,
         icon: `images/icons/${message.iconPath}`

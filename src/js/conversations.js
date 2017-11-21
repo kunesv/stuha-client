@@ -106,6 +106,8 @@ var Conversations = {
         Messages.reload();
 
         Conversations.menu.hide();
+
+        Conversations.members.menu.refreshIfOpen();
     },
     unreadCounts: () => {
         return fetch(`/api/conversations/unreadCounts`, {
@@ -319,6 +321,8 @@ var Conversations = {
                             setTimeout(() => {
                                 Conversations.conversation.member.hide();
                                 button.classList.remove('progress');
+
+                                Conversations.members.menu.refreshIfOpen();
                             }, 200);
                         });
                     }).catch((response) => {
@@ -346,6 +350,41 @@ var Conversations = {
                 } else {
                     document.querySelector('.content').classList.remove('dialog');
                     document.querySelector('.conversation-menu').classList.remove('active');
+                }
+            }
+        }
+    },
+    members: {
+        menu: {
+            show: () => {
+                document.querySelector('.content').classList.add('dialog');
+                document.querySelector('.conversation-members-menu').classList.add('active');
+                Conversations.members.menu.loadUsers();
+            },
+            hide: () => {
+                document.querySelector('.content').classList.remove('dialog');
+                document.querySelector('.conversation-members-menu').classList.remove('active');
+            },
+            loadUsers: () => {
+                return fetch(`/api/conversation/${Conversations.lastConversation.load().id}/members`, {
+                    headers: Fetch.headers()
+                }).then(Fetch.processFetchStatus).then((response) => {
+                    return response.json().then((users) => {
+                        let ul = document.querySelector('.conversation-members-menu ul.members');
+                        ul.innerHTML = '';
+                        for (let i = 0; i < users.length; i++) {
+                            let user = users[i];
+                            let li = document.createElement('li');
+                            li.id = user.id;
+                            li.textContent = user.name;
+                            ul.appendChild(li);
+                        }
+                    });
+                });
+            },
+            refreshIfOpen: () => {
+                if (document.querySelector('.conversation-members-menu').classList.contains('active')) {
+                    Conversations.members.menu.loadUsers();
                 }
             }
         }

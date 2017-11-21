@@ -1,4 +1,4 @@
-$base-font-size: 14px; //calc(13px + .25vw + .05vh);
+$base-font-size: 14px;
 $module: 1.618rem;
 
 $module-half: 0.809rem;
@@ -34,6 +34,14 @@ $border-radius-message: $module;
 
 aside, header, main, section {
   display: block;
+}
+
+:focus {
+  outline: none;
+}
+
+::-moz-focus-inner {
+  border: 0;
 }
 
 @import "layout";

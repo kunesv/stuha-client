@@ -1,8 +1,8 @@
 var Notifications = {
     templates: {
-      button: () => {
-          return `<span class="notification disabled"><button class="light button" data-click="Notifications.toggle"></button></span>`;
-      }
+        button: () => {
+            return `<span class="notification disabled"><button class="light button" data-click="Notifications.toggle"></button></span>`;
+        }
     },
 
     subscriptions: {
@@ -24,6 +24,9 @@ var Notifications = {
     },
 
     init: () => {
+        // FIXME: Notifications temporarily disabled
+        return;
+
         if ('serviceWorker' in navigator && 'PushManager' in window) {
             document.querySelector('main > header .notification').classList.remove('disabled');
 
@@ -38,6 +41,9 @@ var Notifications = {
     },
 
     reload: () => {
+        // FIXME: Notifications temporarily disabled
+        return;
+
         document.querySelector('main > header .notification').classList.remove('active');
         let subscriptions = document.querySelectorAll('.conversations.menu .button.subscribed');
         for (let i = 0; i < subscriptions.length; i++) {

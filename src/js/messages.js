@@ -11,7 +11,7 @@ var Messages = {
     <header>
         <div>
             <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
-            <span class="notification disabled"><button class="light button" data-click="Notifications.toggle"></button></span>
+            ${Notifications.templates.button()}
             <span class="conversation"><button class="light button" data-click="Conversations.conversation.menu.show"></button></span>           
             <span class="members"><button class="light button" data-click="Conversations.members.menu.show"></button></span>
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>

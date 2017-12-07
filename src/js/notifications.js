@@ -1,4 +1,9 @@
 var Notifications = {
+    templates: {
+      button: () => {
+          return `<span class="notification disabled"><button class="light button" data-click="Notifications.toggle"></button></span>`;
+      }
+    },
 
     subscriptions: {
         load: () => {

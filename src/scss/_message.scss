@@ -181,6 +181,8 @@ article {
 
               vertical-align: middle;
 
+              font-size: 1.15 * $font-size-small;
+
               //overflow: hidden;
               //white-space: pre;
               //text-overflow: ellipsis;
@@ -214,7 +216,7 @@ article {
 
     footer {
       color: $color-text-secondary;
-      font-size: 11px;
+      font-size: $font-size-small;
       height: $module;
       text-align: right;
     }
@@ -347,7 +349,7 @@ article.my > main > section > article.replyTo {
     background-color: $color-background;
     color: $color-text-secondary;
 
-    font-size: 13px;
+    font-size: 1.15 * $font-size-small;
     padding: 0 $module;
 
   }

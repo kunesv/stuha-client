@@ -22,35 +22,34 @@ form {
   }
 
   p, div {
+    text-align: right;
+
     span {
-      display: flex;
+      display: inline-block;
+
+      background-color: $color-background-message;
+      border-radius: $module 0 $module $module;
+      padding: $module-half 3 * $module-quarter;
+
+      margin-top: $module-quarter;
 
       &.error {
         display: none;
 
-        background-color: $color-background-message;
-        border-radius: $module 0 $module $module;
-        padding: $module-half 3 * $module-quarter;
-
-        margin-top: $module-quarter;
-      }
-
-      &.active {
-        display: flex;
+        &.active {
+          display: inline-block;
+        }
       }
     }
   }
 
   .error {
-    text-align: right;
-
     span.error {
       display: inline-block;
     }
   }
 
   section.error > p {
-    text-align: right;
     span.error {
       border-radius: $module 0 $module $module;
     }
@@ -121,7 +120,7 @@ label {
   display: flex;
 
   color: #666;
-  font-size: 12px;
+  font-size: $font-size-small;
 
   > input[type=checkbox] {
     opacity: 0;

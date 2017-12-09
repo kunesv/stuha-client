@@ -31,7 +31,7 @@ body {
 }
 
 small {
-  font-size: 13px;
+  font-size: $font-size-small;
 }
 
 .content {
@@ -120,7 +120,7 @@ small {
           flex: 0 0 2.5 * $module;
 
           color: #999;
-          font-size: 12px;
+          font-size: 1.15 * $font-size-small;
           text-align: center;
 
           transition: transform 300ms $animation-curve;
@@ -185,6 +185,8 @@ small {
 
         display: flex;
         justify-content: flex-end;
+
+        background-color: #e3e3e3;
 
         a {
           width: 2.5 * $module;

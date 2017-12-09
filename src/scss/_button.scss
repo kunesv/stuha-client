@@ -10,7 +10,7 @@
 
   color: rgba(white, 0.8);
   cursor: pointer;
-  font-size: 12px;
+  font-size: $font-size-small;
   height: 2.5 * $module;
   padding: 0;
 
@@ -270,7 +270,7 @@ ul.menu {
         line-height: 3 * $module-quarter;
 
         color: #777;
-        font-size: 12px;
+        font-size: $font-size-small;
         text-align: center;
       }
     }

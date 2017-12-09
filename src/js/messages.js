@@ -36,13 +36,7 @@ var Messages = {
     <form enctype="multipart/form-data" id="images">
         <input type="file" id="uploadImage" name="images" multiple="multiple" accept="image/*"/>
     </form>
-    <form id="message">
-        <section>
-            <ul class="icons"></ul>
-            <p>
-                <span class="error">Ještě vyberu ikonku.</span>
-            </p>           
-        </section>       
+    <form id="message">       
         <section>           
             <textarea class="textarea" name="rough"></textarea>
             <ul class="thumbnails"></ul>
@@ -55,8 +49,15 @@ var Messages = {
             <p>
                 <span class="error">A co nějaký obsah?</span>
             </p>      
-        </section>              
-        <p class="button-row"><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>
+        </section>     
+        <section>
+            <p><span>A vybráním ikonky odešlu.</span></p>
+            <ul class="icons"></ul>
+            <p>
+                <span class="error">Ještě vyberu ikonku.</span>
+            </p>           
+        </section>         
+        <!--<p class="button-row"><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>-->
     </form>
 </section>
 
@@ -66,7 +67,7 @@ var Messages = {
     </header>
     <main>
         <form>
-            <label>Search</label>
+            <label>Tady taky ještě nic. Bude tu vyhledávání a archiv.</label>
         </form>
     </main>
 </section>
@@ -303,6 +304,7 @@ var Messages = {
                             }
                             break;
                         case 'LINK':
+                            currentParagraph.classList.add('plain-text');
                             let a = document.createElement('a');
                             a.classList.add('link');
                             // FIXME: URL validation
@@ -550,8 +552,8 @@ var Messages = {
                 let textarea = document.querySelector('.message-dialog .textarea');
                 textarea.value = '';
                 Textarea.reset(textarea);
-                document.querySelector('.message-dialog .submit.button').classList.remove('progress');
-                document.querySelector('.message-dialog .submit.button').classList.remove('done');
+                // document.querySelector('.message-dialog .submit.button').classList.remove('progress');
+                // document.querySelector('.message-dialog .submit.button').classList.remove('done');
 
                 Images.removeAll();
             },
@@ -631,7 +633,8 @@ var Messages = {
                 if (li) {
                     li.classList.add('active');
                 }
-                Messages.message.dialog.validations.icons();
+                // Messages.message.dialog.validations.icons();
+                Messages.message.submit(li);
             },
 
             values: {

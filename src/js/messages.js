@@ -56,8 +56,7 @@ var Messages = {
             <p>
                 <span class="error">Ještě vyberu ikonku.</span>
             </p>           
-        </section>         
-        <!--<p class="button-row"><a class="submit button" tabindex="0" data-click="Messages.message.submit"></a></p>-->
+        </section>                
     </form>
 </section>
 
@@ -384,13 +383,15 @@ var Messages = {
             Messages.message.submit(button);
         },
         submit: (button) => {
-            if (!button.classList.contains('progress')) {
+            if (!button.classList.contains('progress') && !button.classList.contains('done')) {
                 if (!Messages.message.dialog.validations.all()) {
                     return;
                 }
 
-                button.classList.remove('error');
-                button.classList.add('progress');
+                let errors = document.querySelectorAll('.message-dialog .icons li.error');
+                for (let i = 0; i < errors.length; i++) {
+                    errors[i].classList.remove('error');
+                }
 
                 let messageForm = new FormData(document.querySelector('.message-dialog form#message'));
                 messageForm.append('iconPath', Messages.message.dialog.values.icon());
@@ -403,23 +404,27 @@ var Messages = {
                 let lastMessage = document.querySelector('.messages > div:first-child > article:first-child');
                 messageForm.append('lastMessageId', lastMessage.id);
 
+                button.classList.remove('active');
+                button.classList.add('progress');
+
                 fetch('/api/message', {
                     headers: Fetch.headers(),
                     method: 'POST',
                     body: messageForm
                 }).then(Fetch.processFetchStatus).then((response) => {
                     return response.json().then((messages) => {
+                        button.classList.remove('progress');
                         button.classList.add('done');
 
                         setTimeout(() => {
                             Messages.message.dialog.hide();
-                            Messages.message.dialog.messageReset();
+                            setTimeout(Messages.message.dialog.messageReset, 300);
 
                             Messages.message.add(messages);
 
                             document.querySelector('.messages').parentNode.scrollTop = 0;
                             Messages.markNewAsRead();
-                        }, 200);
+                        }, 300);
                     });
                 }).catch((response) => {
                     button.classList.remove('progress');
@@ -545,15 +550,14 @@ var Messages = {
                 Messages.message.dialog.message = {
                     replyTo: []
                 };
-                let activeIcon = document.querySelector('.message-dialog .icons .active');
+                let activeIcon = document.querySelector('.message-dialog .icons .done');
                 if (activeIcon) {
-                    activeIcon.classList.remove('active');
+                    activeIcon.classList.remove('progress');
+                    activeIcon.classList.remove('done');
                 }
                 let textarea = document.querySelector('.message-dialog .textarea');
                 textarea.value = '';
                 Textarea.reset(textarea);
-                // document.querySelector('.message-dialog .submit.button').classList.remove('progress');
-                // document.querySelector('.message-dialog .submit.button').classList.remove('done');
 
                 Images.removeAll();
             },
@@ -580,7 +584,7 @@ var Messages = {
                 Messages.message.dialog.messageReset();
 
                 // textarea.addEventListener('focus', Messages.message.dialog.validations.icons);
-                textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.icons, 300));
+                // textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.icons, 300));
                 textarea.addEventListener('blur', () => setTimeout(Messages.message.dialog.validations.content, 300));
             },
             show: (button) => {

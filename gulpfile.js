@@ -135,13 +135,9 @@ let webserverSettings = {
 
 if (!process.env.PORT) {
     webserverSettings.port = 5000;
-    webserverSettings.proxies = [{
-        source: '/api/',
-        target: 'http://localhost:8080/'
-    }];
 }
 
-// Starts a test server, which you can view at http://localhost:3000
+// Starts a test server, which you can view at http://localhost:5000
 gulp.task('server', ['build'], function () {
     gulp.src('./build')
         .pipe(webserver(webserverSettings))

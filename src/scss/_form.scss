@@ -9,6 +9,16 @@ form {
 
     margin: $module-half 0;
     padding: 0 $module-half;
+
+    > p > span {
+      display: inline-block;
+
+      background-color: $color-background-message;
+      border-radius: $module 0 $module $module;
+      padding: $module-half 3 * $module-quarter;
+
+      margin-top: $module-quarter;
+    }
   }
 
   > p {
@@ -24,20 +34,20 @@ form {
   p, div {
     text-align: right;
 
-    span {
-      display: inline-block;
-
-      background-color: $color-background-message;
-      border-radius: $module 0 $module $module;
-      padding: $module-half 3 * $module-quarter;
-
-      margin-top: $module-quarter;
+    > span {
+      display: flex;
 
       &.error {
         display: none;
 
+        background-color: $color-background-message;
+        border-radius: $module 0 $module $module;
+        padding: $module-half 3 * $module-quarter;
+
+        margin-top: $module-quarter;
+
         &.active {
-          display: inline-block;
+          display: flex;
         }
       }
     }
@@ -131,7 +141,7 @@ label {
       background-color: $color-background-button-secondary-active;
 
       > span {
-        transform: translate(16px, 0);
+        transform: translate(0.7 * $module, 0);
       }
     }
   }
@@ -149,11 +159,12 @@ label {
       background-size: auto 100%;
       background-image: url("/images/check.svg");
 
-      border-radius: 10px;
+      border-radius: $module-half;
       cursor: pointer;
-      height: 20px;
+      height: 0.9 * $module;
       margin-right: $module-half;
-      width: 36px;
+      text-align: left;
+      width: 1.6 * $module;
 
       transition: background-color 200ms;
 
@@ -163,9 +174,9 @@ label {
         background-color: white;
 
         border-radius: 50%;
-        height: 16px;
+        height: calc(#{0.9 * $module} - 4px);
         margin: 2px;
-        width: 16px;
+        width: calc(#{0.9 * $module} - 4px);
 
         transition: transform 300ms $animation-curve;
       }

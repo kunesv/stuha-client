@@ -83,6 +83,21 @@
           opacity: 0;
           transform: scale(0);
         }
+
+        &.progress {
+          @extend .button.progress;
+          background-image: url("/images/progress.svg") !important;
+        }
+
+        &.done {
+          @extend .button.done;
+          background-image: url("/images/done.svg") !important;
+        }
+
+        &.error {
+          @extend .button.error;
+          background-image: url("/images/reload.svg") !important;
+        }
       }
     }
 

@@ -137,6 +137,15 @@ var Messages = {
                 Messages.markNewAsRead();
             }, 100);
         });
+
+        // setInterval(() => {
+        //     if (!document.hidden) {
+        //         let d = document.createElement('div');
+        //         d.textContent = (new Date()).getSeconds();
+        //         document.querySelector('.content > main > section').appendChild(d);
+        //     }
+        // }, 1000)
+
     },
 
     markNewAsRead: () => {
@@ -316,11 +325,9 @@ var Messages = {
                             }
                             break;
                         case 'NEW_LINE':
-                            let br = document.createElement('br');
-                            currentParagraph.appendChild(br);
-                            if (p === message.formatted.textNodes.length - 1 || message.formatted.textNodes[p + 1].type === 'REPLY_TO') {
-                                contentElement.appendChild(currentParagraph);
-                                currentParagraph = document.createElement('p');
+                            if (message.formatted.textNodes[p - 1].type === 'PLAIN_TEXT') {
+                                let br = document.createElement('br');
+                                currentParagraph.appendChild(br);
                             }
                             break;
                         case 'REPLY_TO':
@@ -470,31 +477,22 @@ var Messages = {
 
                             let replyToWrapper = document.createElement('div');
                             // TODO: This might be thought out little nicer ...
-                            let article;
 
-                            if (replyToArticle.parentNode.parentNode.classList.contains('messages')) {
+                            replyToWrapper.classList.add('progress');
+                            replyToWrapper.classList.add('replyToWrapper');
 
-                                replyToWrapper.classList.add('progress');
-                                replyToWrapper.classList.add('replyToWrapper');
+                            Messages.message.template(replyToWrapper, message);
+                            let article = replyToWrapper.querySelector('article:last-child');
 
-                                Messages.message.template(replyToWrapper, message);
-                                article = replyToWrapper.querySelector('article:last-child');
+                            replyTo.parentNode.insertBefore(replyToWrapper, replyTo.nextSibling);
 
-                                replyTo.parentNode.insertBefore(replyToWrapper, replyTo.nextSibling);
-
-                                let closeTemplate = `<span class="close-button">
+                            let closeTemplate = `<span class="close-button">
     <a class="secondary button" data-click="Messages.message.replyTo.close"></a>
 </span>`;
 
-                                replyToWrapper.insertAdjacentHTML('afterBegin', closeTemplate);
-                                Buttons.init(replyToWrapper.querySelectorAll('.close-button .button'));
-                            } else {
-                                let div = document.createElement('div');
-                                Messages.message.template(div, message);
-                                article = div.querySelector('article');
-                                article.classList.add('progress');
-                                replyTo.parentNode.insertBefore(article, replyTo.nextSibling);
-                            }
+                            replyToWrapper.insertAdjacentHTML('afterBegin', closeTemplate);
+                            Buttons.init(replyToWrapper.querySelectorAll('.close-button .button'));
+
                             article.classList.add('replyTo');
 
                             setTimeout(() => {

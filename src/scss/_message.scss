@@ -293,15 +293,6 @@ article {
     .icon.clicked {
       box-shadow: 0.125 * $module 0.25 * $module 0.125 * $module rgba(0, 0, 0, 0.1), 0 0 0 0.5 * $module rgba(black, 0.5) inset;
     }
-
-    > header {
-      padding: 0;
-    }
-  }
-
-  &.openedReplyTo {
-    background-color: rgba(0, 0, 0, 0.015);
-    padding: $module-half;
   }
 
   &.bot {
@@ -368,7 +359,6 @@ article.my > main > section > article.replyTo {
   flex-direction: column;
 
   background-color: rgba(0, 0, 0, 0.015);
-  box-shadow: 0.5 * $module-quarter 0.5 * $module-quarter $module-quarter rgba(0, 0, 0, 0.1);
 
   margin-bottom: $module-quarter;
   padding: $module-half;
@@ -380,14 +370,6 @@ article.my > main > section > article.replyTo {
   article > main {
     margin-left: 0;
     margin-right: 0;
-
-    > section > p:not(.replyTo) {
-      box-shadow: 0 0 $module-quarter / 2 $color-background;
-    }
-    > section > p.replyTo a {
-      box-shadow: 0 0 $module-quarter / 2 $color-background;
-    }
-
   }
 
   > .close-button {

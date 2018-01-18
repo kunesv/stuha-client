@@ -29,7 +29,8 @@ const paths = {
     ],
     // These files are for your app's JavaScript
     js: [
-        './src/js/*.js'
+        './src/js/*.js',
+        './src/js/templates/*.js'
     ],
     sw: [
         './src/js/sw/*.js'
@@ -94,13 +95,13 @@ gulp.task('uglify', ['uglify:libs', 'uglify:app', 'uglify:serviceWorkers']);
 
 gulp.task('uglify:libs', function () {
     return gulp.src(paths.libs)
-        // .pipe(concat('lib.js'))
+    // .pipe(concat('lib.js'))
         .pipe(gulp.dest('./build/js/lib/'));
 });
 
 gulp.task('uglify:app', function () {
-    return gulp.src(paths.js)
-        // .pipe(concat('app.js'))
+    return gulp.src(paths.js, {base: './src/js'})
+    // .pipe(concat('app.js'))
         .pipe(babel({
             presets: ['es2015']
         }))
@@ -121,7 +122,7 @@ gulp.task('sass', function () {
     return gulp.src(paths.sass)
         .pipe(sass())
         .pipe(autoprefixer({
-            browsers: ['last 2 versions', 'ie 10']
+            browsers: ['last 2 versions']
         }))
         .pipe(gulp.dest('./build/css/'))
         ;

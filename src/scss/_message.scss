@@ -1,4 +1,4 @@
-.messages > div {
+.messages {
   margin-left: auto;
   margin-right: auto;
   max-width: $small-screen-threshold;
@@ -131,75 +131,6 @@ article {
           text-align: left;
         }
 
-        &.replyTo {
-          transition: transform 300ms $animation-curve, max-height 300ms 300ms;
-          transform: scale3d(1, 1, 1);
-
-          position: relative;
-
-          &.opened {
-            transform: scale3d(0, 0, 1);
-            max-height: 0;
-          }
-
-          > a {
-            cursor: pointer;
-            border-bottom: 0 none;
-            border-radius: 0 $border-radius-message $border-radius-message 0;
-            background-color: #d6d6d6;
-            color: #666;
-            display: inline-block;
-            height: auto;
-            outline: 0 none;
-            padding: $module-quarter 0.75 * $module $module-quarter $module-quarter;
-
-            transition: background-color 300ms, box-shadow 100ms;
-
-            //max-width: calc(100% - #{1.7501 * $module});
-
-            &:hover {
-              background-color: #d0d0d0;
-            }
-
-            &.clicked {
-              box-shadow: 0 0 0 $module-half rgba(black, 0.1) inset;
-            }
-
-            .replyToIcon {
-              background: white no-repeat center;
-              background-size: 60%;
-              border-radius: $module;
-
-              display: inline-block;
-              vertical-align: middle;
-
-              height: 1.5 * $module;
-              width: 1.5 * $module;
-            }
-
-            .caption {
-              display: inline-block;
-              margin-left: $module-quarter;
-
-              vertical-align: middle;
-
-              font-size: 1.15 * $font-size-small;
-
-              //overflow: hidden;
-              //white-space: pre;
-              //text-overflow: ellipsis;
-              //
-              //max-width: calc(100% - #{1.7501 * $module});
-              //
-              //transition: border-color 300ms;
-
-              //&:hover {
-              //  border-bottom-color: $color-text;
-              //}
-            }
-          }
-        }
-
         &:first-child, &.replyTo:first-child a {
           border-top-left-radius: $border-radius-message;
         }
@@ -277,13 +208,6 @@ article {
     transition: transform 300ms $animation-curve;
     transform: scale3d(1, 1, 1);
 
-    > main > section > article.replyTo {
-      margin-left: -3.5 * $module;
-
-      @media (max-width: $small-screen-threshold) {
-        margin-left: -3 * $module;
-      }
-    }
     margin-bottom: $module-quarter;
 
     &.progress {
@@ -316,15 +240,6 @@ article {
   }
 }
 
-article.my > main > section > article.replyTo {
-  margin-left: 0;
-  margin-right: -3.5 * $module;
-
-  @media (max-width: $small-screen-threshold) {
-    margin-right: -3 * $module;
-  }
-}
-
 .seperator {
   margin-bottom: 1.75 * $module;
   position: relative;
@@ -351,48 +266,6 @@ article.my > main > section > article.replyTo {
   }
 }
 
-.replyToWrapper {
-  transition: transform 300ms $animation-curve;
-  transform: scale3d(1, 1, 1);
-
-  display: flex;
-  flex-direction: column;
-
-  background-color: rgba(0, 0, 0, 0.015);
-
-  margin-bottom: $module-quarter;
-  padding: $module-half;
-
-  &.progress {
-    transform: scale3d(0, 0, 1);
-  }
-
-  article > main {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  > .close-button {
-    display: flex;
-    justify-content: flex-end;
-
-    margin: -$module-half (-$module-half) $module-quarter 0;
-
-    .button {
-      border: 0 none;
-
-      height: 2 * $module;
-      width: 2 * $module;
-    }
-  }
-}
-
-article.my {
-  .replyToWrapper {
-    align-items: flex-end;
-  }
-}
-
 .load-more {
   visibility: hidden;
 
@@ -414,4 +287,79 @@ article.my {
 
 .thumbnails + .formatted {
   margin-top: $module-quarter;
+}
+
+&.replyTos {
+  transition: transform 300ms $animation-curve, max-height 300ms 300ms;
+  transform: scale3d(1, 1, 1);
+
+  position: relative;
+
+  list-style: none;
+  margin: 0.25 * $module-quarter $module-quarter * -0.25;
+  padding: 0;
+
+  &:empty {
+    margin: 0;
+  }
+
+
+  > li {
+    cursor: pointer;
+    border-bottom: 0 none;
+    border-radius: $border-radius-message;
+    background-color: #d6d6d6;
+    color: #666;
+    display: inline-block;
+    height: auto;
+    outline: 0 none;
+    padding: $module-quarter 0.75 * $module $module-quarter $module-quarter;
+
+    margin: 0.25 * $module-quarter;
+
+    transition: background-color 300ms, box-shadow 100ms;
+
+    //max-width: calc(100% - #{1.7501 * $module});
+
+    &:hover {
+      background-color: #d0d0d0;
+    }
+
+    &.clicked {
+      box-shadow: 0 0 0 $module-half rgba(black, 0.1) inset;
+    }
+
+    .replyToIcon {
+      background: white no-repeat center;
+      background-size: 60%;
+      border-radius: $module;
+
+      display: inline-block;
+      vertical-align: middle;
+
+      height: 1.5 * $module;
+      width: 1.5 * $module;
+    }
+
+    .caption {
+      display: inline-block;
+      margin-left: $module-quarter;
+
+      vertical-align: middle;
+
+      font-size: 1.15 * $font-size-small;
+
+      //overflow: hidden;
+      //white-space: pre;
+      //text-overflow: ellipsis;
+      //
+      //max-width: calc(100% - #{1.7501 * $module});
+      //
+      //transition: border-color 300ms;
+
+      //&:hover {
+      //  border-bottom-color: $color-text;
+      //}
+    }
+  }
 }

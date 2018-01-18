@@ -11,7 +11,7 @@
   transform: scale3d(0, 0, 1);
   transform-origin: top left;
   opacity: 0;
-  overflow: hidden;
+  //overflow: hidden;
 
   @media (min-width: $small-screen-threshold + 1) {
     left: 25vw;

@@ -1,0 +1,1 @@
+Templates.thumbnailTemplate = (picture) => `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;

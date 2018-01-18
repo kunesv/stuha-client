@@ -233,6 +233,10 @@ form.show-errors .button {
 
 .load-more .button {
   background-image: url("/images/load-more.svg");
+
+  &.progress {
+    @extend button.progress;
+  }
 }
 
 ul.menu {

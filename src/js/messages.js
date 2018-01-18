@@ -29,37 +29,7 @@ var Messages = {
     init: () => {
         document.querySelector('.content').insertAdjacentHTML('beforeEnd', Messages.template());
 
-        let dialogs = `<section class="message-dialog">
-    <header>
-        <span class="close-button"><a class="secondary button" data-click="Messages.message.dialog.hide"></a></span>
-    </header>
-    <form enctype="multipart/form-data" id="images">
-        <input type="file" id="uploadImage" name="images" multiple="multiple" accept="image/*"/>
-    </form>
-    <form id="message">       
-        <section>           
-            <textarea class="textarea" name="rough"></textarea>
-            <ul class="thumbnails"></ul>
-            <ul class="buttons">
-                <li class="image secondary button">              
-                    <label for="uploadImage"></label>                   
-                </li>
-                <!--<li class="gps button"></li>-->
-            </ul>     
-            <p>
-                <span class="error">A co nějaký obsah?</span>
-            </p>      
-        </section>     
-        <section>
-            <p><span>A vybráním ikonky odešlu.</span></p>
-            <ul class="icons"></ul>
-            <p>
-                <span class="error">Ještě vyberu ikonku.</span>
-            </p>           
-        </section>                
-    </form>
-</section>
-
+        let dialogs = `
 <section class="conversation-menu">
     <header>
         <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.menu.hide"></a></span>
@@ -113,8 +83,9 @@ var Messages = {
     </main>
 </section>
 `;
-
+        document.body.appendChild(Templates.toElement(Templates.messageDialog()));
         document.body.insertAdjacentHTML('beforeEnd', dialogs);
+
 
         Buttons.init(document.querySelectorAll('.button'));
         Buttons.initForms(document.querySelectorAll('form'));
@@ -172,15 +143,15 @@ var Messages = {
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/load`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((messages) => {
+            return response.json().then((last10Messages) => {
                 Messages.placeholders.removeAll();
 
-                if (!messages.messages.length) {
+                if (!last10Messages.messages.length) {
                     Messages.empty.add();
                 } else {
-                    Messages.message.add(messages.messages, true, false, messages.unreadCount);
-                    if (messages.messages.length === 10) {
-                        Messages.message.loadMore.show();
+                    Messages.message.add(last10Messages.messages);
+                    if (last10Messages.moreToLoad) {
+                        Messages.message.loadMore.show(last10Messages.remainingUnreadCount);
                     }
                 }
 
@@ -199,7 +170,7 @@ var Messages = {
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadRecent/${lastMessage.id}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((messages) => Messages.message.add(messages, true, true));
+            return response.json().then((messages) => Messages.message.add(messages));
         }).catch((error) => {
             // FIXME: And what about some serious error handling ?
             console.log('Load-recent failed', error);
@@ -212,17 +183,17 @@ var Messages = {
         }
 
         button.classList.add('progress');
-        let firstArticle = document.querySelector('.messages > div:last-child > article:last-child');
+        let firstArticle = document.querySelector('.messages > article:last-child');
 
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadMore/${firstArticle.id}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((messages) => {
-                if (messages.length < 10) {
+            return response.json().then((moreMessages) => {
+                if (!moreMessages.moreToLoad) {
                     Messages.message.loadMore.hide();
                 }
 
-                Messages.message.add(messages, false);
+                Messages.message.add(moreMessages.messages);
 
                 button.classList.remove('progress');
 
@@ -260,26 +231,9 @@ var Messages = {
     },
 
     message: {
-        thumbnailTemplate: (picture) => {
-            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;
-        },
-        template: (parent, message) => {
-            let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
-    <header>
-        <div class="icon ${!message.robo ? 'button' : ''} ${message.isNew ? 'new' : ''}" data-click="Messages.message.dialog.show" data-reply-to-name="${message.userName}" 
-            style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}')"></div>
-    </header>
-    <main>                 
-       
-        <section class="formatted"></section>
-            
-        <footer>${Datetime.formatDate(new Date()) !== Datetime.formatDate(message.createdOn) ? Datetime.formatDate(message.createdOn) + ',' : ''} <b>${Datetime.formatTime(message.createdOn)}</b></footer>
-    </main>
-</article>`;
 
-            parent.insertAdjacentHTML('beforeEnd', template);
-            let article = parent.querySelector('article:last-child');
-
+        template: (message) => {
+            let article = Templates.toElement(Templates.message(message));
             let contentElement = article.querySelector('.formatted');
 
             if (message.pictures && message.pictures.length) {
@@ -288,7 +242,7 @@ var Messages = {
                 thumbnails.classList.add('thumbnails');
 
                 for (let i = 0; i < message.pictures.length; i++) {
-                    thumbnails.insertAdjacentHTML('beforeend', Messages.message.thumbnailTemplate(message.pictures[i]));
+                    thumbnails.appendChild(Templates.toElement(Templates.thumbnailTemplate(message.pictures[i])));
                 }
 
                 contentElement.parentNode.insertBefore(thumbnails, contentElement);
@@ -296,6 +250,8 @@ var Messages = {
 
             if (message.formatted) {
                 let currentParagraph = document.createElement('p');
+
+                let replys = [];
 
                 for (let p = 0; p < message.formatted.textNodes.length; p++) {
                     let node = message.formatted.textNodes[p];
@@ -331,10 +287,7 @@ var Messages = {
                             }
                             break;
                         case 'REPLY_TO':
-                            Messages.message.replyTo.add(node, currentParagraph);
-                            currentParagraph.classList.add('replyTo');
-                            contentElement.appendChild(currentParagraph);
-                            currentParagraph = document.createElement('p');
+                            article.querySelector('.replyTos').appendChild(Messages.message.replyTo.template(node));
                             break;
                     }
                 }
@@ -344,43 +297,39 @@ var Messages = {
 
             return article;
         },
-        add: (messages, placeOnTop = true, allNew = false, unreadCount = 0) => {
+        add: (messages) => {
             if (!messages.length) {
                 return;
             }
-            let newMessages = document.createElement('div');
-            newMessages.classList.add('loading');
 
             for (let i = 0; i < messages.length; i++) {
                 let message = messages[i];
                 message.createdOn = Datetime.arrayToDate(message.createdOn);
 
                 if (i > 0 && Datetime.formatDate(messages[i - 1].createdOn) !== Datetime.formatDate(message.createdOn)) {
-                    newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(Datetime.formatDate(message.createdOn)));
+                    document.querySelector('.messages').appendChild(Templates.toElement(Templates.messageSeparator(Datetime.formatDate(message.createdOn))));
                 }
 
-                message.isNew = allNew || i < unreadCount;
-
-                Messages.message.template(newMessages, message);
+                document.querySelector('.messages').appendChild(Messages.message.template(message))
             }
 
-            if (placeOnTop) {
-                let newestAlreadyDisplayed = document.querySelector('.messages div:first-child article:first-child');
-                if (newestAlreadyDisplayed && newestAlreadyDisplayed.dataset.date && newestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[messages.length - 1].createdOn)) {
-                    newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(newestAlreadyDisplayed.dataset.date));
-                }
-                document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
-            } else {
-                let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
-                if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {
-                    newMessages.insertAdjacentHTML('afterBegin', Messages.message.separator(Datetime.formatDate(messages[0].createdOn)));
-                }
-                document.querySelector('.messages').appendChild(newMessages);
-            }
+            // if (placeOnTop) {
+            //     let newestAlreadyDisplayed = document.querySelector('.messages div:first-child article:first-child');
+            //     if (newestAlreadyDisplayed && newestAlreadyDisplayed.dataset.date && newestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[messages.length - 1].createdOn)) {
+            //         newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(newestAlreadyDisplayed.dataset.date));
+            //     }
+            //     document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
+            // } else {
+            //     let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
+            //     if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {
+            //         newMessages.insertAdjacentHTML('afterBegin', Messages.message.separator(Datetime.formatDate(messages[0].createdOn)));
+            //     }
+            //     document.querySelector('.messages').appendChild(newMessages);
+            // }
 
-            setTimeout(() => {
-                newMessages.classList.remove('loading');
-            }, 100);
+            // setTimeout(() => {
+            //     newMessages.classList.remove('loading');
+            // }, 100);
 
             Messages.image.loadSome();
         },
@@ -408,7 +357,7 @@ var Messages = {
                 }
                 messageForm.append('conversationId', Conversations.lastConversation.load().id);
                 messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
-                let lastMessage = document.querySelector('.messages > div:first-child > article:first-child');
+                let lastMessage = document.querySelector('.messages > article:first-child');
                 messageForm.append('lastMessageId', lastMessage.id);
 
                 button.classList.remove('active');
@@ -419,20 +368,19 @@ var Messages = {
                     method: 'POST',
                     body: messageForm
                 }).then(Fetch.processFetchStatus).then((response) => {
-                    return response.json().then((messages) => {
-                        button.classList.remove('progress');
-                        button.classList.add('done');
+                    button.classList.remove('progress');
+                    button.classList.add('done');
 
-                        setTimeout(() => {
-                            Messages.message.dialog.hide();
-                            setTimeout(Messages.message.dialog.messageReset, 300);
+                    setTimeout(() => {
+                        Messages.message.dialog.hide();
+                        setTimeout(Messages.message.dialog.messageReset, 300);
 
-                            Messages.message.add(messages);
+                        // Messages.message.add(messages);
 
-                            document.querySelector('.messages').parentNode.scrollTop = 0;
-                            Messages.markNewAsRead();
-                        }, 300);
-                    });
+                        // document.querySelector('.messages').parentNode.scrollTop = 0;
+
+                        Messages.markNewAsRead();
+                    }, 300);
                 }).catch((response) => {
                     button.classList.remove('progress');
                     button.classList.add('error');
@@ -440,25 +388,16 @@ var Messages = {
             }
         },
 
-        separator: (createdOn) => {
-            return `<div class="seperator"><span>${createdOn}</span></div>`;
-        },
-
         replyTo: {
-            add: (node, currentParagraph) => {
-                let id = Messages.message.validations.uuid(node.replyToId);
-                let iconPath = Messages.message.validations.icon(node.iconPath) || '';
-
-                let template = `<a class="button" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
-    <span class="replyToIcon" style="background-image: url('/images/icons/${iconPath}')"></span><span class="caption"></span>
-</a>`;
-
-                currentParagraph.insertAdjacentHTML('beforeEnd', template);
-                currentParagraph.querySelector('a:last-child .caption').textContent = node.caption || '[ ... ]';
+            template: (node) => {
+                let replyTo = Templates.toElement(Templates.replyTo(node));
+                replyTo.querySelector('.caption').textContent = node.caption || '[ ... ]';
+                return replyTo;
             },
             show: (button) => {
-                let replyToArticle = button.offsetParent.offsetParent;
+
                 let replyTo = button.parentNode;
+                let replyToArticle = button.offsetParent.offsetParent;
 
                 replyTo.classList.remove('error');
                 if (!button.classList.contains('progress')) {
@@ -473,31 +412,19 @@ var Messages = {
 
                             button.classList.remove('progress');
                             replyTo.classList.add('opened');
-                            replyToArticle.classList.add('openedReplyTo');
 
-                            let replyToWrapper = document.createElement('div');
-                            // TODO: This might be thought out little nicer ...
-
-                            replyToWrapper.classList.add('progress');
-                            replyToWrapper.classList.add('replyToWrapper');
-
-                            Messages.message.template(replyToWrapper, message);
-                            let article = replyToWrapper.querySelector('article:last-child');
-
-                            replyTo.parentNode.insertBefore(replyToWrapper, replyTo.nextSibling);
+                            let article = Messages.message.template(message);
+                            article.classList.add('replyTo');
+                            replyToArticle.parentNode.insertBefore(article, replyToArticle);
 
                             let closeTemplate = `<span class="close-button">
     <a class="secondary button" data-click="Messages.message.replyTo.close"></a>
 </span>`;
-
-                            replyToWrapper.insertAdjacentHTML('afterBegin', closeTemplate);
-                            Buttons.init(replyToWrapper.querySelectorAll('.close-button .button'));
-
-                            article.classList.add('replyTo');
+                            article.appendChild(Templates.toElement(closeTemplate));
+                            Buttons.init(replyTo.parentNode.querySelectorAll('.close-button .button'));
 
                             setTimeout(() => {
                                 article.classList.remove('progress');
-                                replyToWrapper.classList.remove('progress');
 
                                 Messages.image.loadSome(article);
                             }, 20);
@@ -509,27 +436,23 @@ var Messages = {
                 }
             },
             close: (button) => {
-                let replyToWrapper = button.parentNode.parentNode;
-                replyToWrapper.classList.add('progress');
+                const closeButton = button.parentNode;
+                let article = closeButton.nextSibling;
 
                 setTimeout(() => {
-                    let replyTo = replyToWrapper.previousSibling;
+                    let replyTo = closeButton.previousSibling;
                     replyTo.classList.remove('opened');
 
-                    let parentArticle = replyToWrapper.offsetParent;
-
-                    if (parentArticle.querySelectorAll('.replyToWrapper').length <= 1) {
-                        parentArticle.classList.remove('openedReplyTo');
-                    }
-
-                    replyToWrapper.parentNode.removeChild(replyToWrapper);
+                    article.parentNode.removeChild(article);
+                    closeButton.parentNode.removeChild(closeButton);
                 }, 200);
             }
         },
 
         loadMore: {
-            show: () => {
+            show: (remainingUnreadCount = 0) => {
                 document.querySelector('.messages + .load-more').classList.add('active');
+                document.querySelector('.messages + .load-more a').textContent = remainingUnreadCount;
             },
             hide: () => {
                 document.querySelector('.messages + .load-more').classList.remove('active');
@@ -593,23 +516,22 @@ var Messages = {
                 let textarea = document.querySelector('.message-dialog .textarea');
 
                 if (replyToId) {
-                    let tag = `@${button.dataset.replyToName}`;
-                    let tagWithNo = tag;
-                    let text = textarea.value;
-                    let i = 1;
-                    if (text.includes(tag)) {
-                        tagWithNo = `${tag}(${i})`;
-                        i++;
-                    }
-                    while (text.includes(tagWithNo)) {
-                        tagWithNo = `${tag}(${i})`;
-                        i++;
+                    let node = {
+                        replyToId: replyToId,
+                        iconPath: button.offsetParent.dataset.iconPath
+                    };
+                    let replyTo = Templates.toElement(Templates.replyTo(node));
+                    let caption = '[ ... ]';
+                    let plainText = button.offsetParent.querySelector('.plain-text');
+                    if (plainText) {
+                        caption = plainText.textContent.substr(0, 25) + (plainText.textContent.length > 25 ? '...' : '');
                     }
 
-                    textarea.value = `${textarea.value}${tagWithNo}`;
-                    Textarea.reset(textarea);
+                    replyTo.querySelector('.caption').textContent = caption;
 
-                    Messages.message.dialog.message.replyTo.push({replyToId: replyToId, key: tagWithNo});
+                    document.querySelector('.message-dialog .replyTos').appendChild(replyTo);
+
+                    Messages.message.dialog.message.replyTo.push({replyToId: replyToId});
                 }
 
                 textarea.focus();

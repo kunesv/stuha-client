@@ -167,7 +167,7 @@ form.show-errors .button {
   background-image: url("/images/ex-dark.svg");
 }
 
-.close-button .button {
+.close-button .button, .close-button.button {
   background-image: url("/images/ex.svg");
 }
 

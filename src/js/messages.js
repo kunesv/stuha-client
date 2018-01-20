@@ -453,12 +453,14 @@ var Messages = {
             },
             close: (button) => {
                 let replyTo = button.offsetParent;
-                replyTo.classList.add('progress');
-                replyTo.nextSibling.querySelector('.replyTos .opened').classList.remove('opened');
+                if (replyTo) {
+                    replyTo.classList.add('progress');
+                    replyTo.nextSibling.querySelector('.replyTos .opened').classList.remove('opened');
 
-                setTimeout(() => {
-                    replyTo.parentNode.removeChild(replyTo);
-                }, 200);
+                    setTimeout(() => {
+                        replyTo.parentNode.removeChild(replyTo);
+                    }, 200);
+                }
             }
         },
 

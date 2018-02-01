@@ -7,6 +7,7 @@ var Users = {
         let signedIn = Users.loadFromStorage();
         if (signedIn === 'TRUE') {
             Messages.init();
+            WebSock.init();
         } else {
             Login.init();
         }

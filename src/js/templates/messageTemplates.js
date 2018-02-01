@@ -13,6 +13,6 @@ Templates.message = (message) => `<article id="${message.id}" class="${Users.cur
 </article>`;
 
 Templates.messageSeparator = (createdOn) => `<div class="seperator"><span>${createdOn}</span></div>`;
-Templates.replyTo = (replyTo) => `<li class="button" data-click="Messages.message.replyTo.show" data-id="${replyTo.replyToId}" data-icon-path="${replyTo.iconPath}">
+Templates.replyTo = (replyTo, action) => `<li class="button" data-click="${action}" data-id="${replyTo.replyToId}" data-icon-path="${replyTo.iconPath}">
     <span class="replyToIcon" style="background-image: url('/images/icons/${replyTo.iconPath}')"></span><span class="caption"></span>
 </li>`;

@@ -132,15 +132,8 @@ var Conversations = {
                         }
                     }
                 }
-                Conversations.refreshCurrentConversationUnreadCount();
             });
         });
-    },
-    refreshCurrentConversationUnreadCount: () => {
-        let unread = document.querySelector(`.conversations.menu a[data-conversation-id='${Conversations.lastConversation.load().id}'] .unread`);
-        if (unread.textContent !== '') {
-            Messages.loadRecent();
-        }
     },
     menu: {
         show: () => {

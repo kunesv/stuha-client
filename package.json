@@ -19,6 +19,7 @@
     "gulp-webserver": "^0.9.1",
     "rimraf": "^2.5.4",
     "run-sequence": "^1.2.2",
+    "stompjs": "^2.3.3",
     "whatwg-fetch": "^1.0.0"
   }
 }

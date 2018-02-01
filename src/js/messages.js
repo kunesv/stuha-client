@@ -92,11 +92,7 @@ var Messages = {
 
         Messages.placeholders.add();
 
-        Messages.loadEverything().then(() => {
-            if (Users.notifications.poll) {
-                Messages.intervalLoadNew = setInterval(Conversations.unreadCounts, 10 * 1000);
-            }
-        });
+        Messages.loadEverything();
 
         let scrollingTimeout;
         document.querySelector('.content > main > section').addEventListener('scroll', () => {
@@ -162,18 +158,14 @@ var Messages = {
         });
     },
 
-    loadRecent: () => {
-        // FIXME: Ask to enable notifications when first clicked .., then show auto-update icon, ask to switch off when
-
-        let lastMessage = document.querySelector('.messages > div:first-child > article:first-child');
-
-        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadRecent/${lastMessage.id}`, {
+    loadNew: (messageId) => {
+        return fetch(`/api/message/?messageId=${messageId}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((messages) => Messages.message.add(messages));
+            return response.json().then((message) => Messages.message.addToTop(message));
         }).catch((error) => {
             // FIXME: And what about some serious error handling ?
-            console.log('Load-recent failed', error);
+            console.log('Load-new failed', error);
         });
     },
 
@@ -196,8 +188,6 @@ var Messages = {
                 Messages.message.add(moreMessages.messages);
 
                 button.classList.remove('progress');
-
-                Conversations.unreadCounts();
             });
         }).catch((error) => {
             // FIXME: And what about some serious error handling here?
@@ -299,20 +289,46 @@ var Messages = {
             return article;
         },
         add: (messages) => {
-            if (!messages.length) {
-                return;
-            }
-
+            let messagesList = document.querySelector('.messages');
             for (let i = 0; i < messages.length; i++) {
                 let message = messages[i];
                 message.createdOn = Datetime.arrayToDate(message.createdOn);
 
                 if (i > 0 && Datetime.formatDate(messages[i - 1].createdOn) !== Datetime.formatDate(message.createdOn)) {
-                    document.querySelector('.messages').appendChild(Templates.toElement(Templates.messageSeparator(Datetime.formatDate(message.createdOn))));
+                    messagesList.appendChild(Templates.toElement(Templates.messageSeparator(Datetime.formatDate(message.createdOn))));
                 }
 
-                document.querySelector('.messages').appendChild(Messages.message.template(message))
+                messagesList.appendChild(Messages.message.template(message))
             }
+
+            // if (placeOnTop) {
+            //     let newestAlreadyDisplayed = document.querySelector('.messages div:first-child article:first-child');
+            //     if (newestAlreadyDisplayed && newestAlreadyDisplayed.dataset.date && newestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[messages.length - 1].createdOn)) {
+            //         newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(newestAlreadyDisplayed.dataset.date));
+            //     }
+            //     document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
+            // } else {
+            //     let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
+            //     if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {
+            //         newMessages.insertAdjacentHTML('afterBegin', Messages.message.separator(Datetime.formatDate(messages[0].createdOn)));
+            //     }
+            //     document.querySelector('.messages').appendChild(newMessages);
+            // }
+
+            // setTimeout(() => {
+            //     newMessages.classList.remove('loading');
+            // }, 100);
+
+            Messages.image.loadSome();
+        },
+
+        addToTop: (message) => {
+            let messagesList = document.querySelector('.messages');
+
+            message.createdOn = Datetime.arrayToDate(message.createdOn);
+
+            messagesList.insertBefore(Messages.message.template(message), messagesList.firstChild);
+
 
             // if (placeOnTop) {
             //     let newestAlreadyDisplayed = document.querySelector('.messages div:first-child article:first-child');
@@ -358,8 +374,6 @@ var Messages = {
                 }
                 messageForm.append('conversationId', Conversations.lastConversation.load().id);
                 messageForm.append('replyTo', JSON.stringify(Messages.message.dialog.message.replyTo));
-                let lastMessage = document.querySelector('.messages > article:first-child');
-                messageForm.append('lastMessageId', lastMessage.id);
 
                 button.classList.remove('active');
                 button.classList.add('progress');
@@ -391,7 +405,7 @@ var Messages = {
 
         replyTo: {
             template: (node) => {
-                let replyTo = Templates.toElement(Templates.replyTo(node));
+                let replyTo = Templates.toElement(Templates.replyTo(node, 'Messages.message.replyTo.show'));
                 replyTo.querySelector('.caption').textContent = node.caption || '[ ... ]';
                 return replyTo;
             },
@@ -405,15 +419,13 @@ var Messages = {
                     let replyTo = button.offsetParent.offsetParent.previousSibling;
                     if (replyTo && replyTo.classList.contains('replyTo')) {
                         Messages.message.replyTo.close(replyTo.querySelector('.close-button'));
-                        setTimeout(() => Messages.message.replyTo.load(button), 100);
+                        setTimeout(() => Messages.message.replyTo.load(button), 500);
                     } else {
                         Messages.message.replyTo.load(button);
                     }
                 }
             },
             load: (button) => {
-
-
                 let replyToArticle = button.offsetParent.offsetParent;
 
                 button.classList.remove('error');
@@ -459,7 +471,7 @@ var Messages = {
 
                     setTimeout(() => {
                         replyTo.parentNode.removeChild(replyTo);
-                    }, 200);
+                    }, 300);
                 }
             }
         },
@@ -535,7 +547,7 @@ var Messages = {
                         replyToId: replyToId,
                         iconPath: button.offsetParent.dataset.iconPath
                     };
-                    let replyTo = Templates.toElement(Templates.replyTo(node));
+                    let replyTo = Templates.toElement(Templates.replyTo(node, 'Messages.message.dialog.replyTos.remove'));
                     let caption = '[ ... ]';
                     let plainText = button.offsetParent.querySelector('.plain-text');
                     if (plainText) {
@@ -543,6 +555,7 @@ var Messages = {
                     }
 
                     replyTo.querySelector('.caption').textContent = caption;
+                    Buttons.init([replyTo]);
 
                     document.querySelector('.message-dialog .replyTos').appendChild(replyTo);
 
@@ -574,6 +587,19 @@ var Messages = {
                 }
                 // Messages.message.dialog.validations.icons();
                 Messages.message.submit(li);
+            },
+
+            replyTos: {
+                remove: (button) => {
+                    let i = 0;
+                    let sibling = button.previousSibling;
+                    while (sibling) {
+                        i++;
+                        sibling = sibling.previousSibling;
+                    }
+                    Messages.message.dialog.message.replyTo.splice(i, 1);
+                    button.parentNode.removeChild(button);
+                }
             },
 
             values: {

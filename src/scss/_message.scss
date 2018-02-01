@@ -199,8 +199,9 @@ article {
   &.replyTo {
     background-color: #e8e8e8;
 
-    transition: transform 300ms $animation-curve, opacity 100ms;
+    transition: transform 300ms $animation-curve, opacity 300ms;
     transform: scale3d(1, 1, 1);
+    opacity: 1.0;
 
     margin-bottom: $module-quarter;
     padding: 2.5 * $module $module-half $module-half;
@@ -353,18 +354,6 @@ article {
       vertical-align: middle;
 
       font-size: 1.15 * $font-size-small;
-
-      //overflow: hidden;
-      //white-space: pre;
-      //text-overflow: ellipsis;
-      //
-      //max-width: calc(100% - #{1.7501 * $module});
-      //
-      //transition: border-color 300ms;
-
-      //&:hover {
-      //  border-bottom-color: $color-text;
-      //}
     }
 
     &.opened {

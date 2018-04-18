@@ -325,7 +325,7 @@ var Messages = {
                             }
                             break;
                         case 'NEW_LINE':
-                            if (message.formatted.textNodes[p - 1].type === 'PLAIN_TEXT') {
+                            if (message.formatted.textNodes[p - 1] && message.formatted.textNodes[p - 1].type === 'PLAIN_TEXT') {
                                 let br = document.createElement('br');
                                 currentParagraph.appendChild(br);
                             }

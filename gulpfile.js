@@ -12,6 +12,7 @@ const uglify = require('gulp-uglify');
 const watch = require('gulp-watch');
 const webserver = require('gulp-webserver');
 const svgmin = require('gulp-svgmin');
+const version = require('gulp-version-number');
 
 const paths = {
     images: {
@@ -74,6 +75,13 @@ gulp.task('clean', function (cb) {
 
 gulp.task('copy:app', function () {
     return gulp.src(paths.app)
+        .pipe(version({
+            'value': '%TS%',
+            'append': {
+                'key': 'ver',
+                'to': ['css', 'js']
+            }
+        }))
         .pipe(gulp.dest('./build'));
 });
 
@@ -104,7 +112,7 @@ gulp.task('uglify:app', function () {
     return gulp.src(paths.js, {base: './src/js'})
     // .pipe(concat('app.js'))
         .pipe(babel({
-            presets: ['es2015']
+            presets: ['es2017']
         }))
         .pipe(gulp.dest('./build/js/'));
 });
@@ -113,7 +121,7 @@ gulp.task('uglify:serviceWorkers', function () {
     return gulp.src(paths.sw)
         .pipe(concat('service-worker.js'))
         .pipe(babel({
-            presets: ['es2015']
+            presets: ['es2017']
         }))
         .pipe(gulp.dest('./build/'));
 });

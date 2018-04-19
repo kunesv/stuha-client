@@ -4,7 +4,7 @@ var Datetime = {
             array = array.split(',');
         }
 
-        return new Date(array[0], array[1] - 1, array[2], array[3], array[4], array[5] || 0);
+        return new Date(array[0], array[1] - 1, array[2], array[3], array[4], array[5]);
     },
     formatDate: (date) => {
         let dayNames = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];

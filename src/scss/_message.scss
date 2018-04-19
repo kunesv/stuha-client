@@ -300,8 +300,7 @@ article {
   }
 
   &.openedReplyTo {
-    background-color: rgba(0, 0, 0, 0.015);
-    padding: $module-half;
+
   }
 
   &.bot {
@@ -368,7 +367,6 @@ article.my > main > section > article.replyTo {
   flex-direction: column;
 
   background-color: rgba(0, 0, 0, 0.015);
-  box-shadow: 0.5 * $module-quarter 0.5 * $module-quarter $module-quarter rgba(0, 0, 0, 0.1);
 
   margin-bottom: $module-quarter;
   padding: $module-half;

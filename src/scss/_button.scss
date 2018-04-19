@@ -180,7 +180,6 @@ form.show-errors .button {
 
   &.progress {
     @extend .button.progress;
-    background-position: center;
   }
 
   &.error {
@@ -244,6 +243,14 @@ form.show-errors .button {
 
 .load-more .button {
   background-image: url("/images/load-more.svg");
+
+  &.progress {
+    @extend .button.progress;
+  }
+
+  &.error {
+    @extend .button.error;
+  }
 }
 
 ul.menu {

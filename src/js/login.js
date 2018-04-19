@@ -84,7 +84,7 @@ var Login = {
             <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>     
             
             <footer>
-                <span>Tohle je testovací verze?<br/>Tak to raději zamhouřím jedno oko.</span>
+                <span>Raději zamhouřím jedno oko.</span>
             </footer>      
         </form>
         

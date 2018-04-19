@@ -3,22 +3,23 @@ var Messages = {
         return `<main>
     <aside>  
         <section></section>
+        <div>
+            <button class="light conversation button" data-click="Conversations.conversation.menu.show"></button>
+            <button class="light members button" data-click="Conversations.members.menu.show"></button>       
+        </div>
         <footer>           
-            <a class="logout secondary button" data-click="Login.logout">Logout</a>
-            <a class="user-settings light button" data-click="Users.menu.show"></a>
+        
+            <button class="logout secondary button" data-click="Login.logout">Logout</button>
+            <button class="user-settings light button" data-click="Users.menu.show"></button>
         </footer>
     </aside>
     <header>
         <div>
             <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
-            ${Notifications.templates.button()}
-            <span class="conversation"><button class="light button" data-click="Conversations.conversation.menu.show"></button></span>           
-            <span class="members"><button class="light button" data-click="Conversations.members.menu.show"></button></span>
+            ${Notifications.templates.button()}                        
+            <span class="conversation-name hide-for-large" data-content="currentConversation"></span>           
             <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
-        </div>
-        <div class="conversation-name">
-            <span class="conversation-name " data-content="currentConversation"></span>
-        </div>
+        </div>       
     </header>
     <section>
         <div class="messages"></div>
@@ -161,7 +162,11 @@ var Messages = {
             return Conversations.load();
         }).then(() => {
             return Messages.load();
-        }).catch(Messages.error);
+        }).catch((response) => {
+            Messages.error(response);
+            console.error(response);
+
+        });
     },
 
     load: () => {

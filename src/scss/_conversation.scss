@@ -34,6 +34,10 @@
     }
   }
 
+  header {
+    flex: 0 0 2.5 * $module;
+  }
+
   ul.members {
     display: flex;
     flex-direction: column;
@@ -74,37 +78,49 @@
     background-color: #6c6;
     border-radius: 50%;
 
+    opacity: 0;
+
     transition: transform 300ms $animation-curve, opacity 300ms;
 
-    transform: scale3d(1, 1, 1);
+    transform: scale3d(0, 0, 1);
 
-    font-size: $font-size-small;
     font-weight: bold;
     color: white;
 
     height: $module;
     width: $module;
-
-    &:empty {
-      opacity: 0;
-      transform: scale3d(0, 0, 1);
-
-      &.new {
-        background: #6c6 url("/images/new.svg") center no-repeat;
-        background-size: 100%;
-        opacity: 1;
-        transform: scale3d(1, 1, 1);
-
-        top: 0.5 * $module-quarter;
-        right: 0.5 * $module-quarter;
-
-        height: 3 * $module-quarter;
-        width: 3 * $module-quarter;
-      }
-    }
-
   }
-  a.active span.unread {
+  li.unread a span.unread {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+
+  li.new a span.unread {
+    background: #6c6 url("/images/new.svg") center no-repeat;
+    background-size: 100%;
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+
+    top: 0.5 * $module-quarter;
+    right: 0.5 * $module-quarter;
+
+    height: 3 * $module-quarter;
+    width: 3 * $module-quarter;
+  }
+  li a.active span.unread {
     opacity: 0;
   }
+
+  li.dated {
+    display: none;
+  }
+
+  &.showDated li.dated {
+    display: flex;
+  }
+}
+
+.conversations-hidder {
+  display: flex;
+
 }

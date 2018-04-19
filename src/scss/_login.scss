@@ -58,19 +58,22 @@
 
     display: flex;
     align-items: center;
-    //justify-content: flex-end;
+    justify-content: flex-end;
+
+
 
     //background: url("/images/under-construction.svg") no-repeat left -13px;
     //background-size: 100px 100px;
 
     margin: 1.5 * $module $module-half;
 
-
-    padding: $module-half $module;
-    background-color: $color-background-my-message;
-    color: $color-text-my-message;
-    border-radius: $module 0 $module $module;
-
+    span {
+      display: inline-block;
+      padding: $module-half $module;
+      background-color: $color-background-my-message;
+      color: $color-text-my-message;
+      border-radius: $module 0 $module $module;
+    }
     //font-size: 12px;
   }
 

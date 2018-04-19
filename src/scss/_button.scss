@@ -188,12 +188,14 @@ form.show-errors .button {
   }
 }
 
-.conversation .button {
+.conversation.button {
   background-image: url("/images/conversation-content.svg");
+  width: 2.5 * $module;
 }
 
-.members .button {
+.members.button {
   background-image: url("/images/conversation-member.svg");
+  width: 2.5 * $module;
 }
 
 .reload.button {
@@ -205,6 +207,15 @@ form.show-errors .button {
 
 .user-settings.button {
   background-image: url("/images/user-settings.svg");
+  flex: 0 0 2.5 * $module;
+}
+
+.logout.button {
+  flex: 0 0 2.5 * $module;
+}
+
+.conversation-hidder-settings.button {
+  flex: 0 0 2.5 * $module;
 }
 
 .notification {
@@ -293,7 +304,7 @@ ul.menu {
         line-height: 3 * $module-quarter;
 
         color: #777;
-        font-size: $font-size-small;
+        font-size: $font-size-smaller;
         text-align: center;
       }
     }
@@ -352,6 +363,7 @@ ul.menu {
 
     &.form {
       //flex: 1 1 100%;
+
       background-color: rgba(#000, 0.02);
       //
       //a span:first-child {
@@ -368,8 +380,15 @@ ul.menu {
   }
 
   &.compact {
+    flex: 0 0 2.5 * $module;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     li {
       flex: 0 0 2.5 * $module;
+
+      &.form {
+        flex-grow: 1;
+      }
     }
   }
 

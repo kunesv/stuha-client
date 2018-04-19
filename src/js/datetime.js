@@ -1,5 +1,9 @@
 var Datetime = {
     arrayToDate: (array) => {
+        if (typeof array === 'string') {
+            array = array.split(',');
+        }
+
         return new Date(array[0], array[1] - 1, array[2], array[3], array[4], array[5]);
     },
     formatDate: (date) => {

@@ -21,6 +21,15 @@ var Conversations = {
     </li>
 </ul>`;
     },
+    footerTemplate: () => {
+        return `
+<footer class="conversations-hidder">
+    <!--<button class="conversation-hidder-settings secondary button" data-click=""></button>-->
+    <button class="secondary button" data-click="Conversations.dated.showAll">Zobrazit všechny</button>
+</footer>
+        `;
+
+    },
 
     lastConversation: {
         conversation: {},
@@ -66,6 +75,7 @@ var Conversations = {
                 }
 
                 document.querySelector('aside section').insertAdjacentHTML('beforeEnd', Conversations.template());
+                document.querySelector('aside section').insertAdjacentHTML('beforeEnd', Conversations.footerTemplate());
 
                 let conversationsMenu = document.querySelector('aside .conversations');
                 for (let i = 0; i < conversations.length; i++) {
@@ -74,6 +84,7 @@ var Conversations = {
                 }
 
                 Buttons.init(conversationsMenu.querySelectorAll('.button'));
+                Buttons.init(document.querySelectorAll('.conversations-hidder .button'));
                 Buttons.initForms(conversationsMenu.querySelectorAll('form'));
 
                 let lastConversationId = Conversations.lastConversation.load().id;
@@ -81,6 +92,8 @@ var Conversations = {
                 if (!lastConversationId || !Conversations.lastConversation.conversationExists(lastConversationId, conversations)) {
                     Conversations.lastConversation.save(conversations[0]);
                 }
+
+                Conversations.dated.refresh();
 
                 Notifications.init();
             });
@@ -114,21 +127,29 @@ var Conversations = {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((unreadCounts) => {
-                let conversations = document.querySelectorAll('.conversations.menu a[data-click="Conversations.select"]');
+                let conversations = document.querySelectorAll('.conversations.menu li');
                 for (let i = 0; i < conversations.length; i++) {
                     let conversation = conversations[i];
-                    let unreadCount = unreadCounts[conversation.dataset.conversationId];
-                    let unread = conversation.querySelector('.unread');
+                    if (conversation.classList.contains('add')) {
+                        continue;
+                    }
+
+                    let conversationButton = conversation.querySelector('a[data-click="Conversations.select"]');
+                    let unreadCount = unreadCounts[conversationButton.dataset.conversationId];
+                    let unreadText = conversationButton.querySelector('span:last-child');
+
                     if (unreadCount === undefined) {
-                        unread.classList.add('new');
+                        conversation.classList.add('new');
                     } else {
                         if (unreadCount) {
-                            unread.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                            unreadText.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                            conversation.classList.add('unread');
                         } else {
-                            unread.textContent = '';
+                            conversation.classList.remove('unread');
+                            unreadText.textContent = '';
                         }
-                        if (unread.classList.contains('new')) {
-                            unread.classList.remove('new');
+                        if (conversation.classList.contains('new')) {
+                            conversation.classList.remove('new');
                         }
                     }
                 }
@@ -140,6 +161,20 @@ var Conversations = {
         let unread = document.querySelector(`.conversations.menu a[data-conversation-id='${Conversations.lastConversation.load().id}'] .unread`);
         if (unread.textContent !== '') {
             Messages.loadRecent();
+        }
+    },
+    dated: {
+        range: 604800000, // 1 week default
+        refresh: () => {
+            let conversations = document.querySelectorAll('.conversations.menu li a[data-last-message-on]');
+            for (let i = 0; i < conversations.length; i++) {
+                if (new Date().getTime() - Datetime.arrayToDate(conversations[i].dataset.lastMessageOn).getTime() > Conversations.dated.range) {
+                    conversations[i].parentNode.classList.add('dated');
+                }
+            }
+        },
+        showAll: () => {
+            document.querySelector('.conversations.menu').classList.toggle('showDated');
         }
     },
     menu: {
@@ -171,7 +206,7 @@ var Conversations = {
     conversation: {
         template: (conversation) => {
             return `<li>
-    <a class="button" data-click="Conversations.select" data-conversation-id="${conversation.id}">
+    <a class="button" data-click="Conversations.select" data-conversation-id="${conversation.id}" data-last-message-on="${conversation.lastMessageOn}">
         <span>
             <span class="unread"></span>
         </span>
@@ -387,6 +422,11 @@ var Conversations = {
                     Conversations.members.menu.loadUsers();
                 }
             }
+        }
+    },
+    menus: {
+        toggle: () => {
+            document.querySelector('.content main header').classList.toggle('show-menus');
         }
     }
 };

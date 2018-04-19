@@ -1,5 +1,6 @@
-$base-font-size: calc(14px + 0.16vh + 0.06vw);
-$font-size-small: 0.75rem;
+$base-font-size: calc(14px + 0.1vh + 0.1vw);
+$font-size-small: 0.9rem;
+$font-size-smaller: 0.75rem;
 
 $module: 1.618rem;
 
@@ -63,6 +64,11 @@ aside, header, main, section {
 
 .hide-for-large {
   @media (min-width: $small-screen-threshold + 1) {
+    display: none;
+  }
+}
+.hide-for-small {
+  @media (max-width: $small-screen-threshold) {
     display: none;
   }
 }

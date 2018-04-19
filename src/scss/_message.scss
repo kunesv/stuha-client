@@ -13,7 +13,7 @@
     margin-top: 2 * $module;
 
     @media (max-width: $small-screen-threshold) {
-      margin-top: $module-half;
+      margin-top: $module;
     }
   }
 
@@ -218,7 +218,7 @@ article {
 
     footer {
       color: $color-text-secondary;
-      font-size: $font-size-small;
+      font-size: $font-size-smaller;
       height: $module;
       text-align: right;
     }
@@ -344,7 +344,7 @@ article.my > main > section > article.replyTo {
     background-color: $color-background;
     color: $color-text-secondary;
 
-    font-size: 1.15 * $font-size-small;
+    font-size: 1.15 * $font-size-smaller;
     padding: 0 $module;
 
   }

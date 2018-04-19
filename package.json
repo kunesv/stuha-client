@@ -1,5 +1,6 @@
 {
-  "name": "stuha18",
+  "name": "stuha-client",
+  "version": "18.2.0",
   "private": true,
   "devDependencies": {},
   "scripts": {

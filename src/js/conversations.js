@@ -24,8 +24,8 @@ var Conversations = {
     footerTemplate: () => {
         return `
 <footer class="conversations-hidder">
-    <!--<button class="conversation-hidder-settings secondary button" data-click=""></button>-->
-    <button class="secondary button" data-click="Conversations.dated.showAll">Zobrazit všechny</button>
+    <!--<button class="conversation-hidder-settings light button" data-click="Conversations.dated.settings.show"></button>-->
+    <button class="conversations-hidder-unhide light button" data-click="Conversations.dated.showAll"></button>
 </footer>
         `;
 
@@ -173,8 +173,14 @@ var Conversations = {
                 }
             }
         },
-        showAll: () => {
+        showAll: (button) => {
             document.querySelector('.conversations.menu').classList.toggle('showDated');
+            button.classList.toggle('active');
+        },
+        settings: {
+            show: () => {
+                alert("Jeste ne ...")
+            }
         }
     },
     menu: {

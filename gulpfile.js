@@ -6,12 +6,12 @@ const autoprefixer = require('gulp-autoprefixer');
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const sass = require('gulp-sass');
-const sequence = require('run-sequence');
 const rimraf = require('rimraf');
 const uglify = require('gulp-uglify');
 const watch = require('gulp-watch');
 const webserver = require('gulp-webserver');
 const svgmin = require('gulp-svgmin');
+const version = require('gulp-version-number');
 
 const paths = {
     images: {
@@ -40,30 +40,27 @@ const paths = {
     ]
 };
 
+
 // Default task: builds your app, starts a server, and recompiles assets when they change
-gulp.task('default', ['server'], function () {
+gulp.task('watcher', function () {
     // Watch Sass
-    gulp.watch(paths.sass, ['sass']);
+    gulp.watch(paths.sass, gulp.series('sass'));
 
     // Watch JavaScript
-    gulp.watch(paths.js, ['uglify:app']);
+    gulp.watch(paths.js, gulp.series('uglify:app'));
 
     // Watch JavaScript - Service Workers
-    gulp.watch(paths.sw, ['uglify:serviceWorkers']);
+    gulp.watch(paths.sw, gulp.series('uglify:serviceWorkers'));
 
     // Watch static files
-    gulp.watch(paths.app, ['copy:app']);
+    gulp.watch(paths.app, gulp.series('copy:app'));
 
-    gulp.watch(paths.images.png, ['copy:png']);
+    gulp.watch(paths.images.png, gulp.series('copy:png'));
 
-    gulp.watch(paths.images.svg, ['copy:svg']);
+    gulp.watch(paths.images.svg, gulp.series('copy:svg'));
 
     // Watch app templates
     // gulp.watch(['./src/templates/**/*.html'], ['copy:templates']);
-});
-
-gulp.task('build', function (cb) {
-    sequence('clean', ['copy:app', 'copy:png', 'copy:svg', 'sass', 'uglify'], cb);
 });
 
 gulp.task('clean', function (cb) {
@@ -72,6 +69,13 @@ gulp.task('clean', function (cb) {
 
 gulp.task('copy:app', function () {
     return gulp.src(paths.app)
+        .pipe(version({
+            'value': '%TS%',
+            'append': {
+                'key': 'ver',
+                'to': ['css', 'js']
+            }
+        }))
         .pipe(gulp.dest('./build'));
 });
 
@@ -90,19 +94,15 @@ gulp.task('copy:svg', function () {
         .pipe(gulp.dest('./build'));
 });
 
-gulp.task('uglify', ['uglify:libs', 'uglify:app', 'uglify:serviceWorkers']);
-
 gulp.task('uglify:libs', function () {
     return gulp.src(paths.libs)
-        // .pipe(concat('lib.js'))
         .pipe(gulp.dest('./build/js/lib/'));
 });
 
 gulp.task('uglify:app', function () {
     return gulp.src(paths.js)
-        // .pipe(concat('app.js'))
         .pipe(babel({
-            presets: ['es2015']
+            presets: ['env']
         }))
         .pipe(gulp.dest('./build/js/'));
 });
@@ -111,7 +111,7 @@ gulp.task('uglify:serviceWorkers', function () {
     return gulp.src(paths.sw)
         .pipe(concat('service-worker.js'))
         .pipe(babel({
-            presets: ['es2015']
+            presets: ['env']
         }))
         .pipe(gulp.dest('./build/'));
 });
@@ -138,8 +138,13 @@ if (!process.env.PORT) {
 }
 
 // Starts a test server, which you can view at http://localhost:5000
-gulp.task('server', ['build'], function () {
+gulp.task('server', function () {
     gulp.src('./build')
         .pipe(webserver(webserverSettings))
     ;
 });
+
+gulp.task('uglify', gulp.series('uglify:libs', 'uglify:app', 'uglify:serviceWorkers'));
+gulp.task('build', gulp.series('copy:app', 'copy:png', 'copy:svg', 'sass', 'uglify'));
+gulp.task('run', gulp.parallel('server', 'watcher'));
+gulp.task('default', gulp.series('clean', 'build', 'run'));

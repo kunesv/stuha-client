@@ -173,7 +173,7 @@ form.show-errors .button {
 
 .submit.button, button[type=submit] {
   height: 2.5 * $module;
-  width: 100%;
+  flex: 0 1 100%;
 
   background-image: url("/images/submit.svg");
   background-size: auto 100%;
@@ -189,19 +189,19 @@ form.show-errors .button {
 
 .conversation.button {
   background-image: url("/images/conversation-content.svg");
-  width: 2.5 * $module;
+  flex: 0 0 2.5 * $module;
 }
 
 .members.button {
   background-image: url("/images/conversation-member.svg");
-  width: 2.5 * $module;
+  flex: 0 0 2.5 * $module;
 }
 
 .reload.button {
   background-image: url("/images/reload.svg");
   border-radius: 50%;
   height: 2.5 * $module;
-  width: 2.5 * $module;
+  flex: 0 0 2.5 * $module;
 }
 
 .user-settings.button {
@@ -210,7 +210,7 @@ form.show-errors .button {
 }
 
 .logout.button {
-  flex: 0 0 2.5 * $module;
+  //flex: 0 0 2.5 * $module;
 }
 
 .conversation-hidder-settings.button {

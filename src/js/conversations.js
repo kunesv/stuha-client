@@ -21,16 +21,6 @@ var Conversations = {
     </li>
 </ul>`;
     },
-    footerTemplate: () => {
-        return `
-<footer class="conversations-hidder">
-    <!--<button class="conversation-hidder-settings light button" data-click="Conversations.dated.settings.show"></button>-->
-    <button class="conversations-hidder-unhide light button" data-click="Conversations.dated.showAll"></button>
-</footer>
-        `;
-
-    },
-
     lastConversation: {
         conversation: {},
         load: () => {
@@ -75,7 +65,6 @@ var Conversations = {
                 }
 
                 document.querySelector('aside section').insertAdjacentHTML('beforeEnd', Conversations.template());
-                document.querySelector('aside section').insertAdjacentHTML('beforeEnd', Conversations.footerTemplate());
 
                 let conversationsMenu = document.querySelector('aside .conversations');
                 for (let i = 0; i < conversations.length; i++) {
@@ -84,7 +73,6 @@ var Conversations = {
                 }
 
                 Buttons.init(conversationsMenu.querySelectorAll('.button'));
-                Buttons.init(document.querySelectorAll('.conversations-hidder .button'));
                 Buttons.initForms(conversationsMenu.querySelectorAll('form'));
 
                 let lastConversationId = Conversations.lastConversation.load().id;
@@ -94,10 +82,19 @@ var Conversations = {
                 }
 
                 Conversations.dated.refresh();
+                Conversations.refreshCurrentConversationUnreadCount();
 
-                Notifications.init();
+                // FIXME: Fix Notifications
+                // Notifications.init();
             });
         });
+    },
+    clean: () => {
+        document.querySelector('aside section').innerHTML = '';
+    },
+    reload: () => {
+        Conversations.clean();
+        Conversations.load();
     },
     one: (conversation) => {
         document.querySelector('aside .conversations').insertAdjacentHTML('beforeEnd', Conversations.conversation.template(conversation));
@@ -121,41 +118,6 @@ var Conversations = {
         Conversations.menu.hide();
 
         Conversations.members.menu.refreshIfOpen();
-    },
-    unreadCounts: () => {
-        return fetch(`/api/conversations/unreadCounts`, {
-            headers: Fetch.headers()
-        }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((unreadCounts) => {
-                let conversations = document.querySelectorAll('.conversations.menu li');
-                for (let i = 0; i < conversations.length; i++) {
-                    let conversation = conversations[i];
-                    if (conversation.classList.contains('add')) {
-                        continue;
-                    }
-
-                    let conversationButton = conversation.querySelector('a[data-click="Conversations.select"]');
-                    let unreadCount = unreadCounts[conversationButton.dataset.conversationId];
-                    let unreadText = conversationButton.querySelector('span:last-child');
-
-                    if (unreadCount === undefined) {
-                        conversation.classList.add('new');
-                    } else {
-                        if (unreadCount) {
-                            unreadText.textContent = unreadCount > 99 ? '99+' : unreadCount;
-                            conversation.classList.add('unread');
-                        } else {
-                            conversation.classList.remove('unread');
-                            unreadText.textContent = '';
-                        }
-                        if (conversation.classList.contains('new')) {
-                            conversation.classList.remove('new');
-                        }
-                    }
-                }
-                Conversations.refreshCurrentConversationUnreadCount();
-            });
-        });
     },
     refreshCurrentConversationUnreadCount: () => {
         let unread = document.querySelector(`.conversations.menu a[data-conversation-id='${Conversations.lastConversation.load().id}'] .unread`);

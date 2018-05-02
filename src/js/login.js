@@ -1,60 +1,3 @@
-var Users = {
-    currentUser: {},
-    notifications: {
-        poll: true
-    },
-    init: () => {
-        let signedIn = Users.loadFromStorage();
-        if (signedIn === 'TRUE') {
-            Messages.init();
-        } else {
-            Login.init();
-        }
-    },
-    saveToken: (token) => {
-        Users.currentUser.userId = token.userId;
-        Users.currentUser.token = token.token;
-
-        Users.saveToStorage();
-    },
-    refreshToken: (newToken) => {
-        Users.currentUser.token = newToken;
-        Users.saveToStorage();
-    },
-    saveToStorage: () => {
-        localStorage.setItem('userId', Users.currentUser.userId);
-        localStorage.setItem('token', Users.currentUser.token);
-        localStorage.setItem('signedIn', 'TRUE');
-    },
-    loadFromStorage: () => {
-        Users.currentUser.userId = localStorage.getItem('userId');
-        Users.currentUser.token = localStorage.getItem('token');
-        return localStorage.getItem('signedIn');
-    },
-    clean: () => {
-        localStorage.removeItem('userId');
-        localStorage.removeItem('token');
-        localStorage.removeItem('signedIn');
-
-        Users.currentUser = {};
-    },
-    loadUserDetails: () => {
-        return fetch('/api/currentUser', {
-            headers: Fetch.headers()
-        }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((user) => {
-                Users.currentUser.userName = user.name;
-                Users.currentUser.icons = user.icons;
-            });
-        });
-    },
-    menu: {
-        show: () => {
-            alert('Tohle ještě není zcela hotové, zdá se. No nevadí, vyzkouším zatím ostatní knoflíky.')
-        }
-    }
-};
-
 var Login = {
     template: () => {
         return `
@@ -130,7 +73,7 @@ var Login = {
                 return response.json().then((token) => {
                     Users.saveToken(token);
 
-                    Content.clean();
+                    Layout.clean();
 
                     Users.init();
                 });
@@ -202,7 +145,7 @@ var Login = {
     logoff: () => {
         document.querySelector('.content').classList.remove('moved');
 
-        Content.clean();
+        Layout.clean();
 
         Users.clean();
 
@@ -257,23 +200,3 @@ var Login = {
         }
     }
 };
-
-let Content = {
-    clean: () => {
-        let content = document.querySelector('.content');
-        content.classList.remove('dialog');
-        content.innerHTML = '';
-
-        let dialogs = document.querySelectorAll('body > section');
-
-        for (let i = 0; i < dialogs.length; i++) {
-            dialogs[i].classList.remove('active');
-            // dialogs[i].style.zIndex = 10000;
-            // setTimeout(() => {
-            document.body.removeChild(dialogs[i]);
-            // }, 300);
-        }
-    }
-};
-
-Users.init();

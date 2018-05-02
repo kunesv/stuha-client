@@ -3,14 +3,13 @@ var Messages = {
         return `<main>
     <aside>  
         <section></section>
-        <div>
-            <button class="light conversation button" data-click="Conversations.conversation.menu.show"></button>
-            <button class="light members button" data-click="Conversations.members.menu.show"></button>       
-        </div>
-        <footer>           
-        
-            <button class="logout secondary button" data-click="Login.logout">Logout</button>
-            <button class="user-settings light button" data-click="Users.menu.show"></button>
+        <footer>                                   
+            <button class="user-settings secondary button" data-click="Users.menu.show"></button>
+            
+            <button class="conversations-hidder-unhide light button" data-click="Conversations.dated.showAll"></button>
+            <button class="light conversation button" data-click="Conversations.members.menu.show"></button>
+            <!--<button class="light conversation button" data-click="Conversations.conversation.menu.show"></button>-->
+            
         </footer>
     </aside>
     <header>
@@ -72,6 +71,15 @@ var Messages = {
     </main>
 </section>
 
+<section class="user-menu">
+    <header>
+        <span class="close-button"><a class="secondary button" data-click="Users.menu.hide"></a></span>
+    </header>
+    <main>
+        <button class="logout secondary button" data-click="Login.logout">Logout</button>
+    </main>
+</section>
+
 <section class="conversation-members-menu">
     <header>
         <span class="close-button"><a class="secondary button" data-click="Conversations.members.menu.hide"></a></span>
@@ -124,7 +132,7 @@ var Messages = {
 
         Messages.loadEverything().then(() => {
             if (Users.notifications.poll) {
-                Messages.intervalLoadNew = setInterval(Conversations.unreadCounts, 10 * 1000);
+                Messages.intervalLoadNew = setInterval(Conversations.reload, 10 * 1000);
             }
         });
 
@@ -189,8 +197,6 @@ var Messages = {
                     }
                 }
 
-                Conversations.unreadCounts();
-
                 document.querySelector('.content').classList.remove('loading');
             });
         });
@@ -231,7 +237,7 @@ var Messages = {
 
                 button.classList.remove('progress');
 
-                Conversations.unreadCounts();
+                Conversations.reload();
             });
         }).catch((error) => {
             // FIXME: And what about some serious error handling here?

@@ -1,6 +1,6 @@
 {
   "name": "stuha-client",
-  "version": "18.2.1",
+  "version": "18.2.2",
   "private": true,
   "scripts": {
     "start": "gulp"

@@ -1,11 +1,13 @@
-var Users = {
+const Users = {
     currentUser: {},
+    signedIn: false,
     notifications: {
         poll: true
     },
     init: () => {
         let signedIn = Users.loadFromStorage();
         if (signedIn === 'TRUE') {
+            Users.signedIn = true;
             Messages.init();
         } else {
             Login.init();
@@ -37,6 +39,7 @@ var Users = {
         localStorage.removeItem('signedIn');
 
         Users.currentUser = {};
+        Users.signedIn = false;
     },
     loadUserDetails: () => {
         return fetch('/api/currentUser', {

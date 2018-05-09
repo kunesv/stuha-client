@@ -1,4 +1,4 @@
-var Datetime = {
+const Datetime = {
     arrayToDate: (array) => {
         if (typeof array === 'string') {
             array = array.split(',');

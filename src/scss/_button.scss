@@ -228,6 +228,14 @@ form.show-errors .button {
   }
 }
 
+.add.button {
+  background-image: url("/images/plus-dark.svg");
+
+  &.active {
+    background-image: url("/images/ex-dark.svg")
+  }
+}
+
 .notification {
 
   &.disabled {
@@ -283,7 +291,7 @@ ul.menu {
       display: flex;
       flex-direction: column;
 
-      background: transparent;
+      background-color: transparent;
 
       padding: 3 * $module-quarter $module-half $module-quarter;
 
@@ -292,7 +300,7 @@ ul.menu {
       flex: 1 1 100%;
 
       &:hover {
-        background: rgba(#000, 0.02);
+        background-color: rgba(#000, 0.02);
       }
 
       &.active {
@@ -381,21 +389,19 @@ ul.menu {
       }
     }
 
-    &.form {
+    > .active + form {
       //flex: 1 1 100%;
 
-      background-color: rgba(#000, 0.02);
+      //background-color: rgba(#000, 0.02);
       //
       //a span:first-child {
       //  background-size: 50%;
       //  background-position: top;
       //}
 
-      > form {
-        opacity: 1;
-        transform: scale3d(1, 1, 1);
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
 
-      }
     }
   }
 
@@ -412,6 +418,14 @@ ul.menu {
     }
   }
 
+  &.notext {
+    li > a {
+      padding: 0;
+      height: 2.5 * $module;
+      flex: 0 0 2.5 * $module;
+    }
+  }
+
   &.conversations {
     li {
       > a > span:first-child {
@@ -419,13 +433,6 @@ ul.menu {
         background-image: url("/images/conversation.svg");
         position: relative;
 
-        &.add {
-          background-image: url("/images/plus-dark.svg"), url("/images/conversation.svg");
-        }
-      }
-
-      &.form > a > span:first-child.add {
-        background-image: url("/images/ex-dark.svg"), url("/images/conversation.svg");
       }
     }
   }

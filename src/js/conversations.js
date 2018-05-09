@@ -1,12 +1,9 @@
-var Conversations = {
+const Conversations = {
     template: () => {
         return `
-<ul class="conversations menu">
-    <li class="add">
-        <a class="button" data-click="Conversations.conversation.new.add">       
-            <span class="add"></span>
-            <span>Začít novou konverzaci</span>
-        </a>
+<ul class="conversationsNav menu compact notext">
+    <li>
+        <a class="add button" data-click="Conversations.conversation.new.add"></a>
         <form data-click="Conversations.conversation.new.submitForm">         
             <div><label for="conversationTitle">Název</label></div>
             <div>  
@@ -19,7 +16,8 @@ var Conversations = {
             </div>
         </form>       
     </li>
-</ul>`;
+</ul>
+<ul class="conversations menu loading"></ul>`;
     },
     lastConversation: {
         conversation: {},
@@ -55,46 +53,87 @@ var Conversations = {
             return false;
         }
     },
-    load: () => {
+    init: () => {
+        document.querySelector('aside section').insertAdjacentHTML('beforeEnd', Conversations.template());
+        let conversationsNavMenu = document.querySelector('aside .conversationsNav');
+        Buttons.init(conversationsNavMenu.querySelectorAll('.button'));
+        Buttons.initForms(conversationsNavMenu.querySelectorAll('form'));
+        return Conversations.load();
+    },
+    fill: (conversations) => {
+        let conversationsMenu = document.querySelector('.conversations.menu');
+        for (let i = 0; i < conversations.length; i++) {
+            conversationsMenu.insertAdjacentHTML('beforeEnd', Conversations.conversation.template(conversations[i]));
+            document.querySelector('aside .conversations li:last-child a > span:last-child').textContent = conversations[i].title;
+        }
+
+        Buttons.init(conversationsMenu.querySelectorAll('.button'));
+        // Buttons.initForms(conversationsMenu.querySelectorAll('form'));
+
+        let lastConversationId = Conversations.lastConversation.load().id;
+
+        if (!lastConversationId || !Conversations.lastConversation.conversationExists(lastConversationId, conversations)) {
+            Conversations.lastConversation.save(conversations[0]);
+            Messages.reload();
+        }
+
+        Conversations.dated.refresh();
+
+        Conversations.menu.active();
+        conversationsMenu.classList.remove('loading');
+
+        Conversations.refreshCurrentConversationUnreadCount();
+
+        // FIXME: Fix Notifications
+        // Notifications.init();
+    },
+    get: () => {
         return fetch('/api/conversations', {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
-            return response.json().then((conversations) => {
-                if (document.querySelector('aside .conversations')) {
-                    document.querySelector('aside section').innerHTML = '';
-                }
-
-                document.querySelector('aside section').insertAdjacentHTML('beforeEnd', Conversations.template());
-
-                let conversationsMenu = document.querySelector('aside .conversations');
-                for (let i = 0; i < conversations.length; i++) {
-                    conversationsMenu.insertAdjacentHTML('beforeEnd', Conversations.conversation.template(conversations[i]));
-                    document.querySelector('aside .conversations li:last-child a > span:last-child').textContent = conversations[i].title;
-                }
-
-                Buttons.init(conversationsMenu.querySelectorAll('.button'));
-                Buttons.initForms(conversationsMenu.querySelectorAll('form'));
-
-                let lastConversationId = Conversations.lastConversation.load().id;
-
-                if (!lastConversationId || !Conversations.lastConversation.conversationExists(lastConversationId, conversations)) {
-                    Conversations.lastConversation.save(conversations[0]);
-                }
-
-                Conversations.dated.refresh();
-                Conversations.refreshCurrentConversationUnreadCount();
-
-                // FIXME: Fix Notifications
-                // Notifications.init();
-            });
+            return response.json();
         });
     },
     clean: () => {
-        document.querySelector('aside section').innerHTML = '';
+        let conversations = document.querySelector('aside .conversations');
+        conversations.classList.add('loading');
+        conversations.innerHTML = '';
+    },
+    load: () => {
+        Conversations.get().then(Conversations.fill);
+    },
+    // FIXME: Remove after WebSocket solution is introduced
+    wsToBe: {
+        refresh: () => {
+            Conversations.get().then((conversations) => {
+                let conversationsInMenu = document.querySelectorAll('.conversations.menu li a');
+                let match = conversations.length === conversationsInMenu.length;
+
+                for (let i = 0; match && i < conversations.length; i++) {
+                    if (!Conversations.wsToBe.equals(conversations[i], conversationsInMenu[i])) {
+                        match = false;
+                    }
+                }
+
+                if (!match) {
+                    Conversations.clean();
+                    setTimeout(() => Conversations.fill(conversations), 100);
+                }
+            });
+        },
+        equals: (obj, el) => {
+            let unreadText = el.querySelector('.unread').textContent;
+            return obj.id === el.dataset.conversationId && obj.unreadCount === (unreadText === '' ? 0 : parseInt(unreadText));
+        }
     },
     reload: () => {
-        Conversations.clean();
-        Conversations.load();
+        if (!document.querySelector('.conversations.menu').classList.contains('loading')) {
+            Conversations.clean();
+            Conversations.load();
+        }
+    },
+    all: (conversations) => {
+
     },
     one: (conversation) => {
         document.querySelector('aside .conversations').insertAdjacentHTML('beforeEnd', Conversations.conversation.template(conversation));
@@ -105,11 +144,14 @@ var Conversations = {
     select: (button) => {
         let conversationId = button.dataset.conversationId;
         let conversationTitle = button.parentNode.querySelector('a > span:last-child').textContent;
+        button.querySelector('.unread').textContent = '';
 
         Conversations.selectConversation({id: conversationId, title: conversationTitle});
     },
     selectConversation: (conversation) => {
         Conversations.lastConversation.save({id: conversation.id, title: conversation.title});
+
+        Conversations.menu.active();
 
         Conversations.conversation.new.reset();
 
@@ -120,9 +162,10 @@ var Conversations = {
         Conversations.members.menu.refreshIfOpen();
     },
     refreshCurrentConversationUnreadCount: () => {
-        let unread = document.querySelector(`.conversations.menu a[data-conversation-id='${Conversations.lastConversation.load().id}'] .unread`);
-        if (unread.textContent !== '') {
+        let unread = document.querySelector(`.conversations.menu a.active .unread`);
+        if (parseInt(unread.textContent) > 0) {
             Messages.loadRecent();
+            unread.textContent = '';
         }
     },
     dated: {
@@ -162,13 +205,16 @@ var Conversations = {
         },
         active: () => {
             let conversations = document.querySelector('aside .conversations');
-            let active = conversations.querySelector('.active');
+            let active = conversations.querySelector('.button.active');
             if (active) {
                 active.classList.remove('active');
             }
-            conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).classList.add('active');
 
-            Notifications.active();
+            if (Conversations.lastConversation.load().id) {
+                conversations.querySelector(`[data-conversation-id="${Conversations.lastConversation.load().id}"]`).classList.add('active');
+            }
+
+            // Notifications.active();
         }
     },
     conversation: {
@@ -176,7 +222,7 @@ var Conversations = {
             return `<li>
     <a class="button" data-click="Conversations.select" data-conversation-id="${conversation.id}" data-last-message-on="${conversation.lastMessageOn}">
         <span>
-            <span class="unread"></span>
+            <span class="unread">${conversation.unreadCount > 0 ? conversation.unreadCount : ''}</span>
         </span>
         <span></span>
     </a>
@@ -184,21 +230,21 @@ var Conversations = {
         },
         new: {
             add: (button) => {
-                button.parentNode.classList.toggle('form');
-                if (button.parentNode.classList.contains('form')) {
+                button.classList.toggle('active');
+                if (button.classList.contains('active')) {
                     button.parentNode.querySelector('input[name=title]').focus();
                 } else {
                     Conversations.conversation.new.reset();
                 }
             },
             reset: () => {
-                let li = document.querySelector('.conversations.menu .add');
-                if (li.classList.contains('form')) {
-                    li.classList.remove('form');
-                    li.querySelector('input[name=title]').value = '';
-                    li.querySelector('.submit.button').classList.remove('progress');
-                    li.querySelector('.submit.button').classList.remove('error');
-                    li.querySelector('.submit.button').classList.remove('done');
+                let addButton = document.querySelector('.conversationsNav .add.button');
+                if (addButton.classList.contains('active')) {
+                    addButton.classList.remove('active');
+                    addButton.parentNode.querySelector('input[name=title]').value = '';
+                    addButton.parentNode.querySelector('.submit.button').classList.remove('progress');
+                    addButton.parentNode.querySelector('.submit.button').classList.remove('error');
+                    addButton.parentNode.querySelector('.submit.button').classList.remove('done');
                 }
             },
             submitForm: (form) => {
@@ -210,7 +256,7 @@ var Conversations = {
                     button.classList.remove('error');
                     button.classList.add('progress');
 
-                    let conversationForm = new FormData(document.querySelector('.conversations.menu .form form'));
+                    let conversationForm = new FormData(document.querySelector('.conversationsNav .add+form'));
 
                     fetch('/api/conversation', {
                         headers: Fetch.headers(),
@@ -228,10 +274,10 @@ var Conversations = {
                     }).catch((response) => {
                         switch (response.status) {
                             case 409:
-                                document.querySelector('.conversations.menu .error.ConversationExists').classList.add('active');
+                                document.querySelector('.conversationsNav .error.ConversationExists').classList.add('active');
                                 break;
                             default:
-                                document.querySelector('.conversations.menu .error.Default').classList.add('active');
+                                document.querySelector('.conversationsNav .error.Default').classList.add('active');
                         }
 
                         button.classList.remove('progress');
@@ -242,26 +288,26 @@ var Conversations = {
         },
         member: {
             add: (button) => {
-                if (!button.parentNode.classList.contains('form')) {
-                    Conversations.conversation.member.show();
+                if (!button.classList.contains('active')) {
+                    Conversations.conversation.member.show(button);
                 } else {
-                    Conversations.conversation.member.hide();
+                    Conversations.conversation.member.hide(button);
                 }
             },
-            show: () => {
-                document.querySelector('li.conversation-member-add .submit.button').classList.add('disabled');
-                let searchField = document.querySelector('li.conversation-member-add input[name=userSearch]');
-                searchField.offsetParent.parentNode.classList.add('form');
+            show: (button) => {
+                button.parentNode.querySelector('.submit.button').classList.add('disabled');
+                button.classList.add('active');
+                let searchField = button.parentNode.querySelector('input[type=text]');
                 searchField.addEventListener('input', Conversations.conversation.member.input);
                 searchField.focus();
             },
-            hide: () => {
-                let searchField = document.querySelector('li.conversation-member-add input[name=userSearch]');
+            hide: (button) => {
+                let searchField = button.parentNode.querySelector('input[type=text]');
                 searchField.removeEventListener('input', Conversations.conversation.member.input);
                 searchField.value = '';
-                document.querySelector('li.conversation-member-add .autocomplete').innerHTML = '';
+                button.parentNode.querySelector('.autocomplete').innerHTML = '';
 
-                searchField.offsetParent.parentNode.classList.remove('form');
+                button.classList.remove('active');
             },
             timeout: null,
             input: (event) => {
@@ -318,11 +364,11 @@ var Conversations = {
                         method: 'POST',
                         body: memberForm
                     }).then(Fetch.processFetchStatus).then((response) => {
-                        return response.json().then((conversation) => {
+                        return response.json().then(() => {
                             button.classList.add('done');
 
                             setTimeout(() => {
-                                Conversations.conversation.member.hide();
+                                Conversations.conversation.member.hide(document.querySelector('.conversation-member-add .button'));
                                 button.classList.remove('progress');
 
                                 Conversations.members.menu.refreshIfOpen();

@@ -1,4 +1,4 @@
-var Login = {
+const Login = {
     template: () => {
         return `
 <main>   

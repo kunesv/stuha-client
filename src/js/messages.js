@@ -1,10 +1,12 @@
-var Messages = {
+const Messages = {
     template: () => {
         return `<main>
     <aside>  
         <section></section>
         <footer>                                   
-            <button class="user-settings secondary button" data-click="Users.menu.show"></button>
+            <button class="user-settings secondary button" data-click="Users.menu.show">
+            
+            </button>
             
             <button class="conversations-hidder-unhide light button" data-click="Conversations.dated.showAll"></button>
             <button class="light conversation button" data-click="Conversations.members.menu.show"></button>
@@ -131,8 +133,9 @@ var Messages = {
         Messages.placeholders.add();
 
         Messages.loadEverything().then(() => {
-            if (Users.notifications.poll) {
-                Messages.intervalLoadNew = setInterval(Conversations.reload, 10 * 1000);
+            if (Users.notifications.poll && !document.hidden) {
+                // TODO: To be replaced by Web Socket, eventually.
+                Messages.intervalLoadNew = setInterval(Conversations.wsToBe.refresh, 10 * 1000);
             }
         });
 
@@ -167,7 +170,7 @@ var Messages = {
     loadEverything: () => {
         return Users.loadUserDetails().then(() => {
             Messages.message.dialog.init();
-            return Conversations.load();
+            return Conversations.init();
         }).then(() => {
             return Messages.load();
         }).catch((response) => {
@@ -179,8 +182,6 @@ var Messages = {
 
     load: () => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.load().title;
-
-        Conversations.menu.active();
 
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/load`, {
             headers: Fetch.headers()
@@ -237,7 +238,6 @@ var Messages = {
 
                 button.classList.remove('progress');
 
-                Conversations.reload();
             });
         }).catch((error) => {
             // FIXME: And what about some serious error handling here?

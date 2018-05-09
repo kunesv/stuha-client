@@ -8,7 +8,6 @@ const concat = require('gulp-concat');
 const sass = require('gulp-sass');
 const rimraf = require('rimraf');
 const uglify = require('gulp-uglify');
-const watch = require('gulp-watch');
 const webserver = require('gulp-webserver');
 const svgmin = require('gulp-svgmin');
 const version = require('gulp-version-number');
@@ -144,7 +143,7 @@ gulp.task('server', function () {
     ;
 });
 
-gulp.task('uglify', gulp.series('uglify:libs', 'uglify:app', 'uglify:serviceWorkers'));
-gulp.task('build', gulp.series('copy:app', 'copy:png', 'copy:svg', 'sass', 'uglify'));
+gulp.task('uglify', gulp.parallel('uglify:libs', 'uglify:app', 'uglify:serviceWorkers'));
+gulp.task('build', gulp.parallel('copy:app', 'copy:png', 'copy:svg', 'sass', 'uglify'));
 gulp.task('run', gulp.parallel('server', 'watcher'));
 gulp.task('default', gulp.series('clean', 'build', 'run'));

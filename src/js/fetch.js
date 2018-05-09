@@ -1,4 +1,4 @@
-var Fetch = {
+const Fetch = {
     processFetchStatus: (response) => {
         if (response.status === 200) {
             let token = response.headers.get('token');

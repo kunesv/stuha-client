@@ -66,6 +66,9 @@
 }
 
 .conversations.menu {
+
+  transition: opacity 300ms;
+
   a span.unread {
     position: absolute;
     top: 0;
@@ -78,21 +81,21 @@
     background-color: #6c6;
     border-radius: 50%;
 
-    opacity: 0;
-
     transition: transform 300ms $animation-curve, opacity 300ms;
 
-    transform: scale3d(0, 0, 1);
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
 
     font-weight: bold;
     color: white;
 
     height: $module;
     width: $module;
-  }
-  li.unread a span.unread {
-    opacity: 1;
-    transform: scale3d(1, 1, 1);
+
+    &:empty {
+      opacity: 0;
+      transform: scale3d(0, 0, 1);
+    }
   }
 
   li.new a span.unread {
@@ -117,6 +120,11 @@
 
   &.showDated li.dated {
     display: flex;
+  }
+
+  &.loading {
+    opacity: 0;
+    transition: none;
   }
 }
 

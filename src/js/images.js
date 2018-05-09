@@ -1,4 +1,4 @@
-var Images = {
+const Images = {
 
     count: 0,
 

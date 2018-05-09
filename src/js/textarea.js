@@ -1,4 +1,4 @@
-var Textarea = {
+const Textarea = {
     MIN_HEIGHT: 50,
 
     resize: (textarea) => {

@@ -1,4 +1,4 @@
-var Buttons = {
+const Buttons = {
     CLICK: 'data-click',
     CLICKED_CLASSNAME: 'clicked',
 

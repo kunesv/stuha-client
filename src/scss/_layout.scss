@@ -87,10 +87,6 @@ small {
 
       transition: flex 300ms $animation-curve;
 
-      &.show-menus div span {
-
-      }
-
       div {
         display: flex;
         justify-content: space-between;
@@ -109,12 +105,8 @@ small {
             align-items: center;
             overflow: hidden;
 
-            font-weight: bold;
             color: #666;
             background-color: #e6e6e6;
-            //background-image: url("/images/conversations/stuha.svg");
-
-            text-shadow: 1px 1px #e6e6e6, -1px 1px #e6e6e6, 1px -1px #e6e6e6, -1px -1px #e6e6e6;
 
             font-size: $font-size-small;
             line-height: 3 * $module-quarter;

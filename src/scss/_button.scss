@@ -293,7 +293,7 @@ ul.menu {
 
       background-color: transparent;
 
-      padding: 3 * $module-quarter $module-half $module-quarter;
+      padding: $module $module-half $module-quarter;
 
       transition: background-color 300ms;
 
@@ -329,7 +329,7 @@ ul.menu {
         display: flex;
         align-items: center;
 
-        line-height: 3 * $module-quarter;
+        line-height: $module-half;
 
         color: #777;
         font-size: $font-size-smaller;
@@ -429,10 +429,12 @@ ul.menu {
   &.conversations {
     li {
       > a > span:first-child {
-        border-radius: 50%;
-        background-image: url("/images/conversation.svg");
+        //border-radius: 50%;
+        background-color: $color-background-button-secondary;
         position: relative;
-
+      }
+      > a.active > span:first-child {
+        background-color: $color-background-button-secondary-active;
       }
     }
   }

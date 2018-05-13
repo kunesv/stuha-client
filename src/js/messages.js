@@ -182,6 +182,10 @@ const Messages = {
 
     load: () => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.load().title;
+        document.querySelector('[data-click="Conversations.menu.toggle"]').style.backgroundImage = 'none';
+        if (Conversations.lastConversation.load().iconPath) {
+            document.querySelector('[data-click="Conversations.menu.toggle"]').style.backgroundImage = `url('/images/${Conversations.lastConversation.load().iconPath}')`;
+        }
 
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/load`, {
             headers: Fetch.headers()

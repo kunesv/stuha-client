@@ -25,7 +25,8 @@ const Conversations = {
             if (!Conversations.lastConversation.conversation.id) {
                 Conversations.lastConversation.conversation = {
                     'id': localStorage.getItem('conversationId'),
-                    'title': localStorage.getItem('conversationTitle')
+                    'title': localStorage.getItem('conversationTitle'),
+                    'iconPath': localStorage.getItem('conversationIconPath')
                 };
             }
             return Conversations.lastConversation.conversation;
@@ -34,11 +35,13 @@ const Conversations = {
             Conversations.lastConversation.conversation = conversation;
             localStorage.setItem('conversationId', conversation.id);
             localStorage.setItem('conversationTitle', conversation.title);
+            localStorage.setItem('conversationIconPath', conversation.iconPath);
         },
         clean: () => {
             Conversations.lastConversation.conversation = {};
             localStorage.removeItem('conversationId');
             localStorage.removeItem('conversationTitle');
+            localStorage.removeItem('conversationIconPath');
         },
         conversationExists: (conversationId, conversations) => {
             if (!conversationId) {
@@ -146,10 +149,10 @@ const Conversations = {
         let conversationTitle = button.parentNode.querySelector('a > span:last-child').textContent;
         button.querySelector('.unread').textContent = '';
 
-        Conversations.selectConversation({id: conversationId, title: conversationTitle});
+        Conversations.selectConversation({id: conversationId, title: conversationTitle, iconPath: button.dataset.iconPath});
     },
     selectConversation: (conversation) => {
-        Conversations.lastConversation.save({id: conversation.id, title: conversation.title});
+        Conversations.lastConversation.save({id: conversation.id, title: conversation.title, iconPath: conversation.iconPath});
 
         Conversations.menu.active();
 
@@ -219,9 +222,11 @@ const Conversations = {
     },
     conversation: {
         template: (conversation) => {
+            let backgroundImage = conversation.iconPath ? `background-image: url('/images/${conversation.iconPath}')` : '';
+
             return `<li>
-    <a class="button" data-click="Conversations.select" data-conversation-id="${conversation.id}" data-last-message-on="${conversation.lastMessageOn}">
-        <span>
+    <a class="button" data-click="Conversations.select" data-icon-path="${conversation.iconPath}" data-conversation-id="${conversation.id}" data-last-message-on="${conversation.lastMessageOn}">
+        <span style="${backgroundImage}">
             <span class="unread">${conversation.unreadCount > 0 ? conversation.unreadCount : ''}</span>
         </span>
         <span></span>

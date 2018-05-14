@@ -64,6 +64,8 @@ article {
     .icon {
       display: flex;
 
+      position: relative;
+
       background-color: white;
       background-position: center;
       background-repeat: no-repeat;
@@ -72,7 +74,7 @@ article {
       height: 2.5 * $module;
       margin-right: $module;
       text-align: center;
-      width: 2.5 * $module;
+      flex: 0 0 2.5 * $module;
 
       @media (max-width: $small-screen-threshold) {
         margin-right: $module-half;
@@ -94,17 +96,20 @@ article {
         opacity: 0;
         transition: opacity 30s 3s;
 
-        display: flex;
+        display: block;
         content: "";
         height: $module;
         width: $module;
 
-        margin: -1.75 * $module -1.75 * $module 0 0;
+        position: absolute;
+        top: -1.5 * $module-quarter;
+        right: -1.5 * $module-quarter;
 
         background: #6c6 url("/images/new.svg") center no-repeat;
         background-size: 100%;
 
         border-radius: 50%;
+        box-shadow: 0 0 0 0.75 * $module-quarter rgba(#ececec, 0.75);
       }
     }
   }

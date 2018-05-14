@@ -69,33 +69,41 @@
 
   transition: opacity 300ms;
 
-  a span.unread {
-    position: absolute;
-    top: -$module-half;
-    right: -$module-half;
+  a {
+    &.clicked {
+      span.unread {
+        opacity: 0;
+        box-shadow: 0 0 transparent;
+      }
+    }
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    span.unread {
+      position: absolute;
+      top: -$module-half;
+      right: -$module-half;
 
-    background-color: #6c6;
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px #e6e6e6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-    transition: transform 300ms $animation-curve, opacity 300ms;
+      background-color: #6c6;
+      box-shadow: 0 0 0 0.75 * $module-quarter rgba(#e6e6e6, .75);
 
-    opacity: 1;
-    transform: scale3d(1, 1, 1);
+      transition: transform 300ms $animation-curve, opacity 300ms;
 
-    font-weight: bold;
-    color: white;
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
 
-    height: $module;
-    width: $module;
+      font-weight: bold;
+      color: white;
 
-    &:empty {
-      opacity: 0;
-      transform: scale3d(0, 0, 1);
+      height: $module;
+      width: $module;
+
+      &:empty {
+        opacity: 0;
+        transform: scale3d(0, 0, 1);
+      }
     }
   }
 

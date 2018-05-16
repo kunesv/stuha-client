@@ -87,6 +87,8 @@ const Conversations = {
 
         Conversations.refreshCurrentConversationUnreadCount();
 
+        Conversations.menuButtonUnreadSignalization();
+
         // FIXME: Fix Notifications
         // Notifications.init();
     },
@@ -149,10 +151,18 @@ const Conversations = {
         let conversationTitle = button.parentNode.querySelector('a > span:last-child').textContent;
         button.querySelector('.unread').textContent = '';
 
-        Conversations.selectConversation({id: conversationId, title: conversationTitle, iconPath: button.dataset.iconPath});
+        Conversations.selectConversation({
+            id: conversationId,
+            title: conversationTitle,
+            iconPath: button.dataset.iconPath
+        });
     },
     selectConversation: (conversation) => {
-        Conversations.lastConversation.save({id: conversation.id, title: conversation.title, iconPath: conversation.iconPath});
+        Conversations.lastConversation.save({
+            id: conversation.id,
+            title: conversation.title,
+            iconPath: conversation.iconPath
+        });
 
         Conversations.menu.active();
 
@@ -163,12 +173,23 @@ const Conversations = {
         Conversations.menu.hide();
 
         Conversations.members.menu.refreshIfOpen();
+
+        Conversations.menuButtonUnreadSignalization();
     },
     refreshCurrentConversationUnreadCount: () => {
         let unread = document.querySelector(`.conversations.menu a.active .unread`);
         if (parseInt(unread.textContent) > 0) {
             Messages.loadRecent();
             unread.textContent = '';
+        }
+    },
+    menuButtonUnreadSignalization: () => {
+
+        console.log(document.querySelectorAll('.conversations.menu .unread:not(:empty)').length)
+        if (document.querySelectorAll('.conversations.menu .unread:not(:empty)').length) {
+            document.querySelector('.menu-button').classList.add('unread-conversations');
+        } else {
+            document.querySelector('.menu-button').classList.remove('unread-conversations');
         }
     },
     dated: {

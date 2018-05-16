@@ -114,15 +114,6 @@ const Messages = {
         <section></section>
     </main>
 </section>
-
-<section class="user-dialog">
-    <header>
-        <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.menu.hide"></a></span>
-    </header>
-    <main>
-        Change password, etc ......
-    </main>
-</section>
 `;
 
         document.body.insertAdjacentHTML('beforeEnd', dialogs);
@@ -182,10 +173,10 @@ const Messages = {
 
     load: () => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.load().title;
-        document.querySelector('[data-click="Conversations.menu.toggle"]').style.backgroundImage = 'none';
-        if (Conversations.lastConversation.load().iconPath) {
-            document.querySelector('[data-click="Conversations.menu.toggle"]').style.backgroundImage = `url('/images/${Conversations.lastConversation.load().iconPath}')`;
-        }
+        document.querySelector('.menu-button .button').style.backgroundImage =
+            Conversations.lastConversation.load().iconPath ?
+                `url('/images/${Conversations.lastConversation.load().iconPath}')` : 'none';
+
 
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/load`, {
             headers: Fetch.headers()

@@ -146,6 +146,37 @@ button {
 
 .menu-button .button {
   background-image: url("/images/stuha-logo-lines.svg");
+  background-position: right center;
+
+  //tra
+}
+.menu-button.unread-conversations {
+  flex-basis: 3 * $module;
+
+  .button {
+    background-color: #6c6;
+
+    //&:after {
+    //  background: url("/images/new.svg") center no-repeat;
+    //  background-size: 100%;
+    //  cursor: pointer;
+    //
+    //  display: block;
+    //  content: "";
+    //  height: $module;
+    //  width: $module;
+    //
+    //  left: 0;
+    //
+    //  position: absolute;
+    //}
+  }
+}
+.moved .menu-button.unread-conversations {
+  flex-basis: 2.5 * $module;
+  .button {
+    @extend .secondary;
+  }
 }
 
 form.show-errors .button {

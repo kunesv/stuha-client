@@ -4,8 +4,10 @@ Users.init();
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
         if (Users.signedIn) {
-            Conversations.reload();
-
+            document.querySelector('.menu-button .button').classList.add('loading');
+            setTimeout(() => {
+                Conversations.reload();
+            }, 300);
         }
         // alert(document.visibilityState);
     }

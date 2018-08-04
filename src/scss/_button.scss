@@ -3,9 +3,7 @@
   align-items: center;
   justify-content: center;
 
-  background-color: $color-background-button;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: $color-background-button no-repeat center;
   background-size: auto 100%;
 
   color: rgba(white, 0.8);
@@ -148,8 +146,32 @@ button {
   background-image: url("/images/stuha-logo-lines.svg");
   background-position: right center;
 
-  //tra
+  //transition: background-color 4s, box-shadow 100ms;
+
+  position: relative;
+
+  &:after {
+    @extend .button.progress;
+
+    transition: opacity 300ms;
+    opacity: 0;
+
+    display: block;
+    content: "";
+
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+  }
+
+  &.loading:after {
+    opacity: 1;
+  }
 }
+
 .menu-button.unread-conversations {
   flex-basis: 3 * $module;
 
@@ -172,6 +194,11 @@ button {
     //}
   }
 }
+
+//.menu-button.unread-conversations-now {
+//  transition: none;
+//}
+
 .moved .menu-button.unread-conversations {
   flex-basis: 2.5 * $module;
   .button {

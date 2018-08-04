@@ -124,9 +124,13 @@ const Messages = {
         Messages.placeholders.add();
 
         Messages.loadEverything().then(() => {
-            if (Users.notifications.poll && !document.hidden) {
+            if (Users.notifications.poll) {
                 // TODO: To be replaced by Web Socket, eventually.
-                Messages.intervalLoadNew = setInterval(Conversations.wsToBe.refresh, 10 * 1000);
+                Messages.intervalLoadNew = setInterval(() => {
+                    if (!document.hidden) {
+                        Conversations.wsToBe.refresh();
+                    }
+                }, 10 * 1000);
             }
         });
 

@@ -61,6 +61,7 @@ const Conversations = {
         let conversationsNavMenu = document.querySelector('aside .conversationsNav');
         Buttons.init(conversationsNavMenu.querySelectorAll('.button'));
         Buttons.initForms(conversationsNavMenu.querySelectorAll('form'));
+        document.querySelector('.menu-button .button').classList.add('loading');
         return Conversations.load();
     },
     fill: (conversations) => {
@@ -88,6 +89,9 @@ const Conversations = {
         Conversations.refreshCurrentConversationUnreadCount();
 
         Conversations.menuButtonUnreadSignalization();
+
+        document.querySelector('.menu-button .button').classList.remove('loading');
+        console.log(document.querySelector('.menu-button .button').classList)
 
         // FIXME: Fix Notifications
         // Notifications.init();

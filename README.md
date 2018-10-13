@@ -1,4 +1,4 @@
-# Stuha
+# Stuha Client
 
 Static pages generation experiment.
 

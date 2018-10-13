@@ -307,8 +307,8 @@ const Messages = {
             if (message.formatted) {
                 let currentParagraph = document.createElement('p');
 
-                for (let p = 0; p < message.formatted.textNodes.length; p++) {
-                    let node = message.formatted.textNodes[p];
+                for (let i = 0; i < message.formatted.textNodes.length; i++) {
+                    let node = message.formatted.textNodes[i];
 
                     switch (node.type) {
                         case 'PLAIN_TEXT':
@@ -316,7 +316,7 @@ const Messages = {
                             let span = document.createElement('span');
                             span.textContent = node.text;
                             currentParagraph.appendChild(span);
-                            if (p === message.formatted.textNodes.length - 1 || message.formatted.textNodes[p + 1].type === 'REPLY_TO') {
+                            if (i === message.formatted.textNodes.length - 1 || message.formatted.textNodes[i + 1].type === 'REPLY_TO') {
                                 contentElement.appendChild(currentParagraph);
                                 currentParagraph = document.createElement('p');
                             }
@@ -329,13 +329,13 @@ const Messages = {
                             a.href = encodeURI(node.url);
                             a.textContent = node.label + (node.shortened ? ' …' : '');
                             currentParagraph.appendChild(a);
-                            if (p === message.formatted.textNodes.length - 1 || message.formatted.textNodes[p + 1].type === 'REPLY_TO') {
+                            if (i === message.formatted.textNodes.length - 1 || message.formatted.textNodes[i + 1].type === 'REPLY_TO') {
                                 contentElement.appendChild(currentParagraph);
                                 currentParagraph = document.createElement('p');
                             }
                             break;
                         case 'NEW_LINE':
-                            if (message.formatted.textNodes[p - 1] && message.formatted.textNodes[p - 1].type === 'PLAIN_TEXT') {
+                            if (message.formatted.textNodes[i - 1] && message.formatted.textNodes[i - 1].type === 'PLAIN_TEXT') {
                                 let br = document.createElement('br');
                                 currentParagraph.appendChild(br);
                             }
@@ -346,6 +346,20 @@ const Messages = {
                             contentElement.appendChild(currentParagraph);
                             currentParagraph = document.createElement('p');
                             break;
+                    }
+                }
+
+                if (message.formatted.awards) {
+                    console.log(message.formatted.awards, 'awards')
+                    for (let i = 0; i < message.formatted.awards.length; i++) {
+                        let award = message.formatted.awards[i];
+                        console.log(message.formatted.awards, award, 'awards')
+                        switch (award) {
+                            case 'RANICEK':
+                                console.log(article.querySelector('header'))
+                                article.querySelector('header').insertAdjacentHTML('beforeEnd', '<img class="right award" src="/images/ranicek.svg"/>');
+                                break;
+                        }
                     }
                 }
             }

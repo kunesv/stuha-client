@@ -61,12 +61,14 @@ aside, header, main, section {
 @import "login";
 
 @import "user-dialog";
+@import "award";
 
 .hide-for-large {
   @media (min-width: $small-screen-threshold + 1) {
     display: none;
   }
 }
+
 .hide-for-small {
   @media (max-width: $small-screen-threshold) {
     display: none;

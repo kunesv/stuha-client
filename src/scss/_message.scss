@@ -52,16 +52,18 @@ article {
   }
 
   > header {
-    flex: 0 0 3.5 * $module;
-    padding-bottom: $module;
+    flex: 0 0 2.5 * $module;
 
-    position: relative;
-
-    transition: opacity 600ms;
+    padding-right: $module;
 
     @media (max-width: $small-screen-threshold) {
-      flex: 0 0 3 * $module;
+      padding-right: $module-half;
     }
+
+    display: flex;
+    flex-direction: column;
+
+    transition: opacity 600ms;
 
     .icon {
       display: flex;
@@ -73,14 +75,9 @@ article {
       background-repeat: no-repeat;
       background-size: 60%;
       border-radius: 50%;
-      height: 2.5 * $module;
-      margin-right: $module;
+      width: 2.5 * $module;
       text-align: center;
       flex: 0 0 2.5 * $module;
-
-      @media (max-width: $small-screen-threshold) {
-        margin-right: $module-half;
-      }
 
       &:hover {
         background-color: white;
@@ -100,7 +97,7 @@ article {
 
         display: block;
         content: "";
-        height: $module;
+        flex: 0 0 $module;
         width: $module;
 
         position: absolute;
@@ -115,15 +112,39 @@ article {
       }
     }
 
+    .awards {
+      flex: 0 0 $module;
+
+      padding: 0;
+      margin: 0;
+      list-style: none;
+
+      display: flex;
+      justify-content: space-between;
+
+      li {
+        height: $module;
+        flex: 0 0 $module;
+      }
+    }
+
     .award {
-      position: absolute;
+      background-color: transparent;
+      background-size: 100%;
 
-      height: $module;
-      width: $module;
+      border-radius: 50%;
 
-      &.right {
-        top: 2.75 * $module;
+      &.clicked {
+        box-shadow: 0 0 0 $module-quarter rgba(#320, 0.3) inset;
+      }
+
+      &:hover {
+        background-color: transparent;
+      }
+      
+      &.ranicek {
         right: 1.75 * $module;
+        background-image: url("/images/ranicek.svg");
       }
     }
   }
@@ -240,6 +261,8 @@ article {
       font-size: $font-size-smaller;
       height: $module;
       text-align: right;
+
+      padding-right: $module-quarter;
     }
   }
 
@@ -284,15 +307,14 @@ article {
     }
 
     > header {
-      > .icon {
+      padding-right: 0;
+      padding-left: $module;
 
-        margin: 0 0 0 $module;
-
-        @media (max-width: $small-screen-threshold) {
-          margin-left: $module-half;
-        }
+      @media (max-width: $small-screen-threshold) {
+        padding-left: $module-half;
       }
-      .award {
+
+      .award.ranicek {
         right: 0.75 * $module;
       }
     }
@@ -317,10 +339,6 @@ article {
 
     .icon.clicked {
       box-shadow: 0.125 * $module 0.25 * $module 0.125 * $module rgba(0, 0, 0, 0.1), 0 0 0 0.5 * $module rgba(black, 0.5) inset;
-    }
-
-    > header {
-      padding: 0;
     }
   }
 
@@ -417,7 +435,7 @@ article.my > main > section > article.replyTo {
     display: flex;
     justify-content: flex-end;
 
-    margin: -$module-half (-$module-half) $module-quarter 0;
+    margin: -$module-half (-$module-half) $module 0;
 
     .button {
       border: 0 none;

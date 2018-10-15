@@ -114,6 +114,15 @@ const Messages = {
         <section></section>
     </main>
 </section>
+
+<section class="ranicek-dialog">
+    <main>
+        <header>
+            <span class="close-button"><a class="secondary button" data-click="Ranicek.dialog.hide"></a></span>
+        </header>
+        <section></section>
+    </main>
+</section>
 `;
 
         document.body.insertAdjacentHTML('beforeEnd', dialogs);
@@ -278,6 +287,7 @@ const Messages = {
     <header>
         <div class="icon ${!message.robo ? 'button' : ''} ${message.isNew ? 'new' : ''}" data-click="Messages.message.dialog.show" data-reply-to-name="${message.userName}" 
             style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}')"></div>
+        <ul class="awards"></ul>
     </header>
     <main>                 
        
@@ -350,14 +360,12 @@ const Messages = {
                 }
 
                 if (message.formatted.awards) {
-                    console.log(message.formatted.awards, 'awards')
                     for (let i = 0; i < message.formatted.awards.length; i++) {
                         let award = message.formatted.awards[i];
-                        console.log(message.formatted.awards, award, 'awards')
+
                         switch (award) {
                             case 'RANICEK':
-                                console.log(article.querySelector('header'))
-                                article.querySelector('header').insertAdjacentHTML('beforeEnd', '<img class="right award" src="/images/ranicek.svg"/>');
+                                article.querySelector('.awards').insertAdjacentHTML('beforeEnd', '<li class="ranicek award button" data-click="Ranicek.dialog.show"></li>');
                                 break;
                         }
                     }
@@ -615,7 +623,7 @@ const Messages = {
 
                 let replyToId = button.offsetParent.id;
                 let textarea = document.querySelector('.message-dialog .textarea');
-
+                console.log(button, replyToId)
                 if (replyToId) {
                     let tag = `@${button.dataset.replyToName}`;
                     let tagWithNo = tag;

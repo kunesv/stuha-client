@@ -25,7 +25,7 @@
   }
 
   &.clicked {
-    box-shadow: 0 0 0 0.5 * $module rgba(black, 0.5) inset;
+    box-shadow: 0 0 0 $module-half rgba(black, 0.5) inset;
   }
 
   &.progress {

@@ -1,0 +1,17 @@
+.ranicek-dialog {
+  @extend .overlay;
+
+  transition: transform 300ms, opacity 300ms, background-color 400ms;
+  transform: scale3d(0, 0, 1);
+
+  opacity: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  &.active {
+    background-color: #ccc;
+    transform: scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}

@@ -134,6 +134,9 @@ article {
 
       border-radius: 50%;
 
+      margin-top: -$module-half;
+      z-index: 1;
+
       &.clicked {
         box-shadow: 0 0 0 $module-quarter rgba(#320, 0.3) inset;
       }

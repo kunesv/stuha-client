@@ -336,22 +336,21 @@ ul.menu {
   list-style: none;
 
   display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  flex-direction: column;
 
   li {
-    flex: 1 0 4.5 * $module;
+    display: flex;
+
     transition: box-shadow 100ms, background-color 400ms, flex 300ms $animation-curve;
+
+    padding: 0 0 $module-half;
 
     > a {
       height: auto;
 
       display: flex;
-      flex-direction: column;
 
       background-color: transparent;
-
-      padding: $module $module-half $module-quarter;
 
       transition: background-color 300ms;
 
@@ -379,10 +378,12 @@ ul.menu {
         background-position: center;
         background-repeat: no-repeat;
         background-size: 100%;
-        width: 2.5 * $module;
+        height: 2.5 * $module;
       }
       > span:last-child {
         flex: 1 0 1.5 * $module;
+
+        padding-left: $module-half;
 
         display: flex;
         align-items: center;
@@ -464,7 +465,7 @@ ul.menu {
   }
 
   &.compact {
-    flex: 0 0 2.5 * $module;
+    //flex: 0 0 2.5 * $module;
     justify-content: flex-start;
     flex-wrap: wrap;
     li {

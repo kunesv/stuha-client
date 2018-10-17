@@ -113,6 +113,14 @@ button {
   }
 }
 
+.beige.button {
+  background-color: #b1a77d;
+
+  &:hover {
+    background-color: #a69a6b;
+  }
+}
+
 .light.button {
   background-color: transparent;
   color: #777;
@@ -340,6 +348,7 @@ ul.menu {
 
   li {
     display: flex;
+    flex: 0 0 2.5 * $module;
 
     transition: box-shadow 100ms, background-color 400ms, flex 300ms $animation-curve;
 
@@ -465,7 +474,7 @@ ul.menu {
   }
 
   &.compact {
-    //flex: 0 0 2.5 * $module;
+    flex: 0 0 3 * $module;
     justify-content: flex-start;
     flex-wrap: wrap;
     li {

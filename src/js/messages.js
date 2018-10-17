@@ -118,9 +118,12 @@ const Messages = {
 <section class="ranicek-dialog">
     <main>
         <header>
-            <span class="close-button"><a class="secondary button" data-click="Ranicek.dialog.hide"></a></span>
+            <span class="close-button"><a class="beige button" data-click="Ranicek.dialog.hide"></a></span>
         </header>
-        <section></section>
+        <section>
+            <ol></ol>
+        
+        </section>
     </main>
 </section>
 `;

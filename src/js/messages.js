@@ -31,104 +31,7 @@ const Messages = {
     init: () => {
         document.querySelector('.content').insertAdjacentHTML('beforeEnd', Messages.template());
 
-        let dialogs = `<section class="message-dialog">
-    <header>
-        <span class="close-button"><a class="secondary button" data-click="Messages.message.dialog.hide"></a></span>
-    </header>
-    <form enctype="multipart/form-data" id="images">
-        <input type="file" id="uploadImage" name="images" multiple="multiple" accept="image/*"/>
-    </form>
-    <form id="message">       
-        <section>           
-            <textarea class="textarea" name="rough"></textarea>
-            <ul class="thumbnails"></ul>
-            <ul class="buttons">
-                <li class="image secondary button">              
-                    <label for="uploadImage"></label>                   
-                </li>
-                <!--<li class="gps button"></li>-->
-            </ul>     
-            <p>
-                <span class="error">A co nějaký obsah?</span>
-            </p>      
-        </section>     
-        <section>
-            <p><span>A vybráním ikonky odešlu.</span></p>
-            <ul class="icons"></ul>
-            <p>
-                <span class="error">Ještě vyberu ikonku.</span>
-            </p>           
-        </section>                
-    </form>
-</section>
-
-<section class="conversation-menu">
-    <header>
-        <span class="close-button"><a class="secondary button" data-click="Conversations.conversation.menu.hide"></a></span>
-    </header>
-    <main>
-        <form>
-            <label>Tady taky ještě nic. Bude tu vyhledávání a archiv.</label>
-        </form>
-    </main>
-</section>
-
-<section class="user-menu">
-    <header>
-        <span class="close-button"><a class="secondary button" data-click="Users.menu.hide"></a></span>
-    </header>
-    <main>
-        <button class="logout secondary button" data-click="Login.logout">Logout</button>
-    </main>
-</section>
-
-<section class="conversation-members-menu">
-    <header>
-        <span class="close-button"><a class="secondary button" data-click="Conversations.members.menu.hide"></a></span>
-    </header>
-    <ul class="compact menu">       
-        <li class="conversation-member-add">
-            <button class="light button" data-click="Conversations.conversation.member.add"></button>
-            <form data-click="Conversations.conversation.member.submitForm">                       
-                <div>
-                    <label for="memberId">Jméno</label>
-                </div>
-                <div>
-                    <p class="step1"><input id="memberId" type="hidden" name="memberId"/><input type="text" name="userSearch"/></p>            
-                    <a class="submit button" data-click="Conversations.conversation.member.submit"></a>
-                    <ul class="autocomplete"></ul>
-                </div>               
-            </form>          
-        </li>
-    </ul>
-    <ul class="members">       
-       
-    </ul>
-</section>
-
-<section class="image-dialog">
-    <main>
-        <span class="close-button"><a class="translucent button" data-click="Messages.image.dialog.hide"></a></span>
-        <span class="previous-button"><a class="translucent button" data-click="Messages.image.dialog.previous"></a></span>
-        <span class="next-button"><a class="translucent button" data-click="Messages.image.dialog.next"></a></span>
-        <section></section>
-    </main>
-</section>
-
-<section class="ranicek-dialog">
-    <main>
-        <header>
-            <span class="close-button"><a class="beige button" data-click="Ranicek.dialog.hide"></a></span>
-        </header>
-        <section>
-            <ol></ol>
-        
-        </section>
-    </main>
-</section>
-`;
-
-        document.body.insertAdjacentHTML('beforeEnd', dialogs);
+        document.body.insertAdjacentHTML('beforeEnd', Dialogs.allTemplates());
 
         Buttons.init(document.querySelectorAll('.button'));
         Buttons.initForms(document.querySelectorAll('form'));
@@ -626,7 +529,7 @@ const Messages = {
 
                 let replyToId = button.offsetParent.id;
                 let textarea = document.querySelector('.message-dialog .textarea');
-                console.log(button, replyToId)
+
                 if (replyToId) {
                     let tag = `@${button.dataset.replyToName}`;
                     let tagWithNo = tag;
@@ -742,6 +645,7 @@ const Messages = {
             show: (thumbnail) => {
                 let imageDialog = document.querySelector('.image-dialog');
                 imageDialog.classList.add('active');
+                document.querySelector('.content').classList.add('dialog');
 
                 window.addEventListener('keydown', Messages.image.dialog.keydown);
 
@@ -776,6 +680,8 @@ const Messages = {
             hide: () => {
                 let imageDialog = document.querySelector('.image-dialog');
                 imageDialog.classList.remove('active');
+                document.querySelector('.content').classList.remove('dialog');
+
                 imageDialog.querySelector('main > section').innerHTML = '';
 
                 document.querySelector('.thumbnail.active').classList.remove('active');

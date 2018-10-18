@@ -28,7 +28,7 @@ const paths = {
     ],
     // These files are for your app's JavaScript
     js: [
-        './src/js/*.js'
+        './src/js/**/*.js'
     ],
     sw: [
         './src/js/sw/*.js'

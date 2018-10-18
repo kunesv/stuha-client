@@ -80,8 +80,6 @@
 }
 
 .login-dialog {
-  @extend .overlay;
-
   transition: transform 300ms ease-out, opacity 300ms ease-in-out, background-color 500ms ease-out;
   transform: translate3d(0, -100%, 0);
 

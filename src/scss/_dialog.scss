@@ -13,10 +13,8 @@
   > header {
     display: flex;
     justify-content: flex-end;
-  }
 
-  > main {
-    padding: $module 0 2.5 * $module;
+    flex: 0 0 2.5 * $module;
   }
 
   span.button {
@@ -36,13 +34,11 @@
     height: 5 * $module;
     width: 5 * $module;
 
-
     font-size: $base-font-size;
 
     &:hover {
       background-color: #606060;
     }
-
 
   }
 

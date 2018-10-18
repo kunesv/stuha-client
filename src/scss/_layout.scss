@@ -3,7 +3,7 @@ html, body {
   width: 100%;
 
   font-size: $base-font-size;
-  
+
   -webkit-text-size-adjust: 100%;
 }
 
@@ -55,6 +55,12 @@ small {
 
       > main > header {
         flex-basis: 25vw;
+      }
+    }
+
+    > main {
+      > section {
+        overflow: hidden;
       }
     }
   }

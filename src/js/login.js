@@ -121,7 +121,7 @@ const Login = {
             }
 
             let dialog = document.createElement('section');
-            dialog.classList.add('login-dialog');
+            dialog.classList.add('overlay', 'login-dialog');
             document.body.appendChild(dialog);
 
             dialog.insertAdjacentHTML('beforeEnd', Login.template());

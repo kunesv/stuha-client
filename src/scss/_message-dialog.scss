@@ -1,16 +1,12 @@
 .message-dialog {
-  @extend .overlay;
-
   background-color: #e0e0e0;
 
   transition: transform 300ms $animation-curve, opacity 300ms, background-color 300ms ease-out;
-  transform: scale3d(0, 0, 1);
+  transform: scale3d(0, 0, 0);
   transform-origin: top left;
 
   opacity: 0;
   width: 25vw;
-
-  z-index: 500;
 
   @media (min-width: $small-screen-threshold + 1) {
     border-right: 1px solid #e5e5e5;

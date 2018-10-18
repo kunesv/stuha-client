@@ -181,7 +181,7 @@ article {
           position: relative;
 
           &.opened {
-            transform: scale3d(0, 0, 1);
+            transform: scale3d(0, 0, 0);
             max-height: 0;
           }
 
@@ -337,7 +337,7 @@ article {
     margin-bottom: $module-quarter;
 
     &.progress {
-      transform: scale3d(0, 0, 1);
+      transform: scale3d(0, 0, 0);
     }
 
     .icon.clicked {
@@ -418,7 +418,7 @@ article.my > main > section > article.replyTo {
   padding: $module-half;
 
   &.progress {
-    transform: scale3d(0, 0, 1);
+    transform: scale3d(0, 0, 0);
   }
 
   article > main {

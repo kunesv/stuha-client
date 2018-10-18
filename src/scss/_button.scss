@@ -419,7 +419,7 @@ ul.menu {
       background-color: #e3e3e3;
       box-shadow: 0 2px $module-quarter #ccc;
 
-      transform: scale3d(0, 0, 1);
+      transform: scale3d(0, 0, 0);
       opacity: 0;
       transform-origin: top left;
       transition: transform 200ms $animation-curve, opacity 200ms;

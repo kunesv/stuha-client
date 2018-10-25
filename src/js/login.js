@@ -27,7 +27,7 @@ const Login = {
             <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>     
             
             <footer>
-                <span>Raději zamhouřím jedno oko.</span>
+               
             </footer>      
         </form>
         

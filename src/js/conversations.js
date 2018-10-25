@@ -2,8 +2,8 @@ const Conversations = {
     template: () => {
         return `
 <ul class="conversationsNav menu compact notext">
-    <li>
-        <a class="add button" data-click="Conversations.conversation.new.add"></a>
+    <li class="editable">
+        <a class="add light button" data-click="Conversations.conversation.new.dialog.toggle"></a>
         <form data-click="Conversations.conversation.new.submitForm">         
             <div><label for="conversationTitle">Název</label></div>
             <div>  
@@ -259,18 +259,20 @@ const Conversations = {
 </li>`;
         },
         new: {
-            add: (button) => {
-                button.classList.toggle('active');
-                if (button.classList.contains('active')) {
-                    button.parentNode.querySelector('input[name=title]').focus();
-                } else {
-                    Conversations.conversation.new.reset();
+            dialog: {
+                toggle: (button) => {
+                    button.parentNode.classList.toggle('active');
+                    if (button.parentNode.classList.contains('active')) {
+                        button.parentNode.querySelector('input[name=title]').focus();
+                    } else {
+                        Conversations.conversation.new.reset();
+                    }
                 }
             },
             reset: () => {
                 let addButton = document.querySelector('.conversationsNav .add.button');
-                if (addButton.classList.contains('active')) {
-                    addButton.classList.remove('active');
+                if (addButton.parentNode.classList.contains('active')) {
+                    addButton.parentNode.classList.remove('active');
                     addButton.parentNode.querySelector('input[name=title]').value = '';
                     addButton.parentNode.querySelector('.submit.button').classList.remove('progress');
                     addButton.parentNode.querySelector('.submit.button').classList.remove('error');
@@ -318,7 +320,7 @@ const Conversations = {
         },
         member: {
             add: (button) => {
-                if (!button.classList.contains('active')) {
+                if (!button.parentNode.classList.contains('active')) {
                     Conversations.conversation.member.show(button);
                 } else {
                     Conversations.conversation.member.hide(button);
@@ -326,7 +328,7 @@ const Conversations = {
             },
             show: (button) => {
                 button.parentNode.querySelector('.submit.button').classList.add('disabled');
-                button.classList.add('active');
+                button.parentNode.classList.add('active');
                 let searchField = button.parentNode.querySelector('input[type=text]');
                 searchField.addEventListener('input', Conversations.conversation.member.input);
                 searchField.focus();
@@ -337,7 +339,7 @@ const Conversations = {
                 searchField.value = '';
                 button.parentNode.querySelector('.autocomplete').innerHTML = '';
 
-                button.classList.remove('active');
+                button.parentNode.classList.remove('active');
             },
             timeout: null,
             input: (event) => {

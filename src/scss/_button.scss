@@ -122,11 +122,11 @@ button {
 }
 
 .light.button {
-  background-color: transparent;
+  background-color: rgba(black, .02);
   color: #777;
 
   &:hover {
-    background-color: #e0e0e0;
+    background-color: rgba(black, .04);
   }
 }
 
@@ -350,12 +350,47 @@ ul.menu {
     display: flex;
     flex: 0 0 2.5 * $module;
 
+    position: relative;
+
     transition: box-shadow 100ms, background-color 400ms, flex 300ms $animation-curve;
 
     padding: 0 0 $module-half;
 
+    &.editable {
+      flex-direction: column;
+
+      &.active {
+        position: absolute;
+        width: 100%;
+        height: auto;
+
+        background-color: #e3e3e3;
+        box-shadow: 0 2px 0.4045rem #ccc;
+
+        z-index: 500;
+
+        > a {
+
+        }
+
+        > form {
+          //flex: 1 1 100%;
+
+          //background-color: rgba(#000, 0.02);
+          //
+          //a span:first-child {
+          //  background-size: 50%;
+          //  background-position: top;
+          //}
+
+          opacity: 1;
+          transform: scale3d(1, 1, 1);
+        }
+      }
+    }
+
     > a {
-      height: auto;
+      height: 2.5 * $module;
 
       display: flex;
 
@@ -410,18 +445,11 @@ ul.menu {
       flex-direction: column;
       justify-content: center;
 
-      position: absolute;
-      left: 0;
-      width: calc(100% - #{$module});
+      padding: 0 $module-half $module-half;
 
-      padding: $module-half;
-
-      background-color: #e3e3e3;
-      box-shadow: 0 2px $module-quarter #ccc;
-
-      transform: scale3d(0, 0, 0);
+      transform: scale3d(1, 0, 0);
       opacity: 0;
-      transform-origin: top left;
+      transform-origin: top right;
       transition: transform 200ms $animation-curve, opacity 200ms;
 
       z-index: 1;
@@ -457,31 +485,37 @@ ul.menu {
       }
     }
 
-    > .active + form {
-      //flex: 1 1 100%;
-
-      //background-color: rgba(#000, 0.02);
-      //
-      //a span:first-child {
-      //  background-size: 50%;
-      //  background-position: top;
-      //}
-
-      opacity: 1;
-      transform: scale3d(1, 1, 1);
-
-    }
   }
 
   &.compact {
     flex: 0 0 3 * $module;
     justify-content: flex-start;
     flex-wrap: wrap;
+    flex-direction: row;
     li {
       flex: 0 0 2.5 * $module;
+      height: 2.5 * $module;
 
       &.form {
         flex-grow: 1;
+      }
+
+      > a {
+        flex: 0 0 2.5 * $module;
+        width: 2.5 * $module;
+
+        align-self: flex-end;
+
+        transition: flex 100ms $animation-curve, width 100ms $animation-curve;
+      }
+      
+      &.active {
+        > a {
+          flex: 0 0 2 * $module;
+          width: 2 * $module;
+          background-color: $color-background-button-secondary;
+          background-image: url("/images/ex.svg");
+        }
       }
     }
   }

@@ -60,8 +60,8 @@ const Dialogs = {
         <span class="close-button"><a class="secondary button" data-click="Conversations.members.menu.hide"></a></span>
     </header>
     <ul class="compact menu">       
-        <li class="conversation-member-add">
-            <button class="light button" data-click="Conversations.conversation.member.add"></button>
+        <li class="editable conversation-member-add">
+            <a class="light button" data-click="Conversations.conversation.member.add"></a>
             <form data-click="Conversations.conversation.member.submitForm">                       
                 <div>
                     <label for="memberId">Jméno</label>

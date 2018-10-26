@@ -385,6 +385,8 @@ ul.menu {
 
           opacity: 1;
           transform: scale3d(1, 1, 1);
+
+          width: auto;
         }
       }
     }
@@ -451,6 +453,8 @@ ul.menu {
       opacity: 0;
       transform-origin: top right;
       transition: transform 200ms $animation-curve, opacity 200ms;
+
+      width: 0;
 
       z-index: 1;
 

@@ -273,10 +273,16 @@ const Conversations = {
                 let addButton = document.querySelector('.conversationsNav .add.button');
                 if (addButton.parentNode.classList.contains('active')) {
                     addButton.parentNode.classList.remove('active');
-                    addButton.parentNode.querySelector('input[name=title]').value = '';
-                    addButton.parentNode.querySelector('.submit.button').classList.remove('progress');
-                    addButton.parentNode.querySelector('.submit.button').classList.remove('error');
-                    addButton.parentNode.querySelector('.submit.button').classList.remove('done');
+                }
+
+                addButton.parentNode.querySelector('input[name=title]').value = '';
+                addButton.parentNode.querySelector('.submit.button').classList.remove('progress');
+                addButton.parentNode.querySelector('.submit.button').classList.remove('error');
+                addButton.parentNode.querySelector('.submit.button').classList.remove('done');
+
+                let errors = addButton.parentNode.querySelectorAll('.error.active');
+                for (let i = 0; i < errors.length; i++) {
+                    errors[i].classList.remove('active');
                 }
             },
             submitForm: (form) => {

@@ -197,23 +197,38 @@ const Conversations = {
         }
     },
     dated: {
-        range: 604800000, // 1 week default
-        refresh: () => {
+        default: 50,
+        range: 604800000, // 1 week
+        refresh: (rangeSlider) => {
+
+            let value = (rangeSlider) ? Conversations.dated.save(rangeSlider.target.value) : Conversations.dated.load();
+            let all = (value === '100');
+
             let conversations = document.querySelectorAll('.conversations.menu li a[data-last-message-on]');
             for (let i = 0; i < conversations.length; i++) {
-                if (new Date().getTime() - Datetime.arrayToDate(conversations[i].dataset.lastMessageOn).getTime() > Conversations.dated.range) {
+                if (i !== 0 && !all && (new Date().getTime() - Datetime.arrayToDate(conversations[i].dataset.lastMessageOn).getTime() >
+                    value * value / 10000 * Conversations.dated.range)) {
                     conversations[i].parentNode.classList.add('dated');
+                } else {
+                    conversations[i].parentNode.classList.remove('dated');
                 }
+
+                console.log(value * value / 10000, value, all)
             }
+        },
+        getValue: () => {
+
+        },
+        save: (value) => {
+            localStorage.setItem('datedConversationsRange', value);
+            return value;
+        },
+        load: () => {
+            return localStorage.getItem('datedConversationsRange') || Conversations.dated.default;
         },
         showAll: (button) => {
             document.querySelector('.conversations.menu').classList.toggle('showDated');
             button.classList.toggle('active');
-        },
-        settings: {
-            show: () => {
-                alert("Jeste ne ...")
-            }
         }
     },
     menu: {

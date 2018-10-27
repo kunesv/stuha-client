@@ -352,7 +352,7 @@ ul.menu {
 
     position: relative;
 
-    transition: box-shadow 100ms, background-color 400ms, flex 300ms $animation-curve;
+    transition: box-shadow 100ms, background-color 400ms, flex 300ms $animation-curve, transform 300ms, opacity 300ms;
 
     padding: 0 0 $module-half;
 
@@ -450,7 +450,7 @@ ul.menu {
       transform: scale3d(1, 0, 0);
       opacity: 0;
       transform-origin: top right;
-      transition: transform 200ms $animation-curve, opacity 200ms;
+      transition: transform 300ms $animation-curve, opacity 300ms;
 
       z-index: 1;
 

@@ -138,3 +138,25 @@
 .conversations-hidder {
   display: flex;
 }
+
+.dated-conversations-control {
+  display: flex;
+  flex-direction: column;
+
+  padding: $module-quarter $module-half;
+
+  span {
+    display: flex;
+    font-size: $font-size-smaller;
+  }
+  > span {
+    justify-content: space-between;
+  }
+
+  > input {
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+  }
+}

@@ -216,8 +216,13 @@ const Conversations = {
                 console.log(value * value / 10000, value, all)
             }
         },
-        getValue: () => {
-
+        dialog: {
+            toggle: (button) => {
+                document.querySelector('.dated-conversations-control').classList.toggle('active');
+            },
+            hide: () => {
+                document.querySelector('.dated-conversations-control').classList.remove('active');
+            }
         },
         save: (value) => {
             localStorage.setItem('datedConversationsRange', value);

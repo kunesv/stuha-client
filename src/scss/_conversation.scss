@@ -143,7 +143,23 @@
   display: flex;
   flex-direction: column;
 
-  padding: $module-quarter $module-half;
+  background-color: $color-background;
+  box-shadow: 0 0 $module-quarter rgba(black, 0.2);
+
+  position: absolute;
+  bottom: 2.5 * $module;
+
+  width: 100%;
+
+  transform: scale3d(1, 0, 0);
+  opacity: 0;
+  transform-origin: bottom;
+  transition: transform 300ms $animation-curve, opacity 300ms;
+
+  &.active {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
 
   span {
     display: flex;
@@ -151,12 +167,18 @@
   }
   > span {
     justify-content: space-between;
+    padding: 0 $module-half;
+
+    &:first-child {
+      padding-top: $module-half;
+    }
+    &:last-child {
+      padding-bottom: $module-half;
+    }
   }
 
-  > input {
-    width: 100%;
-
+  input {
     margin: 0;
-    padding: 0;
+    padding: $module-half 0;
   }
 }

@@ -102,6 +102,26 @@ input {
 
   &[type=range] {
     background-color: transparent;
+    width: 100%;
+    -webkit-appearance: none;
+    ::-webkit-slider-thumb {
+      -webkit-appearance: none;
+    }
+
+    &::-moz-range-track {
+      border-radius: 0;
+      height: $module-quarter;
+    }
+
+    &&::-ms-track {
+      width: 100%;
+      cursor: pointer;
+
+      /* Hides the slider so custom styles can be added */
+      background: transparent;
+      border-color: transparent;
+      color: transparent;
+    }
   }
 }
 

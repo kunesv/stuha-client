@@ -279,19 +279,8 @@ form.show-errors .button {
   //flex: 0 0 2.5 * $module;
 }
 
-.conversation-hidder-settings.button {
-  background-color: rgba(0, 0, 0, 0.03);
+.dated-conversations.button {
   background-image: url("/images/conversation-settings.svg");
-  flex: 0 0 2.5 * $module;
-}
-
-.conversations-hidder-unhide.button {
-  //background-color: rgba(0, 0, 0, 0.03);
-  background-image: url("/images/load-more-dark.svg");
-
-  &.active {
-    background-image: url("/images/load-less-dark.svg");
-  }
 }
 
 .add.button {

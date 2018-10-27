@@ -5,16 +5,18 @@ const Messages = {
         <section></section>
         <footer>                                   
             <button class="user-settings secondary button" data-click="Users.menu.show"></button>
-            <span class="dated-conversations-control">
+            <button class="dated-conversations light button" data-click="Conversations.dated.dialog.toggle"></button>
+            <span class="dated-conversations-control">                
                 <span>
                     <span>Jen poslední</span>                  
                     <span>Vše</span>
                 </span>
-                <input type="range" min="0" max="100" value="${Conversations.dated.load()}"/>               
+                <span>
+                    <input type="range" min="0" max="100" value="${Conversations.dated.load()}"/>
+                </span>
             </span>
-            <!--<button class="conversations-hidder-unhide light button" data-click="Conversations.dated.showAll"></button>-->
+
             <button class="light conversation button" data-click="Conversations.members.menu.show"></button>
-            <!--<button class="light conversation button" data-click="Conversations.conversation.menu.show"></button>-->
             
         </footer>
     </aside>
@@ -36,6 +38,7 @@ const Messages = {
         document.querySelector('.content').insertAdjacentHTML('beforeEnd', Messages.template());
 
         document.body.querySelector('.dated-conversations-control').addEventListener('input', Conversations.dated.refresh);
+        document.body.querySelector('.dated-conversations-control').addEventListener('mouseup', Conversations.dated.dialog.hide);
 
         document.body.insertAdjacentHTML('beforeEnd', Dialogs.allTemplates());
 

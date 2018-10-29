@@ -109,7 +109,7 @@ const Conversations = {
         conversations.innerHTML = '';
     },
     load: () => {
-        Conversations.get().then(Conversations.fill);
+        return Conversations.get().then(Conversations.fill);
     },
     // FIXME: Remove after WebSocket solution is introduced
     wsToBe: {

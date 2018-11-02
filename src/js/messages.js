@@ -30,7 +30,10 @@ const Messages = {
     </header>
     <section>
         <div class="messages"></div>
-        <div class="load-more"><a class="secondary button" data-click="Messages.loadMore"></a></div>
+        <div class="load-more">
+            <button class="secondary button" data-click="Messages.loadMore"></button>
+            <button class="light button" data-click="Messages.loadUnread"></button>
+        </div>
     </section>
 </main>`;
     },
@@ -117,7 +120,7 @@ const Messages = {
                 } else {
                     Messages.message.add(messages.messages, true, false, messages.unreadCount);
                     if (messages.messages.length === 10) {
-                        Messages.message.loadMore.show();
+                        Messages.message.loadMore.show(messages.unreadCount);
                     }
                 }
 
@@ -154,8 +157,11 @@ const Messages = {
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
                 if (messages.length < 10) {
+                    Messages.message.loadMore.hideAll();
+                } else {
                     Messages.message.loadMore.hide();
                 }
+
 
                 Messages.message.add(messages, false);
 
@@ -166,6 +172,38 @@ const Messages = {
             // FIXME: And what about some serious error handling here?
             console.log('Load-more failed', error);
         });
+    },
+
+    loadUnread: (button) => {
+        if (button.classList.contains('progress')) {
+            return;
+        }
+
+        button.classList.add('progress');
+        let firstArticle = document.querySelector('.messages > div:last-child > article:last-child');
+        let unreadCount = button.dataset.unreadCount;
+
+        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadUnread/${firstArticle.id}/${unreadCount}`, {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            return response.json().then((messages) => {
+                if (messages.length < 10) {
+                    Messages.message.loadMore.hideAll();
+                } else {
+                    Messages.message.loadMore.hide();
+                }
+
+
+                Messages.message.add(messages, false);
+
+                button.classList.remove('progress');
+
+            });
+        }).catch((error) => {
+            // FIXME: And what about some serious error handling here?
+            console.log('Load-more failed', error);
+        });
+
     },
 
     reload: () => {
@@ -180,6 +218,9 @@ const Messages = {
     },
 
     error: (error) => {
+        if (console) {
+            console.error(error);
+        }
         let errorMessage = 'Nepodařilo se načíst příspěvky, zkuste to prosím ještě jednou.';
         if (!Online.isOnline()) {
             errorMessage = 'Zdá se, že jste mimo signál Internetu. <br/><small>Po jeho obnovení by se měly příspěvky samy nahrát.</small>';
@@ -475,16 +516,25 @@ const Messages = {
         },
 
         loadMore: {
-            show: () => {
-                document.querySelector('.messages + .load-more').classList.add('active');
+            show: (unreadCount) => {
+                document.querySelector('.messages + .load-more .button:first-child').classList.add('active');
+                if (unreadCount) {
+                    let unreadButton = document.querySelector('.messages + .load-more .button:last-child');
+                    unreadButton.classList.add('active');
+                    unreadButton.dataset.unreadCount = unreadCount;
+                }
+            },
+            hideAll: () => {
+                document.querySelector('.messages + .load-more .button:first-child').classList.remove('active');
+                Messages.message.loadMore.hide();
             },
             hide: () => {
-                document.querySelector('.messages + .load-more').classList.remove('active');
+                document.querySelector('.messages + .load-more .button:last-child').classList.remove('active');
             }
         },
 
         removeAll: () => {
-            Messages.message.loadMore.hide();
+            Messages.message.loadMore.hideAll();
             document.querySelector('.messages').innerHTML = '';
             document.querySelector('.content').classList.add('loading');
         },

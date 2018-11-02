@@ -101,6 +101,8 @@ input {
   }
 
   &[type=range] {
+    cursor: pointer;
+
     background-color: transparent;
     width: 100%;
     -webkit-appearance: none;
@@ -113,7 +115,7 @@ input {
       height: $module-quarter;
     }
 
-    &&::-ms-track {
+    &::-ms-track {
       width: 100%;
       cursor: pointer;
 

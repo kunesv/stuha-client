@@ -31,7 +31,6 @@ const Ranicek = {
                     }
                     list.insertAdjacentHTML('beforeEnd', Ranicek.dialog.template(standing, position));
                     list.querySelector('li:last-child span:last-child').style.width = (standing.count / maxCount * 50) + '%';
-                    console.log(standing.count / maxCount)
                 }
 
             });

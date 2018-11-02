@@ -91,7 +91,6 @@ const Conversations = {
         Conversations.menuButtonUnreadSignalization();
 
         document.querySelector('.menu-button .button').classList.remove('loading');
-        console.log(document.querySelector('.menu-button .button').classList)
 
         // FIXME: Fix Notifications
         // Notifications.init();
@@ -188,8 +187,6 @@ const Conversations = {
         }
     },
     menuButtonUnreadSignalization: () => {
-
-        console.log(document.querySelectorAll('.conversations.menu .unread:not(:empty)').length)
         if (document.querySelectorAll('.conversations.menu .unread:not(:empty)').length) {
             document.querySelector('.menu-button').classList.add('unread-conversations');
         } else {
@@ -212,8 +209,6 @@ const Conversations = {
                 } else {
                     conversations[i].parentNode.classList.remove('dated');
                 }
-
-                console.log(value * value / 10000, value, all)
             }
         },
         dialog: {

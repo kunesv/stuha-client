@@ -105,7 +105,7 @@ article {
         right: -1.5 * $module-quarter;
 
         background: #6c6 url("/images/new.svg") center no-repeat;
-        background-size: 100%;
+        background-size: 150%;
 
         border-radius: 50%;
         box-shadow: 0 0 0 0.75 * $module-quarter rgba(#ececec, 0.75);
@@ -456,20 +456,24 @@ article.my {
 }
 
 .load-more {
-  visibility: hidden;
-
   display: flex;
   justify-content: center;
   padding: $module 0 0;
 
-  &.active {
-    visibility: visible;
-  }
-
   .button {
-    flex: 0 0 100%;
+    display: none;
+
+    flex: 1 0 2.5 * $module;
     @media (min-width: $small-screen-threshold + 1) {
       flex: 0 0 2.5 * $module;
+    }
+
+    &.active {
+      display: flex;
+    }
+
+    &:nth-child(2) {
+      flex: 1 1 100%;
     }
   }
 }

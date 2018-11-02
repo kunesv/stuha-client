@@ -316,8 +316,14 @@ form.show-errors .button {
 }
 
 .load-more .button {
-  background-image: url("/images/load-more.svg");
-
+  &:first-child {
+    background-image: url("/images/load-more.svg");
+  }
+  &:nth-child(2) {
+    //background-color: #6c6;
+    background-image: url("/images/new-dark.svg");
+  }
+  
   &.progress {
     @extend .button.progress;
   }
@@ -497,7 +503,7 @@ ul.menu {
 
         transition: flex 100ms $animation-curve, width 100ms $animation-curve;
       }
-      
+
       &.active {
         > a {
           flex: 0 0 2 * $module;

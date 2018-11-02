@@ -474,6 +474,10 @@ article.my {
 
     &:nth-child(2) {
       flex: 1 1 100%;
+
+      @media (min-width: $small-screen-threshold + 1) {
+        flex: 0 0 5 * $module;
+      }
     }
   }
 }

@@ -43,7 +43,7 @@
 
   &.done {
     background: #6c6 url("/images/done.svg") no-repeat center;
-    background-size: 100%;
+    background-size: auto 100%;
     cursor: inherit;
 
     &:hover {
@@ -323,12 +323,12 @@ form.show-errors .button {
     //background-color: #6c6;
     background-image: url("/images/new-dark.svg");
   }
-  
-  &.progress {
+
+  &.progress:first-child, &.progress:nth-child(2) {
     @extend .button.progress;
   }
 
-  &.error {
+  &.error:first-child, &.error:nth-child(2) {
     @extend .button.error;
   }
 }

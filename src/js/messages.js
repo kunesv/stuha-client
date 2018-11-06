@@ -94,7 +94,7 @@ const Messages = {
             Messages.message.dialog.init();
             return Conversations.init();
         }).then(() => {
-            return Messages.load();
+            return Messages.loadInitial();
         }).catch((response) => {
             Messages.error(response);
             console.error(response);
@@ -102,27 +102,40 @@ const Messages = {
         });
     },
 
-    load: () => {
+    remainingCounts: {
+        total: 0,
+        unread: 0,
+        update: (messagesLength) => {
+            Messages.remainingCounts.total = Messages.remainingCounts.total > messagesLength ? Messages.remainingCounts.total - messagesLength : 0;
+            Messages.remainingCounts.unread = Messages.remainingCounts.unread > messagesLength ? Messages.remainingCounts.unread - messagesLength : 0;
+        }
+    },
+
+    loadInitial: () => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.load().title;
         document.querySelector('.menu-button .button').style.backgroundImage =
             Conversations.lastConversation.load().iconPath ?
                 `url('/images/${Conversations.lastConversation.load().iconPath}')` : 'none';
 
 
-        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/load`, {
+        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadInitial`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
                 Messages.placeholders.removeAll();
 
+                Messages.remainingCounts.total = messages.totalCount;
+                Messages.remainingCounts.unread = messages.unreadCount;
+
                 if (!messages.messages.length) {
                     Messages.empty.add();
                 } else {
                     Messages.message.add(messages.messages, true, false, messages.unreadCount);
-                    if (messages.messages.length === 10) {
-                        Messages.message.loadMore.show(messages.unreadCount);
-                    }
+
+                    Messages.remainingCounts.update(messages.messages.length);
                 }
+
+                Messages.message.loadMore.display();
 
                 document.querySelector('.content').classList.remove('loading');
             });
@@ -156,14 +169,11 @@ const Messages = {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
-                if (messages.length < 10) {
-                    Messages.message.loadMore.hideAll();
-                } else {
-                    Messages.message.loadMore.hide();
-                }
 
+                Messages.message.add(messages, false, false, Messages.remainingCounts.unread);
 
-                Messages.message.add(messages, false);
+                Messages.remainingCounts.update(messages.length);
+                Messages.message.loadMore.display();
 
                 button.classList.remove('progress');
 
@@ -181,20 +191,16 @@ const Messages = {
 
         button.classList.add('progress');
         let firstArticle = document.querySelector('.messages > div:last-child > article:last-child');
-        let unreadCount = button.dataset.unreadCount;
 
-        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadUnread/${firstArticle.id}/${unreadCount}`, {
+        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadUnread/${firstArticle.id}/${Messages.remainingCounts.unread}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
             return response.json().then((messages) => {
-                if (messages.length < 10) {
-                    Messages.message.loadMore.hideAll();
-                } else {
-                    Messages.message.loadMore.hide();
-                }
 
+                Messages.message.add(messages, false, true);
 
-                Messages.message.add(messages, false);
+                Messages.remainingCounts.update(messages.length);
+                Messages.message.loadMore.display();
 
                 button.classList.remove('progress');
 
@@ -213,7 +219,7 @@ const Messages = {
         if (!document.querySelector('aside .conversations')) {
             return Messages.loadEverything();
         } else {
-            return Messages.load();
+            return Messages.loadInitial();
         }
     },
 
@@ -516,25 +522,23 @@ const Messages = {
         },
 
         loadMore: {
-            show: (unreadCount) => {
-                document.querySelector('.messages + .load-more .button:first-child').classList.add('active');
-                if (unreadCount) {
-                    let unreadButton = document.querySelector('.messages + .load-more .button:last-child');
-                    unreadButton.classList.add('active');
-                    unreadButton.dataset.unreadCount = unreadCount;
+            display: () => {
+                if (Messages.remainingCounts.total) {
+                    document.querySelector('.messages + .load-more .button:first-child').classList.add('active');
+                } else {
+                    document.querySelector('.messages + .load-more .button:first-child').classList.remove('active');
                 }
-            },
-            hideAll: () => {
-                document.querySelector('.messages + .load-more .button:first-child').classList.remove('active');
-                Messages.message.loadMore.hide();
-            },
-            hide: () => {
-                document.querySelector('.messages + .load-more .button:last-child').classList.remove('active');
+
+                if (Messages.remainingCounts.unread) {
+                    document.querySelector('.messages + .load-more .button:last-child').classList.add('active');
+                } else {
+                    document.querySelector('.messages + .load-more .button:last-child').classList.remove('active');
+                }
+
             }
         },
 
         removeAll: () => {
-            Messages.message.loadMore.hideAll();
             document.querySelector('.messages').innerHTML = '';
             document.querySelector('.content').classList.add('loading');
         },

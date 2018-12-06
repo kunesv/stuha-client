@@ -1,6 +1,6 @@
 // FIXME: Remove after testing
 window.addEventListener('error', (msg, url, linenumber) => {
-    alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+    alert('Error: ' + msg.error + '\nLine Number: ' + msg.lineno + ',' + msg.colno);
 });
 
 

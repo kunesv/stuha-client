@@ -61,7 +61,9 @@ aside, header, main, section {
 @import "login";
 
 @import "user-dialog";
-@import "award";
+@import "ranicek-dialog";
+
+@import "change-password-dialog";
 
 .hide-for-large {
   @media (min-width: $small-screen-threshold + 1) {

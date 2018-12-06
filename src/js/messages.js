@@ -384,10 +384,8 @@ const Messages = {
             Messages.message.submit(button);
         },
         submit: (button) => {
-            if (!button.classList.contains('progress') && !button.classList.contains('done')) {
-                if (!Messages.message.dialog.validations.all()) {
-                    return;
-                }
+            if (!button.classList.contains('progress') && !button.classList.contains('done')
+            && Messages.message.dialog.validations.all()) {
 
                 let errors = document.querySelectorAll('.message-dialog .icons li.error');
                 for (let i = 0; i < errors.length; i++) {

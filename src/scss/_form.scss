@@ -150,6 +150,8 @@ textarea {
 .button-row {
   display: flex;
   justify-content: center;
+
+  flex-direction: row;
 }
 
 label {

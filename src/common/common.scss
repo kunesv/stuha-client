@@ -52,18 +52,18 @@ aside, header, main, section {
 @import "form";
 
 @import "dialog";
-@import "message-dialog";
-@import "image-dialog";
+@import "../messages/message-dialog";
+@import "../images/image-dialog";
 
-@import "message";
-@import "conversation";
+@import "../messages/message";
+@import "../conversations/conversation";
 
-@import "login";
+@import "../login/login";
 
-@import "user-dialog";
-@import "ranicek-dialog";
+@import "../user/user-dialog";
+@import "../messages/ranicek-dialog";
 
-@import "change-password-dialog";
+@import "../user/change-password-dialog";
 
 .hide-for-large {
   @media (min-width: $small-screen-threshold + 1) {

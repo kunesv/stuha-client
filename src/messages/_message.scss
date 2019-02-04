@@ -104,7 +104,7 @@ article {
         top: -1.5 * $module-quarter;
         right: -1.5 * $module-quarter;
 
-        background: #6c6 url("/images/new.svg") center no-repeat;
+        background: #6c6 url("/img/new.svg") center no-repeat;
         background-size: 150%;
 
         border-radius: 50%;
@@ -147,7 +147,7 @@ article {
       
       &.ranicek {
         right: 1.75 * $module;
-        background-image: url("/images/ranicek.svg");
+        background-image: url("/img/ranicek.svg");
       }
     }
   }
@@ -458,7 +458,7 @@ article.my {
 .load-more {
   display: flex;
   justify-content: center;
-  padding: $module 0 0;
+  padding: $module 0 4 * $module;
 
   .button {
     display: none;

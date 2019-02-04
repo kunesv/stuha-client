@@ -2,7 +2,7 @@ const Ranicek = {
     dialog: {
         template: (standing, position) => {
             return `<li>
-    <span style="background-image: url(images/icons/${standing.iconPath})"></span>
+    <span style="background-image: url(img/icons/${standing.iconPath})"></span>
     <span>${standing.userName}</span>
     <span>${standing.count} (${position}.)</span>
     <span></span>

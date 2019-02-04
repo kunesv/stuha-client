@@ -10,7 +10,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;"/>
     <meta name="msapplication-tap-highlight" content="no"/>
 
-    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/common/common.css"/>
     <link rel="manifest" href="/manifest.json">
 </head>
 <body>
@@ -19,30 +19,36 @@
     <script src="/js/lib/polyfill.js"></script>
     <script src="/js/lib/fetch.js"></script>
 
-    <script src="/js/registerServiceWorkers.js"></script>
+    <script src="/common/registerServiceWorkers.js"></script>
 
-    <script src="/js/fetch.js"></script>
-    <script src="/js/datetime.js"></script>
-    <script src="/js/online.js"></script>
+    <script src="/common/fetch.js"></script>
+    <script src="/common/datetime.js"></script>
+    <script src="/common/online.js"></script>
 
-    <script src="/js/templates/dialogs.js"></script>
-    <script src="/js/templates/changePassword-dialog.js"></script>
+    <script src="/conversations/conversations-template.js"></script>
+    <script src="/conversations/conversation-members-menu-template.js"></script>
+    <script src="/conversations/conversation-menu-template.js"></script>
+    <script src="/images/image-dialog-template.js"></script>
+    <script src="/messages/message-dialog-template.js"></script>
+    <script src="/messages/ranicek-dialog-template.js"></script>
+    <script src="/user/user-menu-template.js"></script>
+    <script src="/user/changePassword-dialog-template.js"></script>
 
-    <script src="/js/buttons.js"></script>
-    <script src="/js/textarea.js"></script>
-    <script src="/js/swipe.js"></script>
-    <script src="/js/images.js"></script>
-    <script src="/js/conversations.js"></script>
-    <script src="/js/notifications.js"></script>
-    <script src="/js/users.js"></script>
-    <script src="/js/changePassword.js"></script>
+    <script src="/common/buttons.js"></script>
+    <script src="/common/textarea.js"></script>
+    <script src="/common/swipe.js"></script>
+    <script src="/images/images.js"></script>
+    <script src="/conversations/conversations.js"></script>
+    <script src="/notifications/notifications.js"></script>
+    <script src="/user/users.js"></script>
+    <script src="/user/changePassword.js"></script>
 
-    <script src="/js/layout.js"></script>
+    <script src="/common/layout.js"></script>
 
-    <script src="/js/messages.js"></script>
-    <script src="/js/login.js"></script>
-    <script src="/js/ranicek.js"></script>
+    <script src="/messages/messages.js"></script>
+    <script src="/login/login.js"></script>
+    <script src="/messages/ranicek.js"></script>
 
-    <script src="/js/loader.js"></script>
+    <script src="/common/loader.js"></script>
 </body>
 </html>

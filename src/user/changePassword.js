@@ -5,7 +5,6 @@ const ChangePassword = {
         ChangePassword.submit(button);
     },
     submit: (button) => {
-        console.log(button)
         if (!button.classList.contains('progress') && !button.classList.contains('done')
             && ChangePassword.dialog.validations.validate()) {
 
@@ -39,7 +38,7 @@ const ChangePassword = {
     },
     dialog: {
         init: () => {
-            document.body.insertAdjacentHTML('beforeEnd', ChangePasswordDialog.template());
+            document.body.insertAdjacentHTML('beforeEnd', changePasswordDialogTemplate());
             Buttons.init(document.querySelectorAll('.changePassword-dialog .button'));
             Buttons.initForms(document.querySelectorAll('.changePassword-dialog form'));
         },

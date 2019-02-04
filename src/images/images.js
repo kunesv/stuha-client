@@ -111,7 +111,7 @@ const Images = {
 
     removeOne: (button) => {
         for (let j = 0; j < Images.values.length; j++) {
-            if (Images.values[j].i == button.dataset.i) {
+            if (Images.values[j].i === button.dataset.i) {
                 Images.remove(j);
             }
         }

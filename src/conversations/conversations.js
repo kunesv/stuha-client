@@ -1,24 +1,4 @@
 const Conversations = {
-    template: () => {
-        return `
-<ul class="conversationsNav menu compact notext">
-    <li class="editable">
-        <a class="add light button" data-click="Conversations.conversation.new.dialog.toggle"></a>
-        <form data-click="Conversations.conversation.new.submitForm">         
-            <div><label for="conversationTitle">Název</label></div>
-            <div>  
-                <p class="step1"><input id="conversationTitle" type="text" name="title"/></p>            
-                <a class="submit button" data-click="Conversations.conversation.new.submit"></a>
-            </div>
-            <div>
-                <span class="error ConversationExists">Konverzace už existuje.</span>
-                <span class="error Default">Zkuste to prosím ještě jednou.</span>
-            </div>
-        </form>       
-    </li>
-</ul>
-<ul class="conversations menu loading"></ul>`;
-    },
     lastConversation: {
         conversation: {},
         load: () => {
@@ -57,7 +37,6 @@ const Conversations = {
         }
     },
     init: () => {
-        document.querySelector('aside section').insertAdjacentHTML('beforeEnd', Conversations.template());
         let conversationsNavMenu = document.querySelector('aside .conversationsNav');
         Buttons.init(conversationsNavMenu.querySelectorAll('.button'));
         Buttons.initForms(conversationsNavMenu.querySelectorAll('form'));
@@ -262,7 +241,7 @@ const Conversations = {
     },
     conversation: {
         template: (conversation) => {
-            let backgroundImage = conversation.iconPath ? `background-image: url('/images/${conversation.iconPath}')` : '';
+            let backgroundImage = conversation.iconPath ? `background-image: url('/img/${conversation.iconPath}')` : '';
 
             return `<li>
     <a class="button" data-click="Conversations.select" data-icon-path="${conversation.iconPath}" data-conversation-id="${conversation.id}" data-last-message-on="${conversation.lastMessageOn}">

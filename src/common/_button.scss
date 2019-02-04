@@ -29,7 +29,7 @@
   }
 
   &.progress {
-    background: $color-background-message url("/images/progress.svg") no-repeat center;
+    background: $color-background-message url("/img/progress.svg") no-repeat center;
     cursor: inherit;
 
     &:hover {
@@ -42,7 +42,7 @@
   }
 
   &.done {
-    background: #6c6 url("/images/done.svg") no-repeat center;
+    background: #6c6 url("/img/done.svg") no-repeat center;
     background-size: auto 100%;
     cursor: inherit;
 
@@ -56,7 +56,7 @@
   }
 
   &.error {
-    background: $color-background-error url("/images/reload.svg") no-repeat center;
+    background: $color-background-error url("/img/reload.svg") no-repeat center;
 
     &:hover {
       background-color: $color-background-error;
@@ -151,7 +151,7 @@ button {
 }
 
 .menu-button .button {
-  background-image: url("/images/stuha-logo-lines.svg");
+  background-image: url("/img/menu.svg");
   background-position: right center;
 
   //transition: background-color 4s, box-shadow 100ms;
@@ -218,30 +218,42 @@ form.show-errors .button {
   @extend .button.error;
 }
 
+.add-button {
+  position: fixed;
+  bottom: $module-half;
+  right: $module-half;
+
+  width: 2.5 * $module;
+
+  z-index: 1000;
+}
+
 .add-button .button {
-  background-image: url("/images/plus.svg");
+  border-radius: 50%;
+
+  background-image: url("/img/plus.svg");
   &.light {
-    background-image: url("/images/plus-message-dark.svg");
+    background-image: url("/img/plus-message-dark.svg");
   }
 }
 
 .conversation-member-add > .button {
-  background-image: url("/images/conversation-member-add.svg");
+  background-image: url("/img/conversation-member-add.svg");
 }
 
 .conversation-member-add.form > .button {
-  background-image: url("/images/ex-dark.svg");
+  background-image: url("/img/ex-dark.svg");
 }
 
 .close-button .button {
-  background-image: url("/images/ex.svg");
+  background-image: url("/img/ex.svg");
 }
 
 .submit.button, button[type=submit] {
   height: 2.5 * $module;
   flex: 0 1 100%;
 
-  background-image: url("/images/submit.svg");
+  background-image: url("/img/submit.svg");
   background-size: auto 100%;
 
   &.progress {
@@ -254,24 +266,26 @@ form.show-errors .button {
 }
 
 .conversation.button {
-  background-image: url("/images/conversation-content.svg");
+  border-left: 1px dashed #f6f6f6;
+
+  background-image: url("/img/conversation-content.svg");
   flex: 0 0 2.5 * $module;
 }
 
 .members.button {
-  background-image: url("/images/conversation-member.svg");
+  background-image: url("/img/conversation-member.svg");
   flex: 0 0 2.5 * $module;
 }
 
 .reload.button {
-  background-image: url("/images/reload.svg");
+  background-image: url("/img/reload.svg");
   border-radius: 50%;
   height: 2.5 * $module;
   flex: 0 0 2.5 * $module;
 }
 
 .user-settings.button {
-  background-image: url("/images/user-settings.svg");
+  background-image: url("/img/user-settings.svg");
   flex: 0 0 2.5 * $module;
 }
 
@@ -280,14 +294,14 @@ form.show-errors .button {
 }
 
 .dated-conversations.button {
-  background-image: url("/images/conversation-settings.svg");
+  background-image: url("/img/conversation-settings.svg");
 }
 
 .add.button {
-  background-image: url("/images/plus-dark.svg");
+  background-image: url("/img/plus-dark.svg");
 
   &.active {
-    background-image: url("/images/ex-dark.svg")
+    background-image: url("/img/ex-dark.svg")
   }
 }
 
@@ -298,7 +312,7 @@ form.show-errors .button {
   }
 
   .button {
-    background-image: url("/images/notifications.svg");
+    background-image: url("/img/notifications.svg");
 
     &.active {
       background-color: #dcdcdc;
@@ -317,11 +331,11 @@ form.show-errors .button {
 
 .load-more .button {
   &:first-child {
-    background-image: url("/images/load-more.svg");
+    background-image: url("/img/load-more.svg");
   }
   &:nth-child(2) {
     //background-color: #6c6;
-    background-image: url("/images/new-dark.svg");
+    background-image: url("/img/new-dark.svg");
   }
 
   &.progress:first-child, &.progress:nth-child(2) {
@@ -509,7 +523,7 @@ ul.menu {
           flex: 0 0 2 * $module;
           width: 2 * $module;
           background-color: $color-background-button-secondary;
-          background-image: url("/images/ex.svg");
+          background-image: url("/img/ex.svg");
         }
       }
     }
@@ -527,11 +541,13 @@ ul.menu {
     li {
       > a > span:first-child {
         //border-radius: 50%;
-        background-color: $color-background-button-secondary;
+        //background-color: $color-background-button-secondary;
         position: relative;
+
+        border-right: 1px dashed #f6f6f6;
       }
       > a.active > span:first-child {
-        background-color: $color-background-button-secondary-active;
+        //background-color: $color-background-button-secondary-active;
       }
     }
   }

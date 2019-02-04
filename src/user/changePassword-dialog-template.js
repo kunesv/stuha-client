@@ -1,6 +1,6 @@
-const ChangePasswordDialog = {
-    template: () => {
-        return `<section class="overlay changePassword-dialog">
+const changePasswordDialogTemplate = () => {
+
+    return `<section class="overlay changePassword-dialog">
     <header>
         <span class="close-button"><a class="secondary button" data-click="ChangePassword.dialog.hide"></a></span>
     </header>
@@ -25,5 +25,5 @@ const ChangePasswordDialog = {
     </form>
 </section>
 `;
-    }
+
 };

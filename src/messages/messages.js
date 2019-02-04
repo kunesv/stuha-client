@@ -5,19 +5,6 @@ const Messages = {
         <section></section>
         <footer>                                   
             <button class="user-settings secondary button" data-click="Users.menu.show"></button>
-            <button class="dated-conversations light button" data-click="Conversations.dated.dialog.toggle"></button>
-            <span class="dated-conversations-control">                
-                <span>
-                    <span>Jen poslední</span>                  
-                    <span>Vše</span>
-                </span>
-                <span>
-                    <input type="range" min="0" max="100" value="${Conversations.dated.load()}"/>
-                </span>
-            </span>
-
-            <button class="light conversation button" data-click="Conversations.members.menu.show"></button>
-            
         </footer>
     </aside>
     <header>
@@ -25,7 +12,7 @@ const Messages = {
             <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
             ${Notifications.templates.button()}                        
             <span class="conversation-name hide-for-large" data-content="currentConversation"></span>           
-            <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
+            <button class="light conversation button" data-click="Conversations.members.menu.show"></button>
         </div>       
     </header>
     <section>
@@ -35,15 +22,22 @@ const Messages = {
             <button class="light button" data-click="Messages.loadUnread"></button>
         </div>
     </section>
+    <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
 </main>`;
     },
     init: () => {
         document.querySelector('.content').insertAdjacentHTML('beforeEnd', Messages.template());
 
+        document.querySelector('aside section').insertAdjacentHTML('beforeEnd', conversationsTemplate());
         document.body.querySelector('.dated-conversations-control').addEventListener('input', Conversations.dated.refresh);
         document.body.querySelector('.dated-conversations-control').addEventListener('mouseup', Conversations.dated.dialog.hide);
 
-        document.body.insertAdjacentHTML('beforeEnd', Dialogs.allTemplates());
+        document.body.insertAdjacentHTML('beforeEnd', conversationMembersMenuTemplate());
+        document.body.insertAdjacentHTML('beforeEnd', conversationMenuTemplate());
+        document.body.insertAdjacentHTML('beforeEnd', imageDialogTemplate());
+        document.body.insertAdjacentHTML('beforeEnd', messageDialogTemplate());
+        document.body.insertAdjacentHTML('beforeEnd', ranicekDialogTemplate());
+        document.body.insertAdjacentHTML('beforeEnd', userMenuTemplate());
 
         Buttons.init(document.querySelectorAll('.button'));
         Buttons.initForms(document.querySelectorAll('form'));
@@ -113,9 +107,9 @@ const Messages = {
 
     loadInitial: () => {
         document.querySelector('[data-content="currentConversation"]').textContent = Conversations.lastConversation.load().title;
-        document.querySelector('.menu-button .button').style.backgroundImage =
+        document.querySelector('.conversation.button').style.backgroundImage =
             Conversations.lastConversation.load().iconPath ?
-                `url('/images/${Conversations.lastConversation.load().iconPath}')` : 'none';
+                `url('/img/${Conversations.lastConversation.load().iconPath}')` : 'none';
 
 
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadInitial`, {
@@ -242,13 +236,13 @@ const Messages = {
 
     message: {
         thumbnailTemplate: (picture) => {
-            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;
+            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.images.dialog.show"></span>`;
         },
         template: (parent, message) => {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
     <header>
         <div class="icon ${!message.robo ? 'button' : ''} ${message.isNew ? 'new' : ''}" data-click="Messages.message.dialog.show" data-reply-to-name="${message.userName}" 
-            style="background-image: url('/images/icons/${Messages.message.validations.icon(message.iconPath)}')"></div>
+            style="background-image: url('/img/icons/${Messages.message.validations.icon(message.iconPath)}')"></div>
         <ul class="awards"></ul>
     </header>
     <main>                 
@@ -385,7 +379,7 @@ const Messages = {
         },
         submit: (button) => {
             if (!button.classList.contains('progress') && !button.classList.contains('done')
-            && Messages.message.dialog.validations.all()) {
+                && Messages.message.dialog.validations.all()) {
 
                 let errors = document.querySelectorAll('.message-dialog .icons li.error');
                 for (let i = 0; i < errors.length; i++) {
@@ -442,7 +436,7 @@ const Messages = {
                 let iconPath = Messages.message.validations.icon(node.iconPath) || '';
 
                 let template = `<a class="button" data-click="Messages.message.replyTo.show" data-id="${id}" data-icon-path="${iconPath}">
-    <span class="replyToIcon" style="background-image: url('/images/icons/${iconPath}')"></span><span class="caption"></span>
+    <span class="replyToIcon" style="background-image: url('/img/icons/${iconPath}')"></span><span class="caption"></span>
 </a>`;
 
                 currentParagraph.insertAdjacentHTML('beforeEnd', template);
@@ -624,7 +618,7 @@ const Messages = {
                 return Users.currentUser.icons.map(Messages.message.dialog.icon).join('');
             },
             icon: (icon) => {
-                return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/images/icons/${icon.path}')"></li>`;
+                return `<li class="button ${icon.hiddenOnLoad ? 'hidden' : ''}" tabindex="0" data-click="Messages.message.dialog.selectIcon" data-path="${icon.path}" style="background-image: url('/img/icons/${icon.path}')"></li>`;
             },
             selectIcon: (li) => {
                 let active = li.parentNode.querySelector('.active');

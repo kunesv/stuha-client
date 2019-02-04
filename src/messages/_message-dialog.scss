@@ -16,7 +16,7 @@
     background-color: #e0e0e0;
 
     width: 100%;
-    transform-origin: top right;
+    transform-origin: bottom right;
   }
 
   &.active {
@@ -81,17 +81,17 @@
 
         &.progress {
           @extend .button.progress;
-          background-image: url("/images/progress.svg") !important;
+          background-image: url("/img/progress.svg") !important;
         }
 
         &.done {
           @extend .button.done;
-          background-image: url("/images/done.svg") !important;
+          background-image: url("/img/done.svg") !important;
         }
 
         &.error {
           @extend .button.error;
-          background-image: url("/images/reload.svg") !important;
+          background-image: url("/img/reload.svg") !important;
         }
       }
     }
@@ -106,11 +106,11 @@
         width: 2.5 * $module;
 
         &.gps {
-          background-image: url("/images/gps-icon.svg");
+          background-image: url("/img/gps-icon.svg");
         }
 
         &.image {
-          background-image: url("/images/image-icon.svg");
+          background-image: url("/img/image-icon.svg");
 
           input {
             visibility: hidden;

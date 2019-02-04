@@ -19,7 +19,7 @@ const paths = {
     },
     // Sass
     sass: [
-        './src/scss/**/*.scss'
+        './src/**/*.scss'
     ],
     // JavaScript dependencies
     libs: [
@@ -28,10 +28,11 @@ const paths = {
     ],
     // These files are for your app's JavaScript
     js: [
-        './src/js/**/*.js'
+        './src/**/*.js',
+        '!./src/sw/*.js'
     ],
     sw: [
-        './src/js/sw/*.js'
+        './src/sw/*.js'
     ],
     app: [
         './src/index.html',
@@ -103,7 +104,7 @@ gulp.task('uglify:app', function () {
         .pipe(babel({
             presets: ['env']
         }))
-        .pipe(gulp.dest('./build/js/'));
+        .pipe(gulp.dest('./build/'));
 });
 
 gulp.task('uglify:serviceWorkers', function () {
@@ -122,7 +123,7 @@ gulp.task('sass', function () {
         .pipe(autoprefixer({
             browsers: ['last 2 versions', 'ie 10']
         }))
-        .pipe(gulp.dest('./build/css/'))
+        .pipe(gulp.dest('./build/'))
         ;
 });
 

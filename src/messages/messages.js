@@ -1,35 +1,9 @@
 const Messages = {
-    template: () => {
-        return `<main>
-    <aside>  
-        <section></section>
-        <footer>                                   
-            <button class="user-settings secondary button" data-click="Users.menu.show"></button>
-        </footer>
-    </aside>
-    <header>
-        <div>
-            <span class="menu-button hide-for-large"><button class="secondary button" data-click="Conversations.menu.toggle"></button></span>
-            ${Notifications.templates.button()}                        
-            <span class="conversation-name hide-for-large" data-content="currentConversation"></span>           
-            <button class="light conversation button" data-click="Conversations.members.menu.show"></button>
-        </div>       
-    </header>
-    <section>
-        <div class="messages"></div>
-        <div class="load-more">
-            <button class="secondary button" data-click="Messages.loadMore"></button>
-            <button class="light button" data-click="Messages.loadUnread"></button>
-        </div>
-    </section>
-    <span class="add-button"><button class="button" data-click="Messages.message.dialog.show"></button></span>
-</main>`;
-    },
     init: () => {
-        document.querySelector('.content').insertAdjacentHTML('beforeEnd', Messages.template());
+        document.querySelector('.content').insertAdjacentHTML('beforeEnd', mainTemplate());
 
         document.querySelector('aside section').insertAdjacentHTML('beforeEnd', conversationsTemplate());
-        document.body.querySelector('.dated-conversations-control').addEventListener('input', Conversations.dated.refresh);
+        document.body.querySelector('.dated-conversations-control').addEventListener('change', Conversations.dated.refresh);
         document.body.querySelector('.dated-conversations-control').addEventListener('mouseup', Conversations.dated.dialog.hide);
 
         document.body.insertAdjacentHTML('beforeEnd', conversationMembersMenuTemplate());
@@ -236,7 +210,7 @@ const Messages = {
 
     message: {
         thumbnailTemplate: (picture) => {
-            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.images.dialog.show"></span>`;
+            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;
         },
         template: (parent, message) => {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">

@@ -1,13 +1,12 @@
 const conversationsTemplate = () => {
-    return `
-<ul class="conversationsNav menu compact notext">
+    return `<ul class="conversationsNav menu compact notext">
     <li class="editable">
-        <a class="add light button" data-click="Conversations.conversations.new.dialog.toggle"></a>
-        <form data-click="Conversations.conversations.new.submitForm">         
+        <a class="add light button" data-click="Conversations.conversation.new.dialog.toggle"></a>
+        <form data-click="Conversations.conversation.new.submitForm">         
             <div><label for="conversationTitle">Název</label></div>
             <div>  
                 <p class="step1"><input id="conversationTitle" type="text" name="title"/></p>            
-                <a class="submit button" data-click="Conversations.conversations.new.submit"></a>
+                <a class="submit button" data-click="Conversations.conversation.new.submit"></a>
             </div>
             <div>
                 <span class="error ConversationExists">Konverzace už existuje.</span>
@@ -15,17 +14,17 @@ const conversationsTemplate = () => {
             </div>
         </form>       
     </li>
-    <li>
-        <button class="dated-conversations light button" data-click="Conversations.dated.dialog.toggle"></button>
-        <span class="dated-conversations-control">                
-            <span>
+    <li class="editable">
+        <a class="dated-conversations light button" data-click="Conversations.dated.dialog.toggle"></a>
+        <form class="dated-conversations-control">                
+            <div>
                 <span>Jen poslední</span>                  
                 <span>Vše</span>
-            </span>
-        </span>
-        <span>
-            <input type="range" min="0" max="100" value="${Conversations.dated.load()}"/>
-        </span>
+            </div>
+            <div>
+                <input type="range" min="0" max="100" value="${Conversations.dated.load()}"/>
+            </div>
+        </form>
     </li>
 </ul>
 <ul class="conversations menu loading"></ul>`;

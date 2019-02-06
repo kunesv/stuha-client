@@ -457,28 +457,25 @@ article.my {
 
 .load-more {
   display: flex;
-  justify-content: center;
-  padding: $module 0 4 * $module;
+  justify-content: flex-start;
+  padding: $module 0 0;
 
   .button {
     display: none;
 
-    flex: 1 0 2.5 * $module;
-    @media (min-width: $small-screen-threshold + 1) {
-      flex: 0 0 2.5 * $module;
-    }
+    flex: 0 1 5 * $module;
 
     &.active {
       display: flex;
     }
 
-    &:nth-child(2) {
-      flex: 1 1 100%;
-
-      @media (min-width: $small-screen-threshold + 1) {
-        flex: 0 0 5 * $module;
-      }
-    }
+    //&:nth-child(2) {
+    //  flex: 1 1 100%;
+    //
+    //  @media (min-width: $small-screen-threshold + 1) {
+    //    flex: 0 0 5 * $module;
+    //  }
+    //}
   }
 }
 

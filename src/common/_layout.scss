@@ -52,14 +52,6 @@ small {
   transition: transform 300ms $animation-curve;
 
   &.dialog {
-    @media (min-width: $small-screen-threshold + 1px) {
-      //transform: translate3d($module, 0, 0);
-
-      > main > header {
-        flex-basis: 25vw;
-      }
-    }
-
     > main {
       > section {
         overflow: hidden;

@@ -5,18 +5,10 @@
   transform: scale3d(0, 0, 0);
   transform-origin: top left;
 
-  opacity: 0;
-  width: 25vw;
-
-  @media (min-width: $small-screen-threshold + 1) {
-    left: 25vw;
-  }
-
   @media (max-width: $small-screen-threshold) {
     background-color: #e0e0e0;
 
-    width: 100%;
-    transform-origin: bottom right;
+    transform-origin: top right;
   }
 
   &.active {

@@ -181,34 +181,12 @@ button {
 }
 
 .menu-button.unread-conversations {
-  flex-basis: 3 * $module;
-
   .button {
     background-color: #6c6;
-
-    //&:after {
-    //  background: url("/images/new.svg") center no-repeat;
-    //  background-size: 100%;
-    //  cursor: pointer;
-    //
-    //  display: block;
-    //  content: "";
-    //  height: $module;
-    //  width: $module;
-    //
-    //  left: 0;
-    //
-    //  position: absolute;
-    //}
   }
 }
 
-//.menu-button.unread-conversations-now {
-//  transition: none;
-//}
-
 .moved .menu-button.unread-conversations {
-  flex-basis: 2.5 * $module;
   .button {
     @extend .secondary;
   }
@@ -226,6 +204,10 @@ form.show-errors .button {
   width: 2.5 * $module;
 
   z-index: 1000;
+  
+  @media (min-width: $small-screen-threshold + 1px) {
+    right: 1.5 * $module;
+  }
 }
 
 .add-button .button {
@@ -266,7 +248,7 @@ form.show-errors .button {
 }
 
 .conversation.button {
-  border-left: 1px dashed #f6f6f6;
+  border-left: 1px solid #ececec;
 
   background-image: url("/img/conversation-content.svg");
   flex: 0 0 2.5 * $module;
@@ -295,6 +277,10 @@ form.show-errors .button {
 
 .dated-conversations.button {
   background-image: url("/img/conversation-settings.svg");
+
+  &.active {
+    background-image: url("/img/ex-dark.svg")
+  }
 }
 
 .add.button {
@@ -373,25 +359,14 @@ ul.menu {
         width: 100%;
         height: auto;
 
+        left: 0;
+
         background-color: #e3e3e3;
         box-shadow: 0 2px 0.4045rem #ccc;
 
         z-index: 500;
 
-        > a {
-
-        }
-
         > form {
-          //flex: 1 1 100%;
-
-          //background-color: rgba(#000, 0.02);
-          //
-          //a span:first-child {
-          //  background-size: 50%;
-          //  background-position: top;
-          //}
-
           opacity: 1;
           transform: scale3d(1, 1, 1);
         }
@@ -544,7 +519,7 @@ ul.menu {
         //background-color: $color-background-button-secondary;
         position: relative;
 
-        border-right: 1px dashed #f6f6f6;
+        border-right: 1px solid #ececec;
       }
       > a.active > span:first-child {
         //background-color: $color-background-button-secondary-active;

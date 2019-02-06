@@ -10,6 +10,17 @@
   width: 100%;
   z-index: 30000;
 
+  opacity: 0;
+
+  @media (min-width: $small-screen-threshold + 1) {
+    box-shadow: 0.5*$module-quarter $module-quarter $module-half #999;
+
+    left: 25vw;
+    width: 50vw;
+
+    height: 76vh;
+  }
+
   > header {
     display: flex;
     justify-content: flex-end;

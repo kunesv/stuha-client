@@ -38,8 +38,8 @@ const Conversations = {
     },
     init: () => {
         let conversationsNavMenu = document.querySelector('aside .conversationsNav');
-        Buttons.init(conversationsNavMenu.querySelectorAll('.button'));
-        Buttons.initForms(conversationsNavMenu.querySelectorAll('form'));
+        // Buttons.init(conversationsNavMenu.querySelectorAll('.button'));
+        // Buttons.initForms(conversationsNavMenu.querySelectorAll('form'));
         document.querySelector('.menu-button .button').classList.add('loading');
         return Conversations.load();
     },
@@ -192,10 +192,12 @@ const Conversations = {
         },
         dialog: {
             toggle: (button) => {
-                document.querySelector('.dated-conversations-control').classList.toggle('active');
+                button.parentNode.classList.toggle('active');
             },
             hide: () => {
-                document.querySelector('.dated-conversations-control').classList.remove('active');
+                setTimeout(()=> {
+                    // document.querySelector('.dated-conversations-control').parentNode.classList.remove('active');
+                },100);
             }
         },
         save: (value) => {

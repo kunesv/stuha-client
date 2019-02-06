@@ -198,15 +198,18 @@ form.show-errors .button {
 
 .add-button {
   position: fixed;
-  bottom: $module-half;
-  right: $module-half;
+  bottom: 0;
+  right: 0;
+
+  padding: $module-half;
 
   width: 2.5 * $module;
 
   z-index: 1000;
   
   @media (min-width: $small-screen-threshold + 1px) {
-    right: 1.5 * $module;
+    bottom: 2 * $module-half;
+    right: $module;
   }
 }
 

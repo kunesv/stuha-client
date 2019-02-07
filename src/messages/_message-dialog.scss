@@ -5,6 +5,10 @@
   transform: scale3d(0, 0, 0);
   transform-origin: top left;
 
+  @media (min-width: $small-screen-threshold + 1px) {
+    height: 21 * $module;
+  }
+
   @media (max-width: $small-screen-threshold) {
     background-color: #e0e0e0;
 

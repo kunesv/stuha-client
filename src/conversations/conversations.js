@@ -97,7 +97,8 @@ const Conversations = {
                 let match = conversations.length === conversationsInMenu.length;
 
                 for (let i = 0; match && i < conversations.length; i++) {
-                    if (!Conversations.wsToBe.equals(conversations[i], conversationsInMenu[i])) {
+                    if (Conversations.lastConversation.conversation.id !== conversations[i].id
+                        && !Conversations.wsToBe.equals(conversations[i], conversationsInMenu[i])) {
                         match = false;
                     }
                 }
@@ -195,9 +196,9 @@ const Conversations = {
                 button.parentNode.classList.toggle('active');
             },
             hide: () => {
-                setTimeout(()=> {
+                setTimeout(() => {
                     // document.querySelector('.dated-conversations-control').parentNode.classList.remove('active');
-                },100);
+                }, 100);
             }
         },
         save: (value) => {

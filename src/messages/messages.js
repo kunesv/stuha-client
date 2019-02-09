@@ -52,8 +52,15 @@ const Messages = {
 
     markNewAsRead: () => {
         let newMessages = document.querySelectorAll('.messages .icon.new');
-        for (let i = 0; i < newMessages.length; i++) {
-            newMessages[i].classList.remove('new');
+
+        if (newMessages.length) {
+            fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/markRead/${newMessages[0].offsetParent.id}`, {
+                headers: Fetch.headers()
+            }).then(Fetch.processFetchStatus).then((response) => {
+                for (let i = 0; i < newMessages.length; i++) {
+                    newMessages[i].classList.remove('new');
+                }
+            });
         }
     },
 

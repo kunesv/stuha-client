@@ -50,17 +50,21 @@ const Messages = {
 
     },
 
-    markNewAsRead: () => {
-        let newMessages = document.querySelectorAll('.messages .icon.new');
+    markRead: () => {
+        return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/markRead/${document.querySelector('.messages article').id}`, {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus).then((response) => {
+            let newMessages = document.querySelectorAll('.messages .icon.new');
 
-        if (newMessages.length) {
-            fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/markRead/${newMessages[0].offsetParent.id}`, {
-                headers: Fetch.headers()
-            }).then(Fetch.processFetchStatus).then((response) => {
-                for (let i = 0; i < newMessages.length; i++) {
-                    newMessages[i].classList.remove('new');
-                }
-            });
+            for (let i = 0; i < newMessages.length; i++) {
+                newMessages[i].classList.remove('new');
+            }
+        });
+    },
+
+    markNewAsRead: () => {
+        if (document.querySelectorAll('.messages .icon.new').length) {
+            Messages.markRead();
         }
     },
 
@@ -121,7 +125,7 @@ const Messages = {
         // FIXME: Ask to enable notifications when first clicked .., then show auto-update icon, ask to switch off when
 
         let lastMessage = document.querySelector('.messages > div:first-child > article:first-child');
-
+        console.log(lastMessage)
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadRecent/${lastMessage.id}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
@@ -397,7 +401,7 @@ const Messages = {
                             Messages.message.add(messages);
 
                             document.querySelector('.messages').parentNode.scrollTop = 0;
-                            Messages.markNewAsRead();
+                            Messages.markRead();
                         }, 300);
                     });
                 }).catch((response) => {

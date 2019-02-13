@@ -1,0 +1,174 @@
+$color-dark-background: #232020;
+
+$color-dark-background-message: #dcdcdc;
+$color-dark-background-my-message: #a9E3F3;
+$color-dark-background-button: #6c9;
+$color-dark-background-button-secondary: #c6c6c6;
+$color-dark-background-button-secondary-active: #b9b9b9;
+$color-dark-background-error: #f33;
+
+$color-dark-line: #E5E5E5;
+
+$color-dark-text: rgba(#fffcfc, 0.5);
+$color-dark-link: #09c;
+$color-dark-text-my-message: #256;
+$color-dark-text-secondary: rgba(#fffcfc, 0.3);
+
+body.dark {
+  color: $color-dark-text;
+  background-color: $color-dark-background;
+
+  .content > main {
+    background-color: $color-dark-background;
+
+    & > aside {
+      background-color: #262323;
+
+      & > footer {
+        background-color: rgba(white, 0.01);
+      }
+    }
+
+    & > header div span.conversation-name {
+      background-color: rgba(black, .1);
+      color: $color-dark-text;
+    }
+  }
+
+  .message-dialog > form .icons li, article > main > section > p.replyTo > a .replyToIcon {
+    opacity: .9;
+  }
+
+  article {
+    header {
+      opacity: .9;
+    }
+
+    & > main > section > p.plain-text {
+      background-color: rgba(white, .03);
+    }
+
+    & > main > section > p.replyTo > a {
+      background-color: rgba(black, .15);
+      &:hover {
+        background-color: rgba(black, .25);
+      }
+    }
+
+    & > main footer {
+      color: $color-dark-text-secondary;
+    }
+
+    &.my > main > section > p {
+      //color: rgba(210, 220, 230, .6);
+      &.plain-text {
+        //background-color: #505660;
+      }
+    }
+  }
+
+  .replyToWrapper {
+    background-color: rgba(white, .01);
+  }
+
+  .seperator {
+    span {
+      background-color: $color-dark-background;
+    }
+    &::before {
+      border-bottom-color: rgba(white, .05);
+    }
+  }
+
+  ul.menu li > a.active {
+    background-color: rgba(white, 0.03);
+  }
+
+  label {
+    color: $color-dark-text;
+
+    & > span.check-box {
+      background-color: rgba(white, .02);
+    }
+  }
+  input, textarea {
+    background-color: rgba(black, .3);
+    color: $color-dark-text;
+  }
+
+  form p > span.error, form div > span.error, form .error-message, form > section > p > span {
+    background-color: rgba(white, .02);
+  }
+
+  .overlay {
+    background-color: $color-dark-background;
+
+    @media (min-width: $small-screen-threshold + 1px) {
+      box-shadow: 0.5*$module-quarter $module-quarter $module-half rgba(black, .3);
+    }
+  }
+
+  .button, button {
+    background-color: $color-dark-background-button;
+
+    &:hover {
+      background-color: #488;
+    }
+
+    &.icon {
+      background-color: white;
+      &:hover {
+        background-color: white;
+      }
+    }
+
+    &.secondary {
+      background-color: rgba(black, 0.3);
+      &:hover {
+        background-color: rgba(black, 0.4);
+      }
+    }
+
+    &.light {
+      background-color: rgba(black, 0.05);
+      &:hover {
+        background-color: rgba(black, 0.1);
+      }
+    }
+
+    &.translucent {
+      background-color: rgba(black, 0.1);
+
+      &:hover {
+        background-color: rgba(black, 0.25);
+      }
+    }
+  }
+
+  .conversation.button, button.conversation {
+    border-left-color: rgba(white, 0.05);
+
+    @media (min-width: $small-screen-threshold + 1px) {
+      background-color: transparent;
+      &:hover {
+        background-color: rgba(black, .1);
+      }
+    }
+  }
+
+  ul.menu li > a {
+    background-color: transparent;
+    &:hover {
+      background-color: $color-dark-background
+    }
+  }
+
+  ul.menu.conversations li > a > span:first-child {
+    border-right: 0 none;
+  }
+
+  .conversation-menu ul.members li:nth-child(2n+1), .user-menu ul.members li:nth-child(2n+1), .conversation-members-menu ul.members li:nth-child(2n+1) {
+    background-color: rgba(0, 0, 0, .1);
+  }
+
+}

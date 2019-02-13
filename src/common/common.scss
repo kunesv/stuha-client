@@ -65,8 +65,10 @@ aside, header, main, section {
 
 @import "../user/change-password-dialog";
 
+@import "dark";
+
 .hide-for-large {
-  @media (min-width: $small-screen-threshold + 1) {
+  @media (min-width: $small-screen-threshold + 1px) {
     display: none;
   }
 }

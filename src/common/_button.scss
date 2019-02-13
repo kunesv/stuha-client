@@ -206,7 +206,7 @@ form.show-errors .button {
   width: 2.5 * $module;
 
   z-index: 1000;
-  
+
   @media (min-width: $small-screen-threshold + 1px) {
     bottom: 2 * $module-half;
     right: $module;
@@ -251,10 +251,19 @@ form.show-errors .button {
 }
 
 .conversation.button {
-  border-left: 1px solid #ececec;
+  border-left: 1px solid rgba(white, 0.4);
 
   background-image: url("/img/conversation-content.svg");
   flex: 0 0 2.5 * $module;
+
+  @media (min-width: $small-screen-threshold + 1px) {
+    border-left: 0 none;
+    background-color: transparent;
+
+    &:hover {
+      background-color: rgba(black,.04);
+    }
+  }
 }
 
 .members.button {
@@ -522,7 +531,7 @@ ul.menu {
         //background-color: $color-background-button-secondary;
         position: relative;
 
-        border-right: 1px solid #ececec;
+        border-right: 1px solid rgba(white, 0.4);
       }
       > a.active > span:first-child {
         //background-color: $color-background-button-secondary-active;

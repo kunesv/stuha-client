@@ -108,7 +108,7 @@ article {
         background-size: 150%;
 
         border-radius: 50%;
-        box-shadow: 0 0 0 0.75 * $module-quarter rgba(#ececec, 0.75);
+        //box-shadow: 0 0 0 0.75 * $module-quarter rgba(#ececec, 0.75);
       }
     }
 
@@ -285,8 +285,8 @@ article {
 
         > p {
           border-radius: $border-radius-message 0 0 $border-radius-message;
-          background-color: $color-background-my-message;
-          color: $color-text-my-message;
+          //background-color: $color-background-my-message;
+          //color: $color-text-my-message;
 
           &.replyTo {
             background-color: transparent;
@@ -425,12 +425,12 @@ article.my > main > section > article.replyTo {
     margin-left: 0;
     margin-right: 0;
 
-    > section > p:not(.replyTo) {
-      box-shadow: 0 0 $module-quarter / 2 $color-background;
-    }
-    > section > p.replyTo a {
-      box-shadow: 0 0 $module-quarter / 2 $color-background;
-    }
+    //> section > p:not(.replyTo) {
+    //  box-shadow: 0 0 $module-quarter / 2 $color-background;
+    //}
+    //> section > p.replyTo a {
+    //  box-shadow: 0 0 $module-quarter / 2 $color-background;
+    //}
 
   }
 
@@ -472,7 +472,7 @@ article.my {
     //&:nth-child(2) {
     //  flex: 1 1 100%;
     //
-    //  @media (min-width: $small-screen-threshold + 1) {
+    //  @media (min-width: $small-screen-threshold + 1px) {
     //    flex: 0 0 5 * $module;
     //  }
     //}

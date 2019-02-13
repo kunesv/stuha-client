@@ -97,8 +97,7 @@ const Conversations = {
                 let match = conversations.length === conversationsInMenu.length;
 
                 for (let i = 0; match && i < conversations.length; i++) {
-                    if (Conversations.lastConversation.conversation.id !== conversations[i].id
-                        && !Conversations.wsToBe.equals(conversations[i], conversationsInMenu[i])) {
+                    if (!Conversations.wsToBe.equals(conversations[i], conversationsInMenu[i])) {
                         match = false;
                     }
                 }

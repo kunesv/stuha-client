@@ -147,7 +147,13 @@ article {
       
       &.ranicek {
         right: 1.75 * $module;
-        background-image: url("/img/ranicek.svg");
+        background: #d6caa0 url("/img/ranicek.svg") no-repeat center;
+        background-size: 100%;
+        border-radius: 50%;
+
+        &:hover {
+          background-color: #d6caa0;
+        }
       }
     }
   }

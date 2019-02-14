@@ -58,7 +58,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,12 +67,6 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-283.77082)">
-    <circle
-       style="opacity:1;vector-effect:none;fill:#decd87;fill-opacity:1;stroke:#a0892c;stroke-width:0.52916667;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="path4568"
-       cx="6.614583"
-       cy="290.38541"
-       r="6.1209574" />
     <circle
        style="opacity:1;vector-effect:none;fill:#f4eed7;fill-opacity:1;stroke:none;stroke-width:0.52916676;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4568-1"

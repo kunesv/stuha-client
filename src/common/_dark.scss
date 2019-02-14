@@ -92,7 +92,7 @@ body.dark {
     }
   }
   input, textarea {
-    background-color: rgba(black, .3);
+    background-color: rgba(black, .2);
     color: $color-dark-text;
   }
 
@@ -156,10 +156,21 @@ body.dark {
     }
   }
 
-  ul.menu li > a {
-    background-color: transparent;
-    &:hover {
-      background-color: $color-dark-background
+  ul.menu li {
+    &.editable.active {
+      background-color: #292626;
+      box-shadow: 0.5*$module-quarter $module-quarter $module-half rgba(black, .3);
+    }
+
+    > form > div > label {
+       color: $color-dark-text;
+    }
+
+    & > a {
+      background-color: transparent;
+      &:hover {
+        background-color: $color-dark-background
+      }
     }
   }
 

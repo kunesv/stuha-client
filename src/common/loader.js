@@ -24,10 +24,18 @@ Users.init();
 //
 //
 
-if (new Date().getHours() >= 22 || new Date().getHours() < 5) {
-    document.body.classList.add('dark');
-}
+const Dark = {
+    check: () => {
+        if (new Date().getHours() >= 22 || new Date().getHours() < 5) {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    }
+};
 
+Dark.check();
+setInterval(Dark.check, 300000);
 
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {

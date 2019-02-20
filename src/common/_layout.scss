@@ -28,6 +28,8 @@ body {
   background: $color-background;
   color: $color-text;
 
+  transition: background-color 500ms;
+
   margin: 0;
   padding: 0;
 }
@@ -70,7 +72,7 @@ small {
   }
 
   > main {
-    background-color: $color-background;
+    //background-color: $color-background;
     display: flex;
 
     overflow: hidden;

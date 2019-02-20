@@ -117,6 +117,8 @@ const Messages = {
                 Messages.message.loadMore.display();
 
                 document.querySelector('.content').classList.remove('loading');
+
+                Messages.markNewAsRead();
             });
         });
     },

@@ -27,6 +27,8 @@ const ChangePassword = {
                     setTimeout(() => {
                             ChangePassword.dialog.reset();
                             button.classList.remove('done');
+
+                            Users.menu.hide();
                         }, 300
                     );
                 }, 300);
@@ -50,6 +52,8 @@ const ChangePassword = {
 
             document.querySelector('.changePassword-dialog').classList.add('active');
             document.querySelector('.content').classList.add('dialog');
+
+            document.querySelector('.changePassword-dialog input').focus();
         },
         hide: () => {
             document.querySelector('.changePassword-dialog').classList.remove('active');
@@ -58,7 +62,10 @@ const ChangePassword = {
             setTimeout(ChangePassword.dialog.validations.reset, 300);
         },
         reset: () => {
-
+            let inputs = document.querySelectorAll('.changePassword-dialog input');
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].value = '';
+            }
         },
         validations: {
             validate: () => {

@@ -15,10 +15,14 @@
   @media (min-width: $small-screen-threshold + 1px) {
     box-shadow: 0.5*$module-quarter $module-quarter $module-half #999;
 
-    left: 25vw;
-    width: 50vw;
+    //left: 25vw;
+    //width: 50vw;
 
-    max-height: 95vh;
+    max-height: 100vh;
+
+    > ul {
+      max-width: 30 * $module;
+    }
   }
 
   > header {

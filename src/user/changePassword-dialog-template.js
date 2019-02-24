@@ -7,14 +7,14 @@ const changePasswordDialogTemplate = () => {
     <form data-click="ChangePassword.submitForm">       
         <section>           
             <label>Současné heslo</label>
-            <input name="password"/>                
+            <input name="password" type="password"/>                
             <p>
                 <span class="error">Sem přijde současné heslo.</span>
             </p>      
         </section>     
         <section>           
             <label>Nové heslo</label>
-            <input name="newPassword"/>                
+            <input name="newPassword" type="password"/>                
             <p>
                 <span class="error">Tu vložit nové heslo.</span>
             </p>      

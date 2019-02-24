@@ -8,7 +8,7 @@
   transform: scale3d(0, 0, 0);
   transform-origin: top left;
   opacity: 0;
-  overflow: hidden;
+  //overflow: hidden;
 
   @media (max-width: $small-screen-threshold) {
     transform: scale3d(0, 0, 0);
@@ -35,7 +35,7 @@
     flex-direction: column;
 
     flex-grow: 1;
-    overflow: auto;
+    //overflow: auto;
 
     margin: 0;
     padding: 0;
@@ -71,7 +71,7 @@
     span.unread {
       position: absolute;
       top: 0;
-      right: 0;
+      right: -$module-half;
 
       border-radius: 50%;
 

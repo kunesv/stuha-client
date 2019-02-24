@@ -6,7 +6,7 @@
   transform-origin: top left;
 
   @media (min-width: $small-screen-threshold + 1px) {
-    height: 21 * $module;
+    //height: 21 * $module;
   }
 
   @media (max-width: $small-screen-threshold) {

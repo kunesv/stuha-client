@@ -326,17 +326,23 @@ const Messages = {
             let newMessages = document.createElement('div');
             newMessages.classList.add('loading');
 
+            let messageAlreadyAdded = false;
+
             for (let i = 0; i < messages.length; i++) {
                 let message = messages[i];
-                message.createdOn = Datetime.arrayToDate(message.createdOn);
 
-                if (i > 0 && Datetime.formatDate(messages[i - 1].createdOn) !== Datetime.formatDate(message.createdOn)) {
-                    newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(Datetime.formatDate(message.createdOn)));
+                let duplicate = document.querySelector(`.messages article[id='${message.id}']`);
+                if (!duplicate) {
+                    message.createdOn = Datetime.arrayToDate(message.createdOn);
+
+                    if (i > 0 && Datetime.formatDate(messages[i - 1].createdOn) !== Datetime.formatDate(message.createdOn)) {
+                        newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(Datetime.formatDate(message.createdOn)));
+                    }
+
+                    message.isNew = allNew || i < unreadCount;
+
+                    Messages.message.template(newMessages, message);
                 }
-
-                message.isNew = allNew || i < unreadCount;
-
-                Messages.message.template(newMessages, message);
             }
 
             if (placeOnTop) {

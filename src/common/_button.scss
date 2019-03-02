@@ -327,6 +327,14 @@ form.show-errors .button {
 
 }
 
+.change-password > .button {
+  background-image: url("/img/change-password.svg");
+
+  &.active {
+    background-image: url("/img/ex-dark.svg")
+  }
+}
+
 .load-more .button {
   &:first-child {
     background-image: url("/img/load-more.svg");
@@ -370,6 +378,8 @@ ul.menu {
         position: absolute;
         width: 100%;
         height: auto;
+
+        max-width: 100%;
 
         left: 0;
 
@@ -479,6 +489,17 @@ ul.menu {
           height: 2 * $module;
         }
       }
+
+      &.vertical {
+        > div {
+          flex-direction: column;
+          margin-top: $module-half;
+
+          &:last-child {
+            margin-top: $module;
+          }
+        }
+      }
     }
 
   }
@@ -491,6 +512,8 @@ ul.menu {
     li {
       flex: 0 0 2.5 * $module;
       height: 2.5 * $module;
+
+      max-width: 2.5 * $module;
 
       &.form {
         flex-grow: 1;

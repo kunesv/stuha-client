@@ -12,7 +12,7 @@ const ChangePassword = {
             button.classList.remove('error');
             button.classList.add('progress');
 
-            let changePasswordForm = new FormData(document.querySelector('.changePassword-dialog form'));
+            let changePasswordForm = new FormData(document.querySelector('.change-password form'));
 
             fetch('/api/changePassword', {
                 headers: Fetch.headers(),
@@ -40,29 +40,36 @@ const ChangePassword = {
     },
     dialog: {
         init: () => {
-            document.body.insertAdjacentHTML('beforeEnd', changePasswordDialogTemplate());
-            Buttons.init(document.querySelectorAll('.changePassword-dialog .button'));
-            Buttons.initForms(document.querySelectorAll('.changePassword-dialog form'));
+            document.querySelector('.change-password').insertAdjacentHTML('beforeEnd', changePasswordDialogTemplate());
+
+            // Buttons.init(document.querySelectorAll('.change-password form .button'));
+            Buttons.initForms(document.querySelectorAll('.change-password form'));
+        },
+        toggle: () => {
+            console.log('active',document.querySelector('.change-password').classList.contains('active'))
+            if (document.querySelector('.change-password').classList.contains('active')) {
+                ChangePassword.dialog.hide();
+            } else {
+                ChangePassword.dialog.show();
+            }
         },
         show: () => {
-            let dialog = document.querySelector('.changePassword-dialog');
-            if (!dialog) {
+            console.log('SHOW!')
+            console.log('form',document.querySelector('.change-password form'))
+            if (!document.querySelector('.change-password form')) {
                 ChangePassword.dialog.init();
             }
-
-            document.querySelector('.changePassword-dialog').classList.add('active');
-            document.querySelector('.content').classList.add('dialog');
-
-            document.querySelector('.changePassword-dialog input').focus();
+            document.querySelector('.change-password').classList.add('active');
+            document.querySelector('.change-password input').focus();
         },
         hide: () => {
-            document.querySelector('.changePassword-dialog').classList.remove('active');
-            document.querySelector('.content').classList.remove('dialog');
+            console.log('HIDE!')
+            document.querySelector('.change-password').classList.remove('active');
 
-            setTimeout(ChangePassword.dialog.validations.reset, 300);
+            setTimeout(ChangePassword.dialog.reset, 300);
         },
         reset: () => {
-            let inputs = document.querySelectorAll('.changePassword-dialog input');
+            let inputs = document.querySelectorAll('.change-password input');
             for (let i = 0; i < inputs.length; i++) {
                 inputs[i].value = '';
             }

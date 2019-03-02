@@ -1,6 +1,6 @@
 // FIXME: Remove after testing
 window.addEventListener('error', (msg, url, linenumber) => {
-    alert('Error: ' + msg.error + '\nLine Number: ' + msg.lineno + ',' + msg.colno);
+    alert(`Něco tu smrdí. Radši udělám screenshot téhle obrazovky a pak si všechno rozepsané uložím.\n\nError: ${msg.error}\nLine Number: ${msg.lineno}, ${msg.colno}`);
 });
 
 

@@ -20,8 +20,12 @@
 
     max-height: 100vh;
 
-    > ul {
-      max-width: 30 * $module;
+    > ul, > form {
+      max-width: $small-screen-threshold;
+      margin: 0 auto;
+      width: 100%;
+
+      position: relative;
     }
   }
 

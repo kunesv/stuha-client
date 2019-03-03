@@ -107,6 +107,8 @@
 
   position: relative;
 
+  border-radius: $module;
+
   @media (max-width: 640px) {
     width: 6 * $module;
     height: 4.5 * $module;
@@ -120,11 +122,15 @@
     opacity: 0;
   }
 
+  &:first-child {
+    border-radius: 0 $module $module $module;
+  }
+
   &.gif:after {
     display: flex;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: $module-half;
+    right: $module-half;
 
     content: "";
     background: transparent url("/img/thumbnail-gif.svg") center no-repeat;
@@ -144,8 +150,20 @@
   width: 100%;
 
   background: #666 center no-repeat;
+  border-radius: inherit;
 
   &.active {
     display: inline-block;
+  }
+}
+
+article.my {
+  .thumbnail.button {
+    &:first-child {
+      border-radius: $module;
+    }
+    &:last-child {
+      border-radius: $module 0 $module $module;
+    }
   }
 }

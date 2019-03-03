@@ -717,18 +717,22 @@ const Messages = {
                 let thumbnailGif = button.parentNode.querySelector('.thumbnail-gif');
                 thumbnailGif.classList.add('active');
 
-                return fetch(`/api/image/${button.parentNode.dataset.imageId}`, {
-                    headers: Fetch.headers()
-                }).then(Fetch.processFetchStatus).then((response) => {
-                    return response.blob();
-                }).then((myBlob) => {
-                    // img.src = URL.createObjectURL(myBlob);
-                    let url = URL.createObjectURL(myBlob);
-                    thumbnailGif.style.backgroundImage = `url(${url})`;
-                    thumbnailGif.style.backgroundSize = '100% auto';
-                }).catch((error) => {
-                    console.log(error)
-                });
+                if (!thumbnailGif.classList.contains('loaded')) {
+                    return fetch(`/api/image/${button.parentNode.dataset.imageId}`, {
+                        headers: Fetch.headers()
+                    }).then(Fetch.processFetchStatus).then((response) => {
+                        return response.blob();
+                    }).then((myBlob) => {
+                        // img.src = URL.createObjectURL(myBlob);
+                        let url = URL.createObjectURL(myBlob);
+                        thumbnailGif.style.backgroundImage = `url(${url})`;
+                        thumbnailGif.style.backgroundSize = '100% auto';
+
+                        thumbnailGif.classList.add('loaded');
+                    }).catch((error) => {
+                        console.log(error)
+                    });
+                }
             },
             hide: (button) => {
                 button.parentNode.querySelector('.thumbnail-gif').classList.remove('active');

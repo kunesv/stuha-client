@@ -105,6 +105,8 @@
   width: 8 * $module;
   height: 6 * $module;
 
+  position: relative;
+
   @media (max-width: 640px) {
     width: 6 * $module;
     height: 4.5 * $module;
@@ -124,10 +126,12 @@
     top: 0;
     right: 0;
 
-    content: "GIF";
+    content: "";
+    background: transparent url("/img/thumbnail-gif.svg") center no-repeat;
+    background-size: 100% auto;
 
-    height: 2 * $module;
-    width: 2 * $module;
+    height: 1.5 * $module;
+    width: 1.5 * $module;
 
     justify-content: center;
     align-items: center;
@@ -138,6 +142,8 @@
   display: none;
   height: 100%;
   width: 100%;
+
+  background: black center no-repeat;
 
   &.active {
     display: inline-block;

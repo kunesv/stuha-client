@@ -156,6 +156,12 @@ body.dark {
     }
   }
 
+  .menu-button.unread-conversations {
+    .button {
+      background-color: #6c9;
+    }
+  }
+
   ul.menu li {
     &.editable.active {
       background-color: #292626;

@@ -38,10 +38,9 @@
 
     li {
       display: inline-block;
-      flex: 0 0 1.5 * $module;
 
-      align-items: center;
       padding: 0 $module-half;
+      margin: 0 $module-quarter $module-quarter 0;
 
       color: #777;
 

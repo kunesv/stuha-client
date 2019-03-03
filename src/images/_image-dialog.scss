@@ -117,4 +117,29 @@
   &.active {
     opacity: 0;
   }
+
+  &.gif:after {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    content: "GIF";
+
+    height: 2 * $module;
+    width: 2 * $module;
+
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.thumbnail-gif {
+  display: none;
+  height: 100%;
+  width: 100%;
+
+  &.active {
+    display: inline-block;
+  }
 }

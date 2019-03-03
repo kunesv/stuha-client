@@ -223,7 +223,9 @@ const Messages = {
 
     message: {
         thumbnailTemplate: (picture) => {
-            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show"></span>`;
+            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show">
+        <span class="thumbnail-gif"></span>
+</span>`;
         },
         template: (parent, message) => {
             let template = `<article id="${message.id}" class="${Users.currentUser.userName === message.userName ? 'my' : ''} ${message.robo ? 'robot' : ''}" data-date="${Datetime.formatDate(message.createdOn)}">
@@ -255,6 +257,20 @@ const Messages = {
                 }
 
                 contentElement.parentNode.insertBefore(thumbnails, contentElement);
+
+                for (let i = 0; i < message.pictures.length; i++) {
+                    if (message.pictures[i].name.match(/gif$/)) {
+                        let thumbnail = contentElement.parentNode.querySelectorAll('.thumbnail')[i];
+                        thumbnail.classList.add('gif');
+
+                        thumbnail.addEventListener('mouseover', (event) => {
+                            Messages.image.inBackground.show(event.target);
+                        });
+                        thumbnail.addEventListener('mouseout', (event) => {
+                            Messages.image.inBackground.hide(event.target);
+                        });
+                    }
+                }
             }
 
             if (message.formatted) {
@@ -689,6 +705,35 @@ const Messages = {
     },
 
     image: {
+        inBackground: {
+            toggle: (button) => {
+                if (button.parentNode.querySelector('.thumbnail-gif').classList.contains('active')) {
+                    Messages.image.inBackground.hide(button);
+                } else {
+                    Messages.image.inBackground.show(button);
+                }
+            },
+            show: (button) => {
+                let thumbnailGif = button.parentNode.querySelector('.thumbnail-gif');
+                thumbnailGif.classList.add('active');
+
+                return fetch(`/api/image/${button.parentNode.dataset.imageId}`, {
+                    headers: Fetch.headers()
+                }).then(Fetch.processFetchStatus).then((response) => {
+                    return response.blob();
+                }).then((myBlob) => {
+                    // img.src = URL.createObjectURL(myBlob);
+                    let url = URL.createObjectURL(myBlob);
+                    thumbnailGif.style.backgroundImage = `url(${url})`;
+                    thumbnailGif.style.backgroundSize = '100% auto';
+                }).catch((error) => {
+                    console.log(error)
+                });
+            },
+            hide: (button) => {
+                button.parentNode.querySelector('.thumbnail-gif').classList.remove('active');
+            }
+        },
         dialog: {
             show: (thumbnail) => {
                 let imageDialog = document.querySelector('.image-dialog');

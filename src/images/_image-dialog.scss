@@ -134,7 +134,7 @@
       right: 0;
 
       content: "";
-      background: transparent url("/img/thumbnail-gif.svg") center no-repeat;
+      background: transparent url("/img/thumbnail-gif.svg") center $module-quarter no-repeat;
       background-size: 60% auto;
 
       height: 2.5 * $module;

@@ -320,27 +320,25 @@ const Messages = {
 
             let gifs = article.querySelectorAll('.gif.thumbnail');
             for (let i = 0; i < gifs.length; i++) {
-                let button = gifs[i].querySelector('.button-gif');
-                button.addEventListener('touchend', (event) => {
-                    Messages.image.inBackground.toggle(event.target.parentNode);
-                    event.stopPropagation();
-                    event.preventDefault();
-                    return false;
-                });
+                let thumbnail = gifs[i];
+                let button = thumbnail.querySelector('.button-gif');
 
-                gifs[i].addEventListener('touchend', (event) => {
-                    Messages.image.dialog.show(event.target);
-                    event.stopPropagation();
-                    event.preventDefault();
-                    return false;
-                });
-
-                gifs[i].addEventListener('mouseover', (event) => {
-                    Messages.image.inBackground.show(event.target);
-                });
-                gifs[i].addEventListener('mouseout', (event) => {
-                    Messages.image.inBackground.hide(event.target);
-                });
+                let isTouch = ('ontouchstart' in window);
+                if (isTouch) {
+                    button.addEventListener('touchend', (event) => {
+                        Messages.image.inBackground.toggle(event.target.parentNode);
+                        event.stopPropagation();
+                        event.preventDefault();
+                        return false;
+                    });
+                } else {
+                    thumbnail.addEventListener('mouseenter', (event) => {
+                        Messages.image.inBackground.show(event.target);
+                    });
+                    thumbnail.addEventListener('mouseleave', (event) => {
+                        Messages.image.inBackground.hide(event.target);
+                    });
+                }
             }
 
             Buttons.init(article.querySelectorAll('.button'));
@@ -718,39 +716,37 @@ const Messages = {
 
     image: {
         inBackground: {
-            toggle: (button) => {
-                if (button.parentNode.querySelector('.thumbnail-gif').classList.contains('active')) {
-                    Messages.image.inBackground.hide(button);
+            toggle: (thumbnail) => {
+                if (thumbnail.querySelector('.thumbnail-gif').classList.contains('active')) {
+                    Messages.image.inBackground.hide(thumbnail);
                 } else {
-                    Messages.image.inBackground.show(button);
+                    Messages.image.inBackground.show(thumbnail);
                 }
             },
-            show: (button) => {
-                let thumbnailGif = button.parentNode.querySelector('.thumbnail-gif');
+            show: (thumbnail) => {
+                let thumbnailGif = thumbnail.querySelector('.thumbnail-gif');
                 thumbnailGif.classList.add('active');
 
                 if (!thumbnailGif.classList.contains('loaded')) {
-                    return fetch(`/api/image/${button.parentNode.dataset.imageId}`, {
+                    return fetch(`/api/image/${thumbnail.dataset.imageId}`, {
                         headers: Fetch.headers()
                     }).then(Fetch.processFetchStatus).then((response) => {
                         return response.blob();
                     }).then((myBlob) => {
-                        setTimeout(()=> {
-                            thumbnailGif.style.backgroundImage = `url(${URL.createObjectURL(myBlob)})`;
-                        },100)
-                        // thumbnailGif.classList.add('loaded');
+                        thumbnailGif.style.backgroundImage = `url(${URL.createObjectURL(myBlob)})`;
+                        thumbnailGif.classList.add('loaded');
                     }).catch((error) => {
                         console.log(error)
                     });
                 }
             },
-            hide: (button) => {
-                button.parentNode.querySelector('.thumbnail-gif').classList.remove('active');
+            hide: (thumbnail) => {
+                thumbnail.querySelector('.thumbnail-gif').classList.remove('active');
             }
         },
         dialog: {
             show: (thumbnail) => {
-                Messages.image.inBackground.hide(thumbnail.querySelector('.button-gif'));
+                Messages.image.inBackground.hide(thumbnail);
 
                 let imageDialog = document.querySelector('.image-dialog');
                 imageDialog.classList.add('active');

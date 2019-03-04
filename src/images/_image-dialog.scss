@@ -92,7 +92,7 @@
   margin: -$module-quarter;
 }
 
-.thumbnail.button {
+.thumbnail {
   @extend .scale-button;
 
   background: $color-background-message none center no-repeat;
@@ -126,21 +126,27 @@
     border-radius: 0 $module $module $module;
   }
 
-  &.gif:after {
-    display: flex;
-    position: absolute;
-    top: $module-half;
-    right: $module-half;
+  &.gif {
+    .button-gif {
+      display: flex;
+      position: absolute;
+      top: 0;
+      right: 0;
 
-    content: "";
-    background: transparent url("/img/thumbnail-gif.svg") center no-repeat;
-    background-size: 100% auto;
+      content: "";
+      background: transparent url("/img/thumbnail-gif.svg") center no-repeat;
+      background-size: 60% auto;
 
-    height: 1.5 * $module;
-    width: 1.5 * $module;
+      height: 2.5 * $module;
+      width: 2.5 * $module;
 
-    justify-content: center;
-    align-items: center;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .button-gif {
+    display: none;
   }
 }
 
@@ -150,6 +156,7 @@
   width: 100%;
 
   background: #666 center no-repeat;
+  background-size: 120% auto;
   border-radius: inherit;
 
   &.active {

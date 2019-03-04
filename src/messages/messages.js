@@ -223,8 +223,9 @@ const Messages = {
 
     message: {
         thumbnailTemplate: (picture) => {
-            return `<span class="thumbnail button toLoad" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show">
+            return `<span class="thumbnail button toLoad ${picture.name.match(/gif$/) ? 'gif' : ''}" data-image-id="${picture.id}" data-image-height="${picture.height}" data-image-width="${picture.width}" data-click="Messages.image.dialog.show">
         <span class="thumbnail-gif"></span>
+        <span class="button-gif"></span>
 </span>`;
         },
         template: (parent, message) => {
@@ -257,20 +258,6 @@ const Messages = {
                 }
 
                 contentElement.parentNode.insertBefore(thumbnails, contentElement);
-
-                for (let i = 0; i < message.pictures.length; i++) {
-                    if (message.pictures[i].name.match(/gif$/)) {
-                        let thumbnail = contentElement.parentNode.querySelectorAll('.thumbnail')[i];
-                        thumbnail.classList.add('gif');
-
-                        thumbnail.addEventListener('mouseover', (event) => {
-                            Messages.image.inBackground.show(event.target);
-                        });
-                        thumbnail.addEventListener('mouseout', (event) => {
-                            Messages.image.inBackground.hide(event.target);
-                        });
-                    }
-                }
             }
 
             if (message.formatted) {
@@ -329,6 +316,31 @@ const Messages = {
                         }
                     }
                 }
+            }
+
+            let gifs = article.querySelectorAll('.gif.thumbnail');
+            for (let i = 0; i < gifs.length; i++) {
+                let button = gifs[i].querySelector('.button-gif');
+                button.addEventListener('touchend', (event) => {
+                    Messages.image.inBackground.toggle(event.target.parentNode);
+                    event.stopPropagation();
+                    event.preventDefault();
+                    return false;
+                });
+
+                gifs[i].addEventListener('touchend', (event) => {
+                    Messages.image.dialog.show(event.target);
+                    event.stopPropagation();
+                    event.preventDefault();
+                    return false;
+                });
+
+                gifs[i].addEventListener('mouseover', (event) => {
+                    Messages.image.inBackground.show(event.target);
+                });
+                gifs[i].addEventListener('mouseout', (event) => {
+                    Messages.image.inBackground.hide(event.target);
+                });
             }
 
             Buttons.init(article.querySelectorAll('.button'));
@@ -723,12 +735,10 @@ const Messages = {
                     }).then(Fetch.processFetchStatus).then((response) => {
                         return response.blob();
                     }).then((myBlob) => {
-                        // img.src = URL.createObjectURL(myBlob);
-                        let url = URL.createObjectURL(myBlob);
-                        thumbnailGif.style.backgroundImage = `url(${url})`;
-                        thumbnailGif.style.backgroundSize = '100% auto';
-
-                        thumbnailGif.classList.add('loaded');
+                        setTimeout(()=> {
+                            thumbnailGif.style.backgroundImage = `url(${URL.createObjectURL(myBlob)})`;
+                        },100)
+                        // thumbnailGif.classList.add('loaded');
                     }).catch((error) => {
                         console.log(error)
                     });
@@ -740,6 +750,8 @@ const Messages = {
         },
         dialog: {
             show: (thumbnail) => {
+                Messages.image.inBackground.hide(thumbnail.querySelector('.button-gif'));
+
                 let imageDialog = document.querySelector('.image-dialog');
                 imageDialog.classList.add('active');
                 document.querySelector('.content').classList.add('dialog');
@@ -767,8 +779,6 @@ const Messages = {
                     return response.blob();
                 }).then((myBlob) => {
                     img.src = URL.createObjectURL(myBlob);
-                    // FIXME: No more swipe, until dealt with weird behaviour.
-                    // let content = document.querySelector('.content');
                     Messages.swipe = new Swipe(img, Messages.image.dialog.previous, Messages.image.dialog.next);
                 }).catch(() => {
                     imageDialog.classList.add('error');

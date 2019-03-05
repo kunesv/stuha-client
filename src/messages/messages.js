@@ -325,6 +325,16 @@ const Messages = {
 
                 let isTouch = ('ontouchstart' in window);
                 if (isTouch) {
+                    button.addEventListener('touchstart', (event) => {
+                        event.stopPropagation();
+                    });
+                    button.addEventListener('mousedown', (event) => {
+                        event.stopPropagation();
+                    });
+                    button.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                    });
+
                     button.addEventListener('touchend', (event) => {
                         Messages.image.inBackground.toggle(event.target.parentNode);
                         event.stopPropagation();

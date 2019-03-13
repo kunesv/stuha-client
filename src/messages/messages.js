@@ -960,21 +960,3 @@ const Messages = {
 
 
 };
-
-// let client = Stomp.client('ws://localhost/api/ws/msg');
-// console.log(client)
-let socket = new SockJS('/gs-guide-websocket')
-let stompClient = Stomp.over(socket);
-console.log(stompClient)
-// let client4 = Stomp.client('ws://localhost:8080/gs-guide-websocket');
-// console.log(client4)
-stompClient.connect({}, function (frame) {
-    // setConnected(true);
-    console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/msg', function (greeting) {
-        console.log(JSON.parse(greeting.body).content);
-    });
-
-    stompClient.send("/app/msg", {}, JSON.stringify({'userName': 'Pepik'}));
-
-});

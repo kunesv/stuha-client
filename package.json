@@ -6,9 +6,9 @@
     "start": "gulp"
   },
   "devDependencies": {
-    "babel-polyfill": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.6.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^5.0.0",
     "gulp-babel": "^7.0.1",
@@ -16,13 +16,15 @@
     "gulp-sass": "^4.0.1",
     "gulp-svgmin": "^1.2.4",
     "gulp-uglify": "^3.0.0",
-    "gulp-watch": "^5.0.0",
+    "gulp-version-number": "^0.2.3",
+    "gulp-watch": "^5.0.1",
     "gulp-webserver": "^0.9.1",
-    "gulp-version-number": "^0.1.7",
     "rimraf": "^2.6.2",
     "whatwg-fetch": "^2.0.4"
   },
   "dependencies": {
-    "npm": "^6.0.0"
+    "npm": "^6.9.0",
+    "sockjs-client": "^1.3.0",
+    "stompjs": "^2.3.3"
   }
 }

@@ -19,14 +19,30 @@ const Messages = {
         Messages.placeholders.add();
 
         Messages.loadEverything().then(() => {
-            if (Users.notifications.poll) {
-                // TODO: To be replaced by Web Socket, eventually.
-                Messages.intervalLoadNew = setInterval(() => {
-                    if (!document.hidden) {
-                        Conversations.wsToBe.refresh();
-                    }
-                }, 10 * 1000);
-            }
+
+            const eventSource = new EventSource(`/api/msg?userId=${Users.currentUser.userId}&token=${Users.currentUser.token}`);
+
+            eventSource.onmessage = e => {
+                const msg = JSON.parse(e.data);
+
+                if (msg.conversationId === Conversations.lastConversation.conversation.id) {
+                    Messages.message.add([msg], true, true);
+                } else {
+                    Conversations.reload();
+                }
+            };
+
+            eventSource.onopen = e => console.log('open');
+
+            eventSource.onerror = e => {
+                if (e.readyState === EventSource.CLOSED) {
+                    console.log('close');
+                }
+                else {
+                    console.log(e.error);
+                }
+            };
+            // }
         });
 
         let scrollingTimeout;
@@ -363,9 +379,12 @@ const Messages = {
             newMessages.classList.add('loading');
 
             let messageAlreadyAdded = false;
+            let someMessageIsMine = false;
 
             for (let i = 0; i < messages.length; i++) {
                 let message = messages[i];
+
+                if(message.us)
 
                 let duplicate = document.querySelector(`.messages article[id='${message.id}']`);
                 if (!duplicate) {
@@ -381,18 +400,20 @@ const Messages = {
                 }
             }
 
-            if (placeOnTop) {
-                let newestAlreadyDisplayed = document.querySelector('.messages div:first-child article:first-child');
-                if (newestAlreadyDisplayed && newestAlreadyDisplayed.dataset.date && newestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[messages.length - 1].createdOn)) {
-                    newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(newestAlreadyDisplayed.dataset.date));
+            if (newMessages.querySelectorAll('article').length) {
+                if (placeOnTop) {
+                    let newestAlreadyDisplayed = document.querySelector('.messages div:first-child article:first-child');
+                    if (newestAlreadyDisplayed && newestAlreadyDisplayed.dataset.date && newestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[messages.length - 1].createdOn)) {
+                        newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(newestAlreadyDisplayed.dataset.date));
+                    }
+                    document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
+                } else {
+                    let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
+                    if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {
+                        newMessages.insertAdjacentHTML('afterBegin', Messages.message.separator(Datetime.formatDate(messages[0].createdOn)));
+                    }
+                    document.querySelector('.messages').appendChild(newMessages);
                 }
-                document.querySelector('.messages').insertBefore(newMessages, document.querySelector('.messages').firstChild);
-            } else {
-                let oldestAlreadyDisplayed = document.querySelector('.messages div:last-child article:last-child');
-                if (oldestAlreadyDisplayed && oldestAlreadyDisplayed.dataset.date !== Datetime.formatDate(messages[0].createdOn)) {
-                    newMessages.insertAdjacentHTML('afterBegin', Messages.message.separator(Datetime.formatDate(messages[0].createdOn)));
-                }
-                document.querySelector('.messages').appendChild(newMessages);
             }
 
             setTimeout(() => {
@@ -442,10 +463,10 @@ const Messages = {
                             Messages.message.dialog.hide();
                             setTimeout(Messages.message.dialog.messageReset, 300);
 
-                            Messages.message.add(messages);
-
-                            document.querySelector('.messages').parentNode.scrollTop = 0;
-                            Messages.markRead();
+                            //     // Messages.message.add(messages);
+                            //
+                            //     document.querySelector('.messages').parentNode.scrollTop = 0;
+                            //     Messages.markRead();
                         }, 300);
                     });
                 }).catch((response) => {

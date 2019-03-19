@@ -23,8 +23,7 @@
     "whatwg-fetch": "^2.0.4"
   },
   "dependencies": {
-    "npm": "^6.9.0",
-    "sockjs-client": "^1.3.0",
-    "stompjs": "^2.3.3"
+    "eventsource-polyfill": "^0.9.6",
+    "npm": "^6.9.0"
   }
 }

@@ -25,8 +25,7 @@ const paths = {
     libs: [
         './node_modules/babel-polyfill/dist/polyfill.js',
         './node_modules/whatwg-fetch/fetch.js',
-        './node_modules/stompjs/lib/stomp.js',
-        './node_modules/sockjs-client/dist/sockjs.js'
+        './node_modules/eventsource-polyfill/dist/eventsource.js'
     ],
     // These files are for your app's JavaScript
     js: [

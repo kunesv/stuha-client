@@ -36,7 +36,7 @@ const Login = {
     },
     init: () => {
         // FIXME: Eventually refactor to separate method.
-        clearInterval(Messages.intervalLoadNew);
+        // clearInterval(Messages.intervalLoadNew);
 
         document.querySelector('.content').insertAdjacentHTML('beforeEnd', Login.template());
 

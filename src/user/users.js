@@ -2,7 +2,7 @@ const Users = {
     currentUser: {},
     signedIn: false,
     notifications: {
-        poll: true
+        // poll: true
     },
     init: () => {
         let signedIn = Users.loadFromStorage();

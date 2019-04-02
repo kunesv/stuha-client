@@ -143,7 +143,16 @@ const Conversations = {
     },
     menuButtonUnreadSignalization: () => {
         if (document.querySelectorAll('.conversations.menu .unread:not(:empty)').length) {
+
             document.querySelector('.menu-button').classList.add('unread-conversations');
+
+            let unreads = document.querySelectorAll('.conversations .unread:not(:empty)');
+            let unreadCount = 0;
+            for (let i = 0; i < unreads.length; i++) {
+                unreadCount += 1 * unreads[i].textContent;
+            }
+
+            document.querySelector('.menu-button .button').dataset.content = unreadCount;
         } else {
             document.querySelector('.menu-button').classList.remove('unread-conversations');
         }

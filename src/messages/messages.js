@@ -143,7 +143,7 @@ const Messages = {
         // FIXME: Ask to enable notifications when first clicked .., then show auto-update icon, ask to switch off when
 
         let lastMessage = document.querySelector('.messages > div:first-child > article:first-child');
-        console.log(lastMessage)
+
         return fetch(`/api/messages/${Conversations.lastConversation.conversation.id}/loadRecent/${lastMessage.id}`, {
             headers: Fetch.headers()
         }).then(Fetch.processFetchStatus).then((response) => {
@@ -384,7 +384,9 @@ const Messages = {
             for (let i = 0; i < messages.length; i++) {
                 let message = messages[i];
 
-                if(message.us)
+                if (message.userName === Users.currentUser.userName) {
+                    someMessageIsMine = true;
+                }
 
                 let duplicate = document.querySelector(`.messages article[id='${message.id}']`);
                 if (!duplicate) {
@@ -394,7 +396,7 @@ const Messages = {
                         newMessages.insertAdjacentHTML('beforeEnd', Messages.message.separator(Datetime.formatDate(message.createdOn)));
                     }
 
-                    message.isNew = allNew || i < unreadCount;
+                    message.isNew = (allNew || i < unreadCount) && message.userName !== Users.currentUser.userName;
 
                     Messages.message.template(newMessages, message);
                 }
@@ -414,6 +416,10 @@ const Messages = {
                     }
                     document.querySelector('.messages').appendChild(newMessages);
                 }
+            }
+
+            if (someMessageIsMine) {
+                Messages.markRead();
             }
 
             setTimeout(() => {
@@ -462,11 +468,6 @@ const Messages = {
                         setTimeout(() => {
                             Messages.message.dialog.hide();
                             setTimeout(Messages.message.dialog.messageReset, 300);
-
-                            //     // Messages.message.add(messages);
-                            //
-                            //     document.querySelector('.messages').parentNode.scrollTop = 0;
-                            //     Messages.markRead();
                         }, 300);
                     });
                 }).catch((response) => {

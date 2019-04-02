@@ -89,30 +89,6 @@ const Conversations = {
     load: () => {
         return Conversations.get().then(Conversations.fill);
     },
-    // FIXME: Remove after WebSocket solution is introduced
-    wsToBe: {
-        refresh: () => {
-            Conversations.get().then((conversations) => {
-                let conversationsInMenu = document.querySelectorAll('.conversations.menu li a');
-                let match = conversations.length === conversationsInMenu.length;
-
-                for (let i = 0; match && i < conversations.length; i++) {
-                    if (!Conversations.wsToBe.equals(conversations[i], conversationsInMenu[i])) {
-                        match = false;
-                    }
-                }
-
-                if (!match) {
-                    Conversations.clean();
-                    setTimeout(() => Conversations.fill(conversations), 100);
-                }
-            });
-        },
-        equals: (obj, el) => {
-            let unreadText = el.querySelector('.unread').textContent;
-            return obj.id === el.dataset.conversationId && obj.unreadCount === (unreadText === '' ? 0 : parseInt(unreadText));
-        }
-    },
     reload: () => {
         if (!document.querySelector('.conversations.menu').classList.contains('loading')) {
             Conversations.clean();

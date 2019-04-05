@@ -51,6 +51,11 @@ const Users = {
             });
         });
     },
+    revalidateToken: () => {
+        return fetch('/api/revalidateToken', {
+            headers: Fetch.headers()
+        }).then(Fetch.processFetchStatus);
+    },
     menu: {
         show: () => {
             document.querySelector('.content').classList.add('dialog');

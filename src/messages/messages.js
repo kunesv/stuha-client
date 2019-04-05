@@ -24,6 +24,7 @@ const Messages = {
 
             eventSource.onmessage = e => {
                 const msg = JSON.parse(e.data);
+                console.log(e)
 
                 if (msg.conversationId === Conversations.lastConversation.conversation.id) {
                     Messages.message.add([msg], true, true);
@@ -32,7 +33,10 @@ const Messages = {
                 }
             };
 
-            eventSource.onopen = e => console.log('open');
+            eventSource.onopen = e => {
+                console.log(e, 'open');
+                Messages.e = e;
+            };
 
             eventSource.onerror = e => {
                 if (e.readyState === EventSource.CLOSED) {
@@ -88,13 +92,14 @@ const Messages = {
         return Users.loadUserDetails().then(() => {
             Messages.message.dialog.init();
             return Conversations.init();
-        }).then(() => {
-            return Messages.loadInitial();
-        }).catch((response) => {
-            Messages.error(response);
-            console.error(response);
+        })
+            .then(Messages.loadInitial)
+            .then(Users.revalidateToken)
+            .catch((response) => {
+                Messages.error(response);
+                console.error(response);
 
-        });
+            });
     },
 
     remainingCounts: {

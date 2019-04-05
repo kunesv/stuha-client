@@ -14,15 +14,7 @@ const Login = {
                 <label>Heslo</label>
                 <span><input name="password" type="password"/></span>
                 <span class="error">Sem dám heslo.</span>
-            </p>
-            
-            <p>
-                <label>
-                    <input type="checkbox" name="remember"/> 
-                    <span class="check-box"><span></span></span>
-                    <span>Zapamatovat přihlášení</span>
-                </label>
-            </p>
+            </p>           
             
             <p class="button-row"><input type="hidden" name="damnIE" value=""/> <button type="submit"></button></p>     
             

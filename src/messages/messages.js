@@ -34,8 +34,7 @@ const Messages = {
             };
 
             eventSource.onopen = e => {
-                console.log(e, 'open');
-                Messages.e = e;
+                console.log('open');
             };
 
             eventSource.onerror = e => {

@@ -24,8 +24,6 @@ const Messages = {
 
             eventSource.onmessage = e => {
                 const msg = JSON.parse(e.data);
-                console.log(e)
-
                 if (msg.conversationId === Conversations.lastConversation.conversation.id) {
                     Messages.message.add([msg], true, true);
                 } else {
@@ -45,7 +43,6 @@ const Messages = {
                     console.log(e.error);
                 }
             };
-            // }
         });
 
         let scrollingTimeout;
